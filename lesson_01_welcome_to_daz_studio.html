@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 1.1 — Welcome to Daz Studio: what Daz is, what you can make with it, Genesis figures, how it fits alongside Blender and Unreal, licensing, and system requirements.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 1.1: Welcome to Daz Studio - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 1</a></li>
+            <li aria-current="page">Lesson 1.1: Welcome to Daz Studio</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>👋 Lesson 1.1: Welcome to Daz Studio</h1>
+                <p class="lead">Before you touch a single button, let's answer the big questions: what <em>is</em> Daz Studio, what can you make with it, and how does it fit next to Blender and Unreal? By the end you'll know exactly why Daz is one of the fastest ways to get a believable character into your work.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain what Daz Studio is and the core idea of a <strong>Genesis figure</strong></li>
+                        <li>Describe the main things people create with Daz — and decide whether it fits your goals</li>
+                        <li>Compare Daz Studio with Blender and Unreal, and see where each one shines</li>
+                        <li>Understand Daz's cost and licensing model, and what is free</li>
+                        <li>Check whether your computer is ready to render with Iray</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 40 minutes</p>
+                    <p><strong>Project:</strong> Confirm your goals, check your hardware, and create a free Daz 3D account so you're ready to install in Lesson 1.2.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#introduction" class="toc-link">What Is Daz Studio?</a></li>
+                        <li><a href="#what-you-can-create" class="toc-link">What You Can Create</a></li>
+                        <li><a href="#genesis" class="toc-link">Genesis: The Heart of Daz</a></li>
+                        <li><a href="#where-daz-fits" class="toc-link">Where Daz Fits (vs Blender &amp; Unreal)</a></li>
+                        <li><a href="#cost" class="toc-link">Cost, Licensing &amp; What's Free</a></li>
+                        <li><a href="#requirements" class="toc-link">System Requirements</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Get Ready</a></li>
+                        <li><a href="#best-practices" class="toc-link">Beginner Mindset</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: Introduction -->
+            <section id="introduction" class="lesson-section">
+                <h2>What Is Daz Studio?</h2>
+                <p><strong>Daz Studio</strong> is a free 3D application for creating figures, scenes, and photoreal renders. What sets it apart from tools like Blender or Maya is its philosophy: instead of building a human character out of raw geometry, you start with a <strong>ready-made, fully rigged human figure</strong> and customize it. You shape the face, pose the body, add hair and clothing, set up lights, and render — often reaching striking, realistic results in a single sitting.</p>
+                <p>Think of it as the difference between sculpting a mannequin from clay and starting with a professional, poseable mannequin that already has a skeleton, skin, and a wardrobe. Daz hands you the mannequin. Your creativity goes into <em>direction</em> — who this character is, how they stand, how the light falls — rather than into building anatomy from scratch.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> Daz Studio is a free 3D "virtual photography and posing studio" built around pre-made human figures you customize, light, and render.
+                </blockquote>
+
+                <figure>
+                    <div class="image-placeholder" role="img" aria-label="Screenshot of the Daz Studio interface showing a Genesis figure in the viewport with the Content Library, Scene, and Parameters panes visible">
+                        🖼️ Figure placeholder — Daz Studio interface with a Genesis figure in the viewport
+                    </div>
+                    <figcaption>Figure 1: The Daz Studio workspace — a Genesis figure in the viewport, surrounded by the panes we'll explore in Lesson 1.3. (Art to be added; see <code>lesson_01_image_requirements.md</code>.)</figcaption>
+                </figure>
+            </section>
+
+            <!-- Section 2: What You Can Create -->
+            <section id="what-you-can-create" class="lesson-section">
+                <h2>What You Can Create</h2>
+                <p>Daz is a general-purpose 3D tool, but its sweet spot is <strong>people and character-driven scenes</strong>. Here's what artists reach for it to make:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Use Case</th>
+                                <th>What It Looks Like</th>
+                                <th>Why Daz Is Good At It</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Character portraits &amp; pin-ups</td>
+                                <td>A single figure, beautifully lit and rendered</td>
+                                <td>Photoreal skin and lighting out of the box with Iray</td>
+                            </tr>
+                            <tr>
+                                <td>Comic &amp; book illustration</td>
+                                <td>Consistent characters across many panels</td>
+                                <td>Save a character once, re-pose them endlessly</td>
+                            </tr>
+                            <tr>
+                                <td>Concept &amp; reference art</td>
+                                <td>Posed anatomy for drawing over</td>
+                                <td>Any pose, any angle, correct proportions</td>
+                            </tr>
+                            <tr>
+                                <td>Story &amp; scene renders</td>
+                                <td>Multiple figures in an environment</td>
+                                <td>Huge library of props, sets, hair, and clothing</td>
+                            </tr>
+                            <tr>
+                                <td>Characters for game &amp; film pipelines</td>
+                                <td>A base figure exported elsewhere</td>
+                                <td>Bridges send figures straight to Blender &amp; Unreal</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Render:</strong> the finished 2D image (or video frame) the software produces after calculating how light bounces around your 3D scene. In Daz, the main render engine is <strong>Iray</strong>, which we'll use throughout Module 3.</p>
+                </div>
+
+                <p>What Daz is <em>not</em> built for: from-scratch hard-surface modeling (cars, buildings, weapons), heavy VFX simulation, or being a game engine. For those you'd use Blender or Unreal — which is exactly why this course ends by connecting the three.</p>
+            </section>
+
+            <!-- Section 3: Genesis -->
+            <section id="genesis" class="lesson-section">
+                <h2>Genesis: The Heart of Daz</h2>
+                <p>Almost everything in Daz revolves around the <strong>Genesis figure</strong>. Genesis is Daz's family of base human figures, refined over many generations. The two you'll meet most today are:</p>
+                <ul>
+                    <li><strong>Genesis 8 (G8)</strong> — the most widely supported generation, with an enormous library of characters, clothing, and poses.</li>
+                    <li><strong>Genesis 9 (G9)</strong> — the newest generation, with a unified base figure and improved anatomy. Growing library.</li>
+                </ul>
+
+                <p>A single Genesis figure is far more than a static mesh. It ships with everything a character needs:</p>
+
+                <div class="image-placeholder image-placeholder--wide" role="img" aria-label="Diagram of a Genesis figure showing its built-in parts: rigged skeleton, morphs for shaping, UV-mapped skin surfaces, and material zones">
+                    🖼️ Figure placeholder — anatomy of a Genesis figure (rig, morphs, surfaces)
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Built-in Part</th>
+                                <th>What It Does</th>
+                                <th>We Cover It In</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Rig (skeleton)</strong></td>
+                                <td>Lets you pose the figure by bending joints</td>
+                                <td>Lesson 2.1 — Posing</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Morphs</strong></td>
+                                <td>Sliders that reshape the face and body</td>
+                                <td>Lesson 2.2 — Shaping</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Surfaces &amp; UVs</strong></td>
+                                <td>Define skin, eyes, nails — how materials apply</td>
+                                <td>Lesson 2.3 — Materials</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Auto-fit compatibility</strong></td>
+                                <td>Lets clothing and hair conform to the figure</td>
+                                <td>Lesson 3.1 — Building a Scene</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip</h4>
+                    <p>When you buy or download a "character" for Daz (say, "Victoria 8"), you're really getting a bundle of <em>morphs</em> and <em>materials</em> that load <strong>onto</strong> a Genesis base figure. The base figure is the foundation; characters are presets applied to it. Understanding this makes the entire content ecosystem click.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Content is usually built for a specific generation. A Genesis 8 outfit won't automatically fit a Genesis 9 figure without a conversion product. When you're starting out, pick <em>one</em> generation (G8 is the safest for sheer content volume) and stick with it.
+                </blockquote>
+            </section>
+
+            <!-- Section 4: Where Daz Fits -->
+            <section id="where-daz-fits" class="lesson-section">
+                <h2>Where Daz Fits (vs Blender &amp; Unreal)</h2>
+                <p>If you've taken the Blender or Unreal courses, you might wonder where Daz belongs. The short answer: <strong>Daz is a character source</strong>. It's the fastest place to <em>create a person</em>, which you can then finish in Daz or hand off to another tool.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th>Primary Job</th>
+                                <th>Superpower</th>
+                                <th>Learning Curve</th>
+                                <th>Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Daz Studio</strong></td>
+                                <td>Pose, shape &amp; render human figures</td>
+                                <td>Photoreal characters, fast</td>
+                                <td>Gentle</td>
+                                <td>Free app; paid content</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Blender</strong></td>
+                                <td>Model, sculpt, animate, render anything</td>
+                                <td>Total creative control</td>
+                                <td>Steep</td>
+                                <td>Free &amp; open source</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Unreal Engine</strong></td>
+                                <td>Real-time interactive worlds &amp; games</td>
+                                <td>Real-time rendering at scale</td>
+                                <td>Steep</td>
+                                <td>Free (royalty at scale)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>They aren't competitors so much as <strong>stages in a pipeline</strong>. A common workflow looks like this:</p>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Daz Studio: pose &amp; shape a figure"] --> B{"Finish where?"}
+                        B -->|Render in Daz| C["Iray photoreal still"]
+                        B -->|Blender Bridge| D["Blender: scene, sculpt, animate"]
+                        B -->|Unreal Bridge| E["Unreal: real-time level or game"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                        style D fill:#f59e0b,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Why this course ends with bridges</h4>
+                    <p>Module 5 covers the <strong>Daz to Blender Bridge</strong> and the <strong>Daz to Unreal Bridge</strong>. That's where your Daz skills plug directly into the Blender and Unreal courses — you make the character here, then finish it in the tool that fits the job.</p>
+                </div>
+            </section>
+
+            <!-- Section 5: Cost -->
+            <section id="cost" class="lesson-section">
+                <h2>Cost, Licensing &amp; What's Free</h2>
+                <p>One of the most confusing things for newcomers is the money question. Let's make it simple.</p>
+
+                <div class="card card-success">
+                    <h4>✅ The application is free</h4>
+                    <p>Daz Studio itself costs nothing to download and use, including its Iray renderer. You can install it, load figures, pose, light, and render commercially — without paying for the software.</p>
+                </div>
+
+                <div class="card card-warning">
+                    <h4>⚠️ Content is where money enters</h4>
+                    <p>The business model is <strong>content</strong>: characters, clothing, hair, sets, and poses sold in the Daz Store. Some is free; a lot is paid. You do <em>not</em> need to spend money to complete this course — Daz gives every new account a generous <strong>Starter Essentials</strong> bundle (base Genesis figures, some hair and clothing, basic materials), which is all we need.</p>
+                </div>
+
+                <h3>Licensing in plain English</h3>
+                <ul>
+                    <li><strong>Standard license</strong> (default with most content) — you may use your renders commercially (prints, book covers, comics, etc.).</li>
+                    <li><strong>Interactive / game license</strong> — a separate add-on needed if you export a figure's mesh into a <em>game</em> you distribute. This matters for the Unreal bridge if you ship a product.</li>
+                </ul>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Rendered <em>images</em> are broadly fine to use commercially. Distributing the <em>3D mesh itself</em> (for example, inside a shipped game) is what may require an interactive license. We'll flag this again in Lesson 5.2 (Unreal Bridge). When in doubt, check the product's readme on the Daz store page.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: System Requirements -->
+            <section id="requirements" class="lesson-section">
+                <h2>System Requirements</h2>
+                <p>Daz Studio runs on modest machines, but <strong>Iray rendering loves a good GPU</strong>. Iray is a GPU-accelerated engine: with a supported NVIDIA card, renders that take minutes on a CPU can finish in seconds.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Minimum</th>
+                                <th>Recommended for Iray</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>OS</td>
+                                <td>Windows 10 / macOS 11</td>
+                                <td>Windows 11 (64-bit)</td>
+                            </tr>
+                            <tr>
+                                <td>RAM</td>
+                                <td>8 GB</td>
+                                <td>16–32 GB</td>
+                            </tr>
+                            <tr>
+                                <td>GPU</td>
+                                <td>Any (CPU rendering works, but slow)</td>
+                                <td>NVIDIA RTX with 8 GB+ VRAM</td>
+                            </tr>
+                            <tr>
+                                <td>Disk</td>
+                                <td>~10 GB for app + starter content</td>
+                                <td>SSD with 50 GB+ (content grows fast)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-warning">
+                    <h4>⚠️ Watch Out — VRAM is the real ceiling</h4>
+                    <p>Iray renders on your GPU only if the <em>entire scene fits in video memory (VRAM)</em>. If a scene is too big, Iray silently "drops to CPU" and slows to a crawl. An 8&nbsp;GB card is a comfortable starting point; 12&nbsp;GB+ gives you room for detailed multi-figure scenes. We'll cover how to keep scenes within budget in Module 3.</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ No NVIDIA card? You can still take this course</h4>
+                    <p>Everything except fast rendering works on any machine, and Iray will still render on your CPU (just more slowly). Mac users render on CPU as well. You'll learn every concept the same way — renders simply take longer to resolve.</p>
+                </div>
+            </section>
+
+            <!-- Section 7: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Get Ready</h2>
+                <p>We install Daz in the next lesson. Your job right now is to get everything lined up so the install goes smoothly — and to lock in what <em>you</em> want out of this course.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Readiness Checklist</h3>
+                    <p><strong>Objective:</strong> Confirm you're set up to install and render.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Find your GPU: on Windows, open <strong>Task Manager → Performance → GPU</strong> and note the model and dedicated memory (VRAM). On macOS, check <strong>About This Mac</strong>.</li>
+                        <li>Write down whether you have an NVIDIA card and how much VRAM it has.</li>
+                        <li>Confirm you have at least ~20 GB of free disk space for the app plus starter content.</li>
+                        <li>Create a <strong>free Daz 3D account</strong> at <a href="https://www.daz3d.com/" target="_blank" rel="noopener">daz3d.com</a> (top-right → Sign In → Register). You'll need it to download the app and claim your free Starter Essentials in Lesson 1.2.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — where's my VRAM number?</summary>
+                        <p>In Windows Task Manager's GPU panel, look for "Dedicated GPU memory." On a laptop with two GPUs, the NVIDIA one is the card Iray will use — make sure that's the one you note.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Name Your Goal</h3>
+                    <p><strong>Objective:</strong> Give yourself a target so every later lesson has a purpose.</p>
+                    <p>In a sentence, finish this: <em>"By the end of this course I want to make ______."</em> A character portrait? A comic panel? A figure for a Blender scene or an Unreal level? Keep it somewhere visible — in the capstone (Lesson 5.3) you'll build exactly this kind of piece across the whole pipeline.</p>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What is a "Genesis figure" in Daz Studio?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Genesis isn't the renderer — that's Iray.">
+                                A) The engine that renders your final image
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Genesis is Daz's family of ready-made, rigged base human figures that you shape, pose, and surface.">
+                                B) A ready-made, rigged base human figure you customize
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="That would describe a modeling tool; Daz starts from a pre-made figure.">
+                                C) A blank mesh you sculpt a human from
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> Which statement about Daz's cost is accurate?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The application itself is free.">
+                                A) The Daz Studio application must be purchased before use
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="The app (and Iray) are free; Daz makes money selling content, though new accounts get free Starter Essentials.">
+                                B) The app is free; most figures, clothing, and sets are sold as content
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="You won't need to buy anything for this course.">
+                                C) You must buy content to complete this course
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Iray renders fastest when…</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Iray is GPU-accelerated and needs the scene to fit in VRAM; otherwise it falls back to slower CPU rendering.">
+                                A) The scene fits in a supported NVIDIA GPU's VRAM
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="More CPU cores help CPU fallback, but the GPU is the fast path.">
+                                B) You have the most CPU cores possible
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Disk space matters for content, not render speed.">
+                                C) You have the largest hard drive
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 8: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Beginner Mindset</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Pick one figure generation to start</strong> (Genesis 8) so all your content is compatible.</li>
+                    <li><strong>Use the free Starter Essentials</strong> before spending anything — it's enough to learn every skill in this course.</li>
+                    <li><strong>Think like a photographer.</strong> Your job in Daz is direction and lighting, not building anatomy.</li>
+                    <li><strong>Save early, save often,</strong> and keep your scenes small while learning to stay inside VRAM.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't buy a big content haul on day one.</strong> Wait until you know what your projects actually need.</li>
+                    <li><strong>Don't mix generations</strong> (G8 clothing on a G9 figure) until you understand conversion products.</li>
+                    <li><strong>Don't expect Daz to be a modeler.</strong> For custom props and hard-surface work, that's Blender's job.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>The Daz forums are one of the friendliest, deepest 3D knowledge bases online — search there first when stuck.</li>
+                    <li>Watch the file sizes: characters and HD morphs are large. An SSD keeps loading snappy.</li>
+                    <li>Every "character" you'll ever buy is just morphs + materials on a Genesis base — internalize that and the store stops being confusing.</li>
+                </ul>
+            </section>
+
+            <!-- Section 9: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><strong>Daz Studio</strong> is a free 3D app for posing, shaping, lighting, and rendering ready-made human figures.</li>
+                        <li><strong>Genesis figures</strong> are the heart of Daz — rigged, morphable, surfaced base humans that all content builds on.</li>
+                        <li>Daz's strength is <strong>fast, photoreal characters</strong>; Blender and Unreal handle modeling and real-time worlds, and bridges connect them.</li>
+                        <li>The <strong>app is free</strong>; content is the business model, but free Starter Essentials covers this whole course.</li>
+                        <li><strong>Iray</strong> renders fastest on a supported NVIDIA GPU with enough VRAM to hold the scene.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="https://www.daz3d.com/" target="_blank" rel="noopener">Daz 3D — official site &amp; store</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/start" target="_blank" rel="noopener">Daz Studio Documentation Center</a></li>
+                    <li><a href="https://www.daz3d.com/forums/" target="_blank" rel="noopener">Daz 3D Community Forums</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>In <strong>Lesson 1.2 — Installing Daz &amp; the Content Library</strong>, we'll download Daz Studio, set up the Install Manager, claim your free Starter Essentials, and get your first Genesis figure onto your drive so it's ready to load.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>🎉 You're oriented!</h3>
+                    <p>You now understand what Daz is, why it exists, and where it fits. That context makes everything ahead click faster. Let's get it installed.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="index.html" class="prev-lesson">← Course Home</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_02_installing_and_content_library.html" class="next-lesson">Next: Installing Daz &amp; the Content Library →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

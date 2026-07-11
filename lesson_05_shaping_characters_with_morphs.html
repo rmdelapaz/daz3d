@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 2.2 — Shaping Characters with Morphs: using the Shaping pane, applying character presets, dialing head and body morphs, adding expressions, and mixing morphs responsibly to sculpt a distinct character from the Genesis base.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 2.2: Shaping Characters with Morphs - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 2</a></li>
+            <li aria-current="page">Lesson 2.2: Shaping Characters with Morphs</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>🎭 Lesson 2.2: Shaping Characters with Morphs</h1>
+                <p class="lead">Your figure can strike any pose — but it's still the default person. This lesson changes <em>who</em> the figure is. With the Shaping pane and a handful of morph dials, you'll sculpt the generic Genesis base into a distinct character: a face that's yours, a body with a real build, an expression with feeling. This is where a render stops looking like "a Daz figure" and starts looking like <em>someone</em>.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain what a <strong>morph</strong> is and how it reshapes a figure without changing its rig</li>
+                        <li>Navigate the <strong>Shaping pane</strong> and find head, body, and expression morphs</li>
+                        <li>Apply a <strong>character preset</strong> for an instant full-figure shape</li>
+                        <li><strong>Dial custom head and face</strong> features to build a unique face</li>
+                        <li>Adjust <strong>body proportions and build</strong> with body morphs</li>
+                        <li>Add <strong>expressions</strong> to bring emotion to the face</li>
+                        <li><strong>Mix morphs responsibly</strong> and save your character as a Shaping preset</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 55 minutes</p>
+                    <p><strong>Project:</strong> A one-of-a-kind character dialed from the Genesis base — custom face, adjusted body, and a natural expression — saved as your first Shaping preset.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#morphs" class="toc-link">What Are Morphs?</a></li>
+                        <li><a href="#shaping-pane" class="toc-link">The Shaping Pane</a></li>
+                        <li><a href="#presets" class="toc-link">Character Presets: Instant Shapes</a></li>
+                        <li><a href="#head-face" class="toc-link">Shaping the Head &amp; Face</a></li>
+                        <li><a href="#body" class="toc-link">Shaping the Body</a></li>
+                        <li><a href="#expressions" class="toc-link">Expressions</a></li>
+                        <li><a href="#mixing" class="toc-link">Mixing Morphs Responsibly</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Build a Character</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: What Are Morphs? -->
+            <section id="morphs" class="lesson-section">
+                <h2>What Are Morphs?</h2>
+                <p>In Lesson 2.1 you posed a figure by rotating its <strong>bones</strong>. Shaping is the other half of the story: instead of moving the skeleton, you reshape the <em>mesh</em> — the skin surface itself. The tool that does this is the <strong>morph</strong>.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> A morph is a slider that smoothly reshapes a figure — a longer nose, a wider jaw, a heavier build — by pushing the mesh toward a saved target shape, all without touching the rig.
+                </blockquote>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Morph:</strong> a stored deformation of a figure's mesh, exposed as a dial that runs from 0 (no effect) to 1 (full effect), and often beyond. Dialing it to 0.5 applies half the shape. Because morphs move vertices and leave the skeleton alone, a morphed figure still poses exactly the same way.</p>
+                </div>
+
+                <p>Morphs are why one Genesis base can become almost anyone. A <strong>character</strong> you buy or download is really just a bundle of morphs (plus materials): dial them all to 1 and you get that artist's face and body; dial them partway, or mix several, and you get something new.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Morphs vs poses vs materials</h4>
+                    <p>Three separate systems reshape a Genesis figure, and it's worth keeping them straight: <strong>poses</strong> rotate bones (Lesson 2.1), <strong>morphs</strong> reshape the mesh (this lesson), and <strong>materials</strong> paint the surface (Lesson 2.3). They're independent — changing one never disturbs the others.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Morphs only appear if they're <strong>installed for that figure</strong>. A base Genesis 8 figure has a modest set of built-in shaping dials; the huge libraries of faces and bodies come from character products and morph packs you add. If a dial you expect is missing, the morph simply isn't installed yet.
+                </blockquote>
+            </section>
+
+            <!-- Section 2: The Shaping Pane -->
+            <section id="shaping-pane" class="lesson-section">
+                <h2>The Shaping Pane</h2>
+                <p>Every morph lives in the <strong>Shaping pane</strong> — your control room for a figure's shape. Open it from <strong>Window → Panes (Tabs) → Shaping</strong> if it isn't already in your layout.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Shaping pane:</strong> the pane that gathers all of a selected figure's morph dials, organized into groups. It's a filtered, purpose-built view of the same properties you'd find scattered through the Parameters pane — but arranged for the job of sculpting a character.</p>
+                </div>
+
+                <h3>How it's organized</h3>
+                <p>With a figure selected, the Shaping pane shows a category list down the side. The exact groups depend on what's installed, but you'll almost always see:</p>
+                <ul>
+                    <li><strong>Actor</strong> — full-character morphs that reshape the whole figure at once (this is where installed characters usually appear).</li>
+                    <li><strong>Head</strong> — face and skull morphs, often sub-grouped into eyes, nose, mouth, ears, jaw.</li>
+                    <li><strong>Body</strong> — proportion and build morphs: height, weight, muscle, and region-by-region shaping.</li>
+                    <li><strong>Expressions</strong> — emotion and phoneme morphs that pose the face (sometimes under a Head sub-group).</li>
+                </ul>
+
+                <p>Here's how those categories relate — a mental map of the pane:</p>
+
+                <div class="mermaid">
+                    graph TD
+                        A["Shaping pane morphs"] --> B["Actor: full-character presets"]
+                        A --> C["Head: face and features"]
+                        A --> D["Body: proportions and build"]
+                        A --> E["Expressions: emotion and phonemes"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                        style D fill:#3b82f6,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Select the figure first</h4>
+                    <p>Like poses and materials, the Shaping pane always shows the <strong>currently selected</strong> figure. If the pane looks empty or wrong, click the figure in the Scene pane first. Selecting a piece of clothing or a prop shows <em>its</em> morphs instead — a common source of "where did my dials go?"</p>
+                </div>
+
+                <figure>
+                    <div class="image-placeholder" role="img" aria-label="Screenshot of the Daz Studio Shaping pane with a Genesis 8 figure selected, showing the Actor, Head, and Body category groups and their morph dials">
+                        🖼️ Figure placeholder — the Shaping pane with Actor / Head / Body groups and morph dials
+                    </div>
+                    <figcaption>Figure 1: The Shaping pane with a Genesis figure selected. Categories run down the side; the dials for the chosen group fill the panel. (Art to be added; see <code>lesson_05_image_requirements.md</code>.)</figcaption>
+                </figure>
+            </section>
+
+            <!-- Section 3: Character Presets -->
+            <section id="presets" class="lesson-section">
+                <h2>Character Presets: Instant Shapes</h2>
+                <p>Just as pose presets give you an instant pose, <strong>character presets</strong> give you an instant shape. Double-click a character in your content library (with the figure selected) and its full set of morphs dials in at once — a complete face and body in a single click.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Character preset:</strong> a saved package that dials a group of morphs to preset values to produce a specific, named character. It's the fastest way to a finished shape, and — because it's just morph values — a perfect starting point you can then adjust dial by dial.</p>
+                </div>
+
+                <h3>The full-character workflow</h3>
+                <p>Building a character rarely means dialing from zero. The realistic path looks like this:</p>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Load Genesis figure"] --> B["Open Shaping pane"]
+                        B --> C["Apply a character preset"]
+                        C --> D["Dial head and body morphs"]
+                        D --> E["Add an expression"]
+                        E --> F["Save as a Shaping preset"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style D fill:#3b82f6,stroke:#333,color:#fff
+                        style F fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — start from a preset, then make it yours</h4>
+                    <p>A pure preset is recognizable — other artists own the same product and use the same face. Dial it to <strong>70–90%</strong>, then nudge a few features (a different nose, a stronger jaw), and you've got a character nobody else has. "Preset as a base, hand-tuning on top" is exactly the posing lesson's advice applied to shape.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> A character preset often sets <em>both</em> shape (morphs) <em>and</em> skin (materials). If you only want the shape, look for a <strong>shaping</strong> or <strong>shape-only</strong> version, or dial the head/body morphs directly instead of applying the full character. Read the product's contents so you know what a double-click will change.
+                </blockquote>
+            </section>
+
+            <!-- Section 4: Shaping the Head & Face -->
+            <section id="head-face" class="lesson-section">
+                <h2>Shaping the Head &amp; Face</h2>
+                <p>The face is where a character earns its identity. In the Shaping pane's <strong>Head</strong> group you'll find dials for every feature — and small, combined moves read as far more convincing than one dramatic one.</p>
+
+                <h3>What the head dials control</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature area</th>
+                                <th>Typical dials</th>
+                                <th>What it changes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Eyes</strong></td>
+                                <td>Size, height, depth, slant, spacing</td>
+                                <td>How large, deep-set, and far apart the eyes read</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nose</strong></td>
+                                <td>Length, width, bridge height, tip shape</td>
+                                <td>Profile and front-on character of the nose</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mouth &amp; jaw</strong></td>
+                                <td>Lip fullness, mouth width, jaw width, chin shape</td>
+                                <td>The lower-face structure that carries a lot of "look"</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Overall head</strong></td>
+                                <td>Head scale, face shape, cheekbones, age</td>
+                                <td>The broad proportions everything else sits inside</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Dial values below 1 — and negative</h4>
+                    <p>Most morphs accept values <em>past</em> their 0–1 range. Push a dial to 1.5 for an exaggerated feature, or into <strong>negative</strong> values to go the opposite way (a "nose length" of −0.3 shortens it). The dial's default is 0, meaning "no change from the base." Right-click a dial for a precise numeric entry.</p>
+                </div>
+
+                <figure>
+                    <div class="image-placeholder image-placeholder--wide" role="img" aria-label="Before-and-after comparison of a Genesis figure's face: on the left the default base head, on the right the same head after dialing custom eye, nose, and jaw morphs">
+                        🖼️ Figure placeholder — face before (default) and after custom head morphs
+                    </div>
+                    <figcaption>Figure 2: The same figure's face before and after a few head-morph adjustments. Small changes across several dials build a distinct face without any single extreme move.</figcaption>
+                </figure>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — work at eye level, framed close</h4>
+                    <p>Shape the face with the camera at the figure's eye level and framed tight on the head, rotating around it as you dial. Reshaping a face while looking down at it from the default view hides exactly the proportions you're trying to judge. Press <kbd>F</kbd> after selecting the head to frame it.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> It's easy to overshoot. A nose at 1.0 on top of a character preset that <em>also</em> lengthens the nose can stack into a caricature. Dial gently, rotate to check the profile, and judge the whole face together rather than one feature in isolation.
+                </blockquote>
+            </section>
+
+            <!-- Section 5: Shaping the Body -->
+            <section id="body" class="lesson-section">
+                <h2>Shaping the Body</h2>
+                <p>The <strong>Body</strong> group controls proportion and build — height, weight, muscle, and finer region shaping. Body morphs do a lot of the work of making a character read as a specific person before the face is even close.</p>
+
+                <h3>The big-picture dials</h3>
+                <ul>
+                    <li><strong>Height</strong> — overall scale along the vertical; a surprisingly strong identity cue.</li>
+                    <li><strong>Weight / Body Fat</strong> — softens or slims the whole silhouette.</li>
+                    <li><strong>Muscularity / Definition</strong> — adds or removes visible muscle tone.</li>
+                    <li><strong>Region shaping</strong> — targeted dials for torso, arms, legs, hands, and feet when you need finer control.</li>
+                </ul>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Full-body morph (FBM):</strong> a single morph that reshapes the entire figure in a coordinated way — a "heavier build" FBM adjusts torso, limbs, and face together so the result stays anatomically consistent. Character presets are usually built from one or more FBMs plus head detail.</p>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Proportion sells realism</h4>
+                    <p>Real people vary more in <strong>proportion</strong> than in any single feature. A slightly shorter figure with a fuller build and a smaller head reads as a completely different person than the default — even with the same face. Spend as much attention on body proportion as on the face.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Extreme body morphs can cause <strong>pokethrough</strong> and fit problems when you add clothing later — a body dialed far past the base may push through garments built for the default shape. Auto-follow morphs help clothing keep up, but the more extreme the body, the more fit-up you'll do. Keep builds believable unless the project needs otherwise.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: Expressions -->
+            <section id="expressions" class="lesson-section">
+                <h2>Expressions</h2>
+                <p>An expression is a morph too — but one that poses the face rather than reshaping its underlying structure. A neutral face is lifeless; a subtle expression is the difference between a mannequin and a character.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Expression morph:</strong> a morph that moves the face into an emotion (smile, surprise, anger) or a speech shape (a phoneme like "oh" or "ee"). They live in the <strong>Expressions</strong> group and layer on top of your character's structural morphs without changing who the character is.</p>
+                </div>
+
+                <h3>Applying expressions</h3>
+                <ul>
+                    <li><strong>Expression presets</strong> dial a full expression in one click — the fastest route to a feeling face.</li>
+                    <li><strong>Individual expression dials</strong> (brow raise, smile, squint) let you build a custom expression or soften a preset.</li>
+                    <li>Because expressions are morphs, you can blend them — a little smile plus a slight brow raise reads as warmth.</li>
+                </ul>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — dial expressions down</h4>
+                    <p>Full-strength expression presets often look theatrical. Apply one, then pull it back to <strong>40–70%</strong>. A restrained smile or a barely-there frown almost always looks more real and more flattering than the same expression at 100%. Subtlety reads as authenticity.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Keep expressions <strong>separate from structural head morphs</strong> in your mind. If you bake a big smile into your saved character shape, every render of that character will smile. Save the character's <em>structure</em>, and apply expressions per shot — you'll thank yourself later.
+                </blockquote>
+            </section>
+
+            <!-- Section 7: Mixing Morphs Responsibly -->
+            <section id="mixing" class="lesson-section">
+                <h2>Mixing Morphs Responsibly</h2>
+                <p>The real creative power is <strong>mixing</strong> — combining morphs from different sources into a character that's uniquely yours. Done well it's limitless; done carelessly it produces broken, melty faces. A few habits keep you on the right side.</p>
+
+                <h3>Habits of clean mixing</h3>
+                <ul>
+                    <li><strong>Blend, don't max.</strong> Two characters at 0.5 each usually look better than one at 1.0 — and nobody recognizes the source.</li>
+                    <li><strong>Change one thing at a time.</strong> Dial a morph, rotate to judge it, then move on. Ten dials moved at once are impossible to debug.</li>
+                    <li><strong>Watch the seams.</strong> Heavy head morphs from one product plus a body from another can mismatch at the neck; check where regions meet.</li>
+                    <li><strong>Zero to reset.</strong> <strong>Edit → Zero → Zero Figure Shape</strong> wipes all shaping back to the base if a mix goes wrong — the shaping equivalent of Zero Figure Pose.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 Saving your character</h4>
+                    <p>Once you've built a shape worth keeping, save it: with the figure selected, <strong>File → Save As → Shaping Preset…</strong>. Like a pose preset, it stores only the morph values — no mesh — so it's tiny and reapplies to any compatible Genesis figure. Save it into a mapped content folder (Lesson 1.2) so it shows up in your panes.</p>
+                </div>
+
+                <div class="card card-warning">
+                    <h4>⚠️ The morph-strength trap</h4>
+                    <p>Stacking several products that each nudge the same feature adds up fast. If your figure suddenly looks distorted, don't hunt blindly — <strong>Zero Figure Shape</strong> and rebuild the mix one dial at a time. It's faster than trying to subtract your way out of a pile-up.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Morphs you mix must be <strong>installed and licensed</strong> for the figures you share renders of — but the mixed <em>result</em> you save is just dial values referencing those morphs, not the morph data itself. Sharing your Shaping preset with someone who lacks the source morphs means it won't reproduce your character. Keep note of what a mix depends on.
+                </blockquote>
+            </section>
+
+            <!-- Section 8: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Build a Character</h2>
+                <p>Time to sculpt. You'll shape a face, adjust a body, add an expression, and bank the result as your own Shaping preset.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Preset &amp; Face</h3>
+                    <p><strong>Objective:</strong> Get a starting shape and make the face your own.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Load a <strong>Genesis 8</strong> figure and open the <strong>Shaping</strong> pane. If you own a character, apply it as a starting preset; otherwise start from the base.</li>
+                        <li>Select the figure's <strong>head</strong> and press <kbd>F</kbd> to frame it at eye level.</li>
+                        <li>In the <strong>Head</strong> group, adjust <strong>three</strong> features — say nose length, jaw width, and eye size — keeping each change modest. Rotate to check the profile as you go.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Body &amp; Expression</h3>
+                    <p><strong>Objective:</strong> Give the character a build and a feeling.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>In the <strong>Body</strong> group, set an overall <strong>Height</strong> and a <strong>Weight</strong> or <strong>Muscularity</strong> value so the silhouette reads as a specific build.</li>
+                        <li>Open the <strong>Expressions</strong> group and apply an expression preset, then dial it back to roughly <strong>50%</strong>.</li>
+                        <li>Frame the whole figure and judge face and body together. Adjust anything that fights for attention.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — my character suddenly looks distorted</summary>
+                        <p>You've probably stacked morphs that touch the same feature (a preset that lengthens the nose <em>plus</em> your own nose dial, for example). Don't try to subtract your way out — use <strong>Edit → Zero → Zero Figure Shape</strong> and rebuild the mix one dial at a time, checking after each.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Save Your Character</h3>
+                    <p><strong>Objective:</strong> Bank the shape as a reusable preset.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Zero any <strong>expression</strong> back to neutral so you save structure, not a smile.</li>
+                        <li>With the figure selected, choose <strong>File → Save As → Shaping Preset…</strong> and save it into a <code>My Characters</code> folder, named something like <code>Ren 01</code>.</li>
+                        <li>Load a fresh Genesis 8 figure and apply your preset to prove your character reappears. That's a complete shaping workflow.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What does a morph actually change on a Genesis figure?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="That's what poses do — they rotate bones. Morphs work on the mesh, not the skeleton.">
+                                A) It rotates the figure's bones into a new position
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="A morph reshapes the mesh — the skin surface — by pushing vertices toward a saved target shape, and it leaves the rig untouched, so a morphed figure still poses exactly the same way.">
+                                B) It reshapes the mesh toward a saved target, leaving the rig untouched
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Painting the surface is what materials do (Lesson 2.3). A morph changes shape, not color.">
+                                C) It repaints the figure's skin surface and textures
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> You expect a "nose length" dial but it isn't in the Shaping pane. What's the most likely reason?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The Shaping pane shows whatever is installed — it doesn't hide standard dials at random.">
+                                A) The Shaping pane only shows dials at random and it will appear later
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Zeroing resets values to 0; it never removes a dial from the pane.">
+                                B) You zeroed the figure shape, which deleted the dial
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Morph dials only appear when the morph is installed for that figure. The base figure has a modest built-in set; detailed face and body dials come from morph packs you add. A missing dial means the morph isn't installed.">
+                                C) That morph isn't installed for the figure — extra dials come from morph packs
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Why dial an expression preset back to 40–70% instead of leaving it at 100%?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Full-strength expression presets often look theatrical; pulling them back to a partial value reads as more natural and flattering. Because expressions are morphs, you can set them to any fraction of full strength.">
+                                A) Full-strength expressions look theatrical; a partial value reads as more natural
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Expressions layer on top of structure without changing it — strength doesn't damage the character's shape.">
+                                B) Leaving it at 100% permanently alters the character's structural morphs
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Expression strength has no bearing on clothing fit — that's a body-morph concern.">
+                                C) A full expression causes clothing pokethrough
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Start from a character preset</strong> at 70–90%, then hand-tune a few features to make it unique.</li>
+                    <li><strong>Shape the face at eye level, framed close</strong>, rotating to judge the profile.</li>
+                    <li><strong>Change one dial at a time</strong> and check before moving on.</li>
+                    <li><strong>Give proportion real attention</strong> — height and build define a character as much as the face.</li>
+                    <li><strong>Save your character as a Shaping preset</strong> into a mapped content folder.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't max every dial</strong> — stacked full-strength morphs pile into caricature and distortion.</li>
+                    <li><strong>Don't bake expressions into a saved shape</strong> — keep structure and expression separate.</li>
+                    <li><strong>Don't ignore the neck seam</strong> when mixing a head from one product with a body from another.</li>
+                    <li><strong>Don't push body morphs so far</strong> that clothing can't follow, unless the project needs it.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Blend two characters at partial strength to make a face nobody else owns.</li>
+                    <li>Use <strong>Zero Figure Shape</strong> freely — it's your safe "start the mix over" button.</li>
+                    <li>Note which morph products a saved mix depends on, so it reproduces on other machines.</li>
+                    <li>Save partial shapes (a great nose, a favorite body build) to layer onto future characters.</li>
+                </ul>
+            </section>
+
+            <!-- Section 10: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>A <strong>morph</strong> reshapes a figure's mesh toward a saved target and leaves the <strong>rig untouched</strong>, so morphed figures still pose normally.</li>
+                        <li>The <strong>Shaping pane</strong> gathers a figure's morphs into <strong>Actor, Head, Body, and Expressions</strong> groups — for the selected figure.</li>
+                        <li><strong>Character presets</strong> give an instant full shape; dial them to 70–90% and hand-tune to make them yours.</li>
+                        <li><strong>Head and body morphs</strong> build identity — small combined moves and honest <strong>proportion</strong> beat any single extreme dial.</li>
+                        <li><strong>Expressions</strong> are morphs too; keep them separate from structure, and <strong>mix responsibly</strong> — blend, change one thing at a time, and <strong>Zero Figure Shape</strong> to reset.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/finding_your_way_around/interface/panes/shaping/start" target="_blank" rel="noopener">The Shaping pane — official Daz user guide</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/creating_scene_content/morphs/start" target="_blank" rel="noopener">Working with morphs — Daz documentation</a></li>
+                    <li><a href="https://www.daz3d.com/genesis-8" target="_blank" rel="noopener">About the Genesis 8 figure</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your character now has a face, a body, and a feeling all its own — but the skin is still the default surface. In <strong>Lesson 2.3 — Materials &amp; Iray Surfaces</strong>, we bring the figure to life at the surface level: the Surfaces pane, the Iray Uber shader, and the material tweaks that turn a shaped figure into a believable, render-ready character.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>🎉 You made someone!</h3>
+                    <p>From a generic base to a distinct character with your own face, build, and expression — that's the creative heart of Daz. Every render from here is <em>your</em> character, not a stock figure. Next, let's make that skin look real.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_04_loading_and_posing_figures.html" class="prev-lesson">← Previous: Loading &amp; Posing Genesis Figures</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_06_materials_and_iray_surfaces.html" class="next-lesson">Next: Materials &amp; Iray Surfaces →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 1.2 — Installing Daz & the Content Library: the three install methods (DIM, Daz Central, Daz Connect), claiming free Starter Essentials, Smart Content vs the Content Library, and where your files actually live.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 1.2: Installing Daz &amp; the Content Library - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 1</a></li>
+            <li aria-current="page">Lesson 1.2: Installing Daz &amp; the Content Library</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>📦 Lesson 1.2: Installing Daz &amp; the Content Library</h1>
+                <p class="lead">Time to get Daz onto your machine. The install itself is easy — the part that trips up newcomers is <em>content</em>: how it's delivered, where it lands on your drive, and why Daz has two different panes for finding it. We'll demystify all of it and get your free Starter Essentials ready to load.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Choose between the three ways to install Daz Studio — <strong>Daz Central</strong>, <strong>Daz Install Manager (DIM)</strong>, and <strong>Daz Connect</strong></li>
+                        <li>Install Daz Studio and claim your free <strong>Starter Essentials</strong> content</li>
+                        <li>Explain the difference between an <strong>application</strong> and a <strong>content library</strong></li>
+                        <li>Tell <strong>Smart Content</strong> apart from the <strong>Content Library</strong> and know when to use each</li>
+                        <li>Find where your content files physically live on disk — and why that matters</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 45 minutes</p>
+                    <p><strong>Project:</strong> A working Daz Studio install with Starter Essentials downloaded and visible in the content panes, ready to load a figure in Lesson 1.3.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#app-vs-content" class="toc-link">App vs Content: The Big Idea</a></li>
+                        <li><a href="#install-methods" class="toc-link">Three Ways to Install</a></li>
+                        <li><a href="#installing" class="toc-link">Installing Daz Studio</a></li>
+                        <li><a href="#starter-essentials" class="toc-link">Claiming Starter Essentials</a></li>
+                        <li><a href="#smart-vs-library" class="toc-link">Smart Content vs Content Library</a></li>
+                        <li><a href="#where-files-live" class="toc-link">Where Your Files Actually Live</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Install &amp; Verify</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: App vs Content -->
+            <section id="app-vs-content" class="lesson-section">
+                <h2>App vs Content: The Big Idea</h2>
+                <p>Before we install anything, hold onto one idea — it explains almost every "where did my figure go?" question beginners ask:</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> Daz Studio is <em>two</em> separate things — the <strong>application</strong> (the program you open) and your <strong>content</strong> (the figures, clothing, hair, and poses stored in folders on your drive). They're installed and updated independently.
+                </blockquote>
+
+                <p>In most software, the program <em>is</em> the whole thing. Daz is different. The application is a fairly small download. Your content — Genesis figures, outfits, sets — is a growing collection of files that lives in a <strong>content library</strong> the app reads from. You could reinstall the application tomorrow and all your content would still be sitting there, untouched.</p>
+
+                <p>This split is why Daz has dedicated <strong>installer tools</strong> whose whole job is to download content and drop it into the right folders. Understanding the split now means the panes, paths, and installers ahead will feel obvious instead of mysterious.</p>
+
+                <figure>
+                    <div class="image-placeholder image-placeholder--wide" role="img" aria-label="Diagram showing the Daz Studio application as one box and the content library folders as a separate box, connected by an arrow labeled 'the app reads content from the library'">
+                        🖼️ Figure placeholder — the app and the content library are two separate things
+                    </div>
+                    <figcaption>Figure 1: The application and your content library are separate. Installers put content into the library; the app reads from it. (Art to be added; see <code>lesson_02_image_requirements.md</code>.)</figcaption>
+                </figure>
+            </section>
+
+            <!-- Section 2: Three ways to install -->
+            <section id="install-methods" class="lesson-section">
+                <h2>Three Ways to Install</h2>
+                <p>Daz gives you three different tools to install the app and manage content. They can even be mixed, but as a beginner you should pick <em>one</em> and stick with it. Here's the honest comparison:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>What It Is</th>
+                                <th>Best For</th>
+                                <th>Watch Out</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Daz Central</strong></td>
+                                <td>An all-in-one launcher that installs the app and content with a friendly, modern UI</td>
+                                <td>Absolute beginners who want the simplest path</td>
+                                <td>Less control over exact install folders</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Daz Install Manager (DIM)</strong></td>
+                                <td>A dedicated download/installer that lists your purchases as installable packages</td>
+                                <td>Anyone who wants clean control over what's installed and where</td>
+                                <td>Slightly more manual; two windows to learn</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Daz Connect</strong></td>
+                                <td>Installs content <em>from inside Daz Studio</em> itself (the "Smart Content" store integration)</td>
+                                <td>Grabbing a single item quickly while you work</td>
+                                <td>Stores files in a separate "Cloud" location that confuses many users</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>DIM (Daz Install Manager):</strong> a small companion program, separate from Daz Studio, that logs into your account, lists everything you own as downloadable packages, and installs them into your content library. It's the long-standing favorite of experienced users because it's predictable and easy to reinstall or uninstall from.</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Our recommendation for this course</h4>
+                    <p>If you want the <strong>simplest</strong> start, use <strong>Daz Central</strong> — one app, one button. If you'd like the <strong>tidiest, most controllable</strong> setup (and the habits experienced users build), use <strong>DIM</strong>. Either works for everything in this course. We'll show the DIM path in detail because it makes <em>where files live</em> crystal clear — the single most useful thing to understand early.</p>
+                </div>
+
+                <p>Here's how the three relate to the app and your content library:</p>
+
+                <div class="mermaid">
+                    graph TD
+                        AC["Daz Central: launcher"] --> APP["Daz Studio application"]
+                        AC --> LIB["Content library on disk"]
+                        DIM["Daz Install Manager"] --> APP
+                        DIM --> LIB
+                        DC["Daz Connect: in-app store"] --> CLOUD["Connect Cloud folder"]
+                        APP --> LIB
+                        APP --> CLOUD
+                        style APP fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style LIB fill:#3b82f6,stroke:#333,color:#fff
+                        style CLOUD fill:#f59e0b,stroke:#333,color:#fff
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Don't try to install the <em>same</em> content through two methods at once. Mixing DIM and Daz Connect installs of the same product is the classic cause of duplicate entries in your content panes. Pick one primary method now.
+                </blockquote>
+            </section>
+
+            <!-- Section 3: Installing -->
+            <section id="installing" class="lesson-section">
+                <h2>Installing Daz Studio</h2>
+                <p>The exact clicks differ slightly between Central and DIM, but the shape is the same everywhere. Here's the full arc so you know what to expect before you start:</p>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Create free Daz account"] --> B["Download installer: Central or DIM"]
+                        B --> C["Sign in"]
+                        C --> D["Install the Daz Studio app"]
+                        D --> E["Install Starter Essentials content"]
+                        E --> F["Launch Daz Studio"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style D fill:#3b82f6,stroke:#333,color:#fff
+                        style F fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <h3>The DIM path, step by step</h3>
+                <ol>
+                    <li>Go to <a href="https://www.daz3d.com/get_studio" target="_blank" rel="noopener">daz3d.com/get_studio</a> and download the <strong>Daz Install Manager</strong> for your OS (Windows or macOS).</li>
+                    <li>Run the DIM installer and open DIM. Sign in with the free account you created in Lesson 1.1.</li>
+                    <li>DIM shows a <strong>Ready to Download</strong> tab listing everything on your account. At minimum you'll see <strong>Daz Studio</strong> itself and the <strong>Starter Essentials</strong> packages.</li>
+                    <li>Tick <strong>Daz Studio</strong> (and its Starter Essentials) and click <strong>Download</strong>. When downloads finish, the items move to <strong>Ready to Install</strong> — click <strong>Install</strong>.</li>
+                    <li>That's it. Daz Studio is now installed, and its starter content is in your library.</li>
+                </ol>
+
+                <figure>
+                    <div class="image-placeholder" role="img" aria-label="Screenshot of Daz Install Manager showing the Ready to Download tab with Daz Studio and Starter Essentials packages checked">
+                        🖼️ Figure placeholder — Daz Install Manager, Ready to Download tab
+                    </div>
+                    <figcaption>Figure 2: DIM's tabbed workflow — <em>Ready to Download</em> → <em>Ready to Install</em> → <em>Installed</em>. You always know exactly what's on your system.</figcaption>
+                </figure>
+
+                <div class="card card-info">
+                    <h4>💡 Doing it with Daz Central instead?</h4>
+                    <p>Download <strong>Daz Central</strong> from the same page, sign in, and click <strong>Install</strong> next to Daz Studio. Central handles the app and its starter content together — fewer steps, less visible detail. You can always add DIM later; they coexist happily as long as you don't double-install the same product.</p>
+                </div>
+
+                <div class="card card-warning">
+                    <h4>⚠️ Watch Out — the first launch is slow</h4>
+                    <p>The very first time Daz Studio opens, it builds a database of your content and may show a <strong>PostgreSQL</strong> setup / "Content Management Service" prompt. Let it finish and accept the defaults. This one-time indexing is what powers <strong>Smart Content</strong> — if you skip or block it, Smart Content will look empty later.</p>
+                </div>
+            </section>
+
+            <!-- Section 4: Starter Essentials -->
+            <section id="starter-essentials" class="lesson-section">
+                <h2>Claiming Starter Essentials</h2>
+                <p>Every free Daz account can claim the <strong>Starter Essentials</strong> bundles at no cost. These are the base building blocks — and everything this course needs.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bundle</th>
+                                <th>What's Inside</th>
+                                <th>Why You Need It</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Genesis 8 Starter Essentials</strong></td>
+                                <td>The Genesis 8 base figures (male &amp; female) plus starter shapes and materials</td>
+                                <td>The figure you'll pose, shape, and render all course long</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Genesis 9 Starter Essentials</strong></td>
+                                <td>The newer Genesis 9 base figure and starter content</td>
+                                <td>Optional — grab it to try the newest generation</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Default lights, cameras &amp; shaders</strong></td>
+                                <td>Basic Iray materials and utility presets</td>
+                                <td>Enough to light and render without buying anything</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — if the bundles aren't in DIM</h4>
+                    <p>If Starter Essentials don't appear in your DIM download list, they may not be attached to your account yet. Log in at <a href="https://www.daz3d.com/" target="_blank" rel="noopener">daz3d.com</a>, search the store for "Genesis 8 Starter Essentials," and add the <strong>free</strong> item to your cart and "check out" (it costs nothing). It'll then show up in DIM. This one-time step catches a lot of beginners.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> For this course, <strong>Genesis 8</strong> is our default figure because it has the deepest free and paid content library. Installing G9 too is fine, but when a lesson says "load the base figure," reach for Genesis 8 unless told otherwise.
+                </blockquote>
+            </section>
+
+            <!-- Section 5: Smart Content vs Content Library -->
+            <section id="smart-vs-library" class="lesson-section">
+                <h2>Smart Content vs Content Library</h2>
+                <p>Inside Daz Studio you'll find <em>two</em> panes that both show content. New users constantly wonder why. Here's the clean mental model:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Smart Content</th>
+                                <th>Content Library</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>What it shows</strong></td>
+                                <td>Content organized by <em>metadata</em> — categories, and what's compatible with your selected figure</td>
+                                <td>The raw <em>folder structure</em> on disk, exactly as files are stored</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Killer feature</strong></td>
+                                <td>Select a figure and it filters to only what fits — "show me hair for this Genesis 8 character"</td>
+                                <td>Always shows everything, even content without metadata</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Depends on</strong></td>
+                                <td>The content database (the indexing step from first launch)</td>
+                                <td>Nothing — it just reads folders</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Best when</strong></td>
+                                <td>You want the <em>right</em> item fast and don't care where it lives</td>
+                                <td>Metadata is missing, or you want to browse by folder</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Metadata:</strong> extra information attached to a content file — its category, which figure it fits, its thumbnail, and tags. <strong>Smart Content</strong> is powered entirely by metadata; <strong>Content Library</strong> ignores it and just shows folders. This is why a freshly installed item can appear in one pane but not the other.</p>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 The rule of thumb</h4>
+                    <p>Use <strong>Smart Content</strong> for day-to-day work — it's faster and context-aware. Fall back to the <strong>Content Library</strong> when something you know you installed doesn't show up in Smart Content (usually a metadata issue), or when you prefer browsing folders directly. Both point at the <em>same</em> files on disk; they're just two windows onto the same shelf.</p>
+                </div>
+
+                <figure>
+                    <div class="image-placeholder image-placeholder--wide" role="img" aria-label="Side-by-side screenshot of the Smart Content pane filtered to a Genesis 8 figure next to the Content Library pane showing a folder tree">
+                        🖼️ Figure placeholder — Smart Content (metadata-driven) beside Content Library (folder-driven)
+                    </div>
+                    <figcaption>Figure 3: Two panes, one library. Smart Content filters by metadata and compatibility; the Content Library shows the real folder tree.</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> If <strong>Smart Content</strong> looks empty right after installing, don't panic. It usually means the content database is still building or the item lacks metadata. Switch to the <strong>Content Library</strong> pane and browse to <code>People &gt; Genesis 8</code> — your figure will be there. We'll re-index in the hands-on exercise.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: Where files live -->
+            <section id="where-files-live" class="lesson-section">
+                <h2>Where Your Files Actually Live</h2>
+                <p>This is the knowledge that separates confident Daz users from frustrated ones. Content is just files in <strong>content directory</strong> folders that you can see in your OS file browser. When Daz "can't find" something, it's almost always a directory-mapping issue — not a lost file.</p>
+
+                <h3>The default content directory</h3>
+                <p>By default, DIM installs content into a folder like this (Windows shown; macOS is analogous under your user Library):</p>
+
+                <div class="card card-accent">
+                    <h4>📁 Typical Windows content path</h4>
+                    <p><code>C:\Users\Public\Documents\My DAZ 3D Library\</code></p>
+                    <p>Inside it you'll find familiar folders: <code>People\</code>, <code>Runtime\</code>, <code>data\</code>, <code>Environments\</code>, and more. Your Genesis 8 figure lives under <code>People\Genesis 8\</code>.</p>
+                </div>
+
+                <p>Daz Studio doesn't magically know about that folder — you <strong>map</strong> it in preferences so the app knows which directories to read. DIM and the app usually agree on this automatically, but when they don't, content "disappears." The fix is always the same: make sure the app's <strong>content directories</strong> point at the folder your installer wrote to.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Where to check the mapping</h4>
+                    <p>In Daz Studio: <strong>Edit → Preferences → Content → Content Directory Manager</strong> (on macOS, <strong>DAZ Studio → Preferences</strong>). This lists every folder Daz treats as a content library. If a path here matches where DIM installed, everything shows up. If not, add the correct folder and click your content pane's refresh.</p>
+                </div>
+
+                <h3>Three storage locations, briefly</h3>
+                <ul>
+                    <li><strong>DAZ Studio Formats</strong> — modern content (<code>.duf</code> files): figures, poses, materials. This is where most things live.</li>
+                    <li><strong>Poser Formats</strong> — older <code>Runtime</code>-style content, still widely used for textures and legacy items.</li>
+                    <li><strong>Daz Connect (Cloud)</strong> — a separate <code>data/cloud</code> location used only when you install <em>through Daz Connect</em>. This is the "why do I have duplicates?" culprit, and the main reason we recommend picking one install method.</li>
+                </ul>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — put your library on a fast, roomy drive</h4>
+                    <p>Content grows quickly. During install you can point DIM at any folder — many users put <code>My DAZ 3D Library</code> on a large SSD (e.g. <code>D:\Daz\My DAZ 3D Library</code>) for speed and space. Just make sure Daz Studio's Content Directory Manager points at the same place. Decide this <em>before</em> you install a lot, since moving content later means re-mapping paths.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Never rename or move content folders by hand once Daz knows about them, unless you also update the Content Directory Manager. The files aren't lost when you move them — but Daz will act like they are until the mapping is fixed.
+                </blockquote>
+            </section>
+
+            <!-- Section 7: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Install &amp; Verify</h2>
+                <p>Let's turn all of this into a working setup. By the end you'll have Daz installed, Starter Essentials downloaded, and your figure visible in both content panes.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Install Daz &amp; Starter Essentials</h3>
+                    <p><strong>Objective:</strong> Get the application and base content onto your machine.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Download either <strong>Daz Central</strong> or <strong>Daz Install Manager</strong> from <a href="https://www.daz3d.com/get_studio" target="_blank" rel="noopener">daz3d.com/get_studio</a> and sign in.</li>
+                        <li>Install <strong>Daz Studio</strong>.</li>
+                        <li>Install <strong>Genesis 8 Starter Essentials</strong>. (If it's not listed, claim the free item in the store first — see the Pro Tip above.)</li>
+                        <li>Launch Daz Studio. Let the first-run content indexing finish completely.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Confirm Content in Both Panes</h3>
+                    <p><strong>Objective:</strong> Prove your content is installed <em>and</em> mapped correctly.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Open the <strong>Content Library</strong> pane (Window → Panes → Content Library if it's hidden).</li>
+                        <li>Browse to <code>DAZ Studio Formats → My DAZ 3D Library → People → Genesis 8</code>. You should see your figure and starter presets.</li>
+                        <li>Open the <strong>Smart Content</strong> pane. Under <strong>Figures</strong>, confirm the Genesis 8 base figure appears.</li>
+                        <li>If Smart Content is empty, go to <strong>Content DB Maintenance</strong> (right-click the pane's options menu → <em>Content DB Maintenance</em>) and run <strong>Re-Import Metadata</strong>. Refresh the pane.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — my figure shows in Content Library but not Smart Content</summary>
+                        <p>That's a metadata/database issue, not a missing file. Run <em>Re-Import Metadata</em> from Content DB Maintenance, or confirm the Content Management Service (PostgreSQL) is running. The file is fine — Smart Content just hasn't indexed it yet.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Locate Your Library on Disk</h3>
+                    <p><strong>Objective:</strong> Connect the app's view to the real files.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Open <strong>Edit → Preferences → Content → Content Directory Manager</strong>.</li>
+                        <li>Note the folder listed under <strong>DAZ Studio Formats</strong> (e.g. <code>...\My DAZ 3D Library</code>).</li>
+                        <li>Open that folder in your OS file browser and find <code>People\Genesis 8\</code>. Seeing the real files there is the whole point — content is just files in mapped folders.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What is the main difference between Smart Content and the Content Library?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Both panes read from the same content on disk — neither stores a private copy.">
+                                A) Smart Content stores its own separate copy of every file
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Smart Content is metadata-driven and filters by compatibility, while the Content Library shows the raw folder structure on disk. Both point at the same files.">
+                                B) Smart Content filters by metadata/compatibility; Content Library shows the raw folder tree
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="The Content Library isn't paid-only — it shows everything, free or paid.">
+                                C) The Content Library only shows content you've paid for
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> Your Genesis 8 figure appears in the Content Library but not in Smart Content. What's the most likely cause?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="If it shows in the Content Library, the file is installed and mapped — it isn't missing.">
+                                A) The figure failed to download and isn't on disk
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Starter Essentials are free; you don't need to buy the base figure.">
+                                B) You need to purchase the figure to unlock Smart Content
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Smart Content is powered by the content database and metadata. If indexing hasn't finished or metadata is missing, items won't appear there even though the files exist — re-importing metadata fixes it.">
+                                C) The metadata/database hasn't indexed it yet
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Why does this course recommend picking one install method (e.g. DIM <em>or</em> Daz Central) rather than mixing them?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Installing the same product through multiple methods — especially Daz Connect's separate Cloud location alongside DIM — is the classic cause of duplicate content entries.">
+                                A) Installing the same content two ways causes duplicate entries and confusion
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Daz Studio itself is free regardless of install method.">
+                                B) Using more than one method makes the application cost money
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Method choice doesn't disable Iray or GPU rendering.">
+                                C) Mixing methods disables GPU rendering in Iray
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 8: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Pick one install method</strong> (DIM or Daz Central) and use it consistently to avoid duplicate content.</li>
+                    <li><strong>Let the first-run indexing finish</strong> so Smart Content works from day one.</li>
+                    <li><strong>Know your content path</strong> — check the Content Directory Manager once so you always know where files live.</li>
+                    <li><strong>Install your library on a fast, roomy drive</strong> before you accumulate a lot of content.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't hand-move content folders</strong> without updating the Content Directory Manager afterward.</li>
+                    <li><strong>Don't double-install the same product</strong> through both DIM and Daz Connect.</li>
+                    <li><strong>Don't assume a missing item is lost</strong> — check the Content Library pane and your directory mapping first.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Keep DIM installed even if you use Central — it's the fastest way to <em>reinstall</em> or <em>uninstall</em> a specific product cleanly.</li>
+                    <li>The <code>My DAZ 3D Library</code> folder can be backed up like any other folder. Back it up before big reorganizations.</li>
+                    <li>If a store product won't appear in DIM, re-log in — DIM refreshes your entitlements on sign-in.</li>
+                </ul>
+            </section>
+
+            <!-- Section 9: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>Daz is <strong>two things</strong>: the application and your content library, installed and updated separately.</li>
+                        <li>Three install tools — <strong>Daz Central</strong> (simplest), <strong>DIM</strong> (most control), and <strong>Daz Connect</strong> (in-app) — pick one and stick with it.</li>
+                        <li>Free <strong>Starter Essentials</strong> (Genesis 8) is all this course needs; claim it if it's not already on your account.</li>
+                        <li><strong>Smart Content</strong> is metadata-driven and compatibility-aware; the <strong>Content Library</strong> shows the raw folder tree — both point at the same files.</li>
+                        <li>Content is just <strong>files in mapped folders</strong>; the Content Directory Manager is where the app learns where they live.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="https://www.daz3d.com/get_studio" target="_blank" rel="noopener">Download Daz Studio, DIM &amp; Daz Central</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/install_manager/start" target="_blank" rel="noopener">Daz Install Manager — official documentation</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/finding_content/start" target="_blank" rel="noopener">Finding &amp; managing content — Daz user guide</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>With Daz installed and content ready, <strong>Lesson 1.3 — The Daz Studio Interface</strong> gets you comfortable in the workspace: navigating the viewport, reading the Scene and Parameters panes, arranging tabs and layouts, and saving a setup that fits how you work.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>🎉 You're installed!</h3>
+                    <p>The trickiest part of Daz for beginners — content, panes, and paths — now makes sense. Everything from here is the fun part: figures, poses, light, and renders. Let's open the workspace.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_01_welcome_to_daz_studio.html" class="prev-lesson">← Previous: Welcome to Daz Studio</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_03_the_daz_studio_interface.html" class="next-lesson">Next: The Daz Studio Interface →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

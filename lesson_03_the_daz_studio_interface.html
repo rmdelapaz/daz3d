@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 1.3 — The Daz Studio Interface: navigating the viewport, reading the Scene and Parameters panes, working with the content panes, arranging tabs and panes, and saving a custom workspace layout.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 1.3: The Daz Studio Interface - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 1</a></li>
+            <li aria-current="page">Lesson 1.3: The Daz Studio Interface</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>🖥️ Lesson 1.3: The Daz Studio Interface</h1>
+                <p class="lead">Daz Studio's first impression can be overwhelming — panes everywhere, a big 3D window in the middle, and dozens of little controls. But the layout is logical once you know the four regions that matter. In this lesson we'll get you moving smoothly around the viewport, reading the Scene and Parameters panes, and arranging a workspace that fits how <em>you</em> work.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li><strong>Navigate the viewport</strong> confidently — orbit, pan, zoom, and frame your figure</li>
+                        <li>Read the <strong>Scene pane</strong> to select, rename, and understand the objects in your scene</li>
+                        <li>Use the <strong>Parameters pane</strong> to find and adjust any dialable property</li>
+                        <li>Recognize how the <strong>content panes</strong> feed items into your scene</li>
+                        <li>Rearrange <strong>tabs and panes</strong>, choose a built-in <strong>layout</strong>, and <strong>save your own workspace</strong></li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 50 minutes</p>
+                    <p><strong>Project:</strong> A comfortable, saved custom interface layout with the panes you'll use most — ready to load your first figure in Lesson 2.1.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#workspace" class="toc-link">The Workspace at a Glance</a></li>
+                        <li><a href="#viewport" class="toc-link">Navigating the Viewport</a></li>
+                        <li><a href="#scene-pane" class="toc-link">The Scene Pane</a></li>
+                        <li><a href="#parameters-pane" class="toc-link">The Parameters Pane</a></li>
+                        <li><a href="#content-panes" class="toc-link">The Content Panes</a></li>
+                        <li><a href="#tabs-layouts" class="toc-link">Tabs, Panes &amp; Layouts</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Build Your Workspace</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: Workspace at a Glance -->
+            <section id="workspace" class="lesson-section">
+                <h2>The Workspace at a Glance</h2>
+                <p>Open Daz Studio and it looks busy — but almost everything you'll touch falls into <strong>four regions</strong>. Learn these and the clutter turns into a map.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> The <strong>viewport</strong> in the center is your 3D stage; the <strong>content panes</strong> bring things onto that stage; the <strong>Scene pane</strong> lists what's on it; and the <strong>Parameters</strong>/<strong>tool</strong> panes change whatever is selected.
+                </blockquote>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Region</th>
+                                <th>Where It Sits</th>
+                                <th>What It Does</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Viewport</strong></td>
+                                <td>Center — the large 3D window</td>
+                                <td>Shows your scene in 3D; where you frame, pose, and preview</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Content panes</strong></td>
+                                <td>Usually left or right</td>
+                                <td>Smart Content &amp; Content Library — where you find and load figures, clothing, poses</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Scene pane</strong></td>
+                                <td>Usually top-right</td>
+                                <td>A tree list of every object in the scene; your selection hub</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Parameters &amp; tool panes</strong></td>
+                                <td>Usually right or bottom</td>
+                                <td>Parameters, Shaping, Surfaces, Posing — they edit whatever is selected</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>The exact positions depend on the <strong>layout</strong> you're using (Daz ships several), but the <em>roles</em> never change. A workflow loop connects them: you <em>find</em> something in a content pane, it appears in the <em>viewport</em> and the <em>Scene pane</em>, you <em>select</em> it there, and you <em>adjust</em> it in Parameters. That loop is the heartbeat of Daz Studio.</p>
+
+                <div class="mermaid">
+                    graph LR
+                        C["Content panes: find an item"] --> V["Viewport: it appears in 3D"]
+                        V --> S["Scene pane: select the object"]
+                        S --> P["Parameters pane: adjust it"]
+                        P --> V
+                        style V fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style S fill:#3b82f6,stroke:#333,color:#fff
+                        style P fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <figure>
+                    <div class="image-placeholder image-placeholder--wide" role="img" aria-label="Annotated screenshot of the full Daz Studio interface with the viewport, content panes, Scene pane, and Parameters pane each labeled">
+                        🖼️ Figure placeholder — the four regions of the Daz Studio interface, labeled
+                    </div>
+                    <figcaption>Figure 1: The four regions of the workspace. Positions shift between layouts, but the roles — stage, source, list, editor — stay the same. (Art to be added; see <code>lesson_03_image_requirements.md</code>.)</figcaption>
+                </figure>
+            </section>
+
+            <!-- Section 2: Viewport -->
+            <section id="viewport" class="lesson-section">
+                <h2>Navigating the Viewport</h2>
+                <p>The viewport is where you'll spend most of your time, so getting fluid with the camera pays off immediately. Daz gives you two ways to move: the little <strong>navigation cube/icons</strong> in the top-right corner of the viewport, and — faster once learned — <strong>mouse + modifier</strong> shortcuts.</p>
+
+                <h3>The three core moves</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Move</th>
+                                <th>What It Does</th>
+                                <th>Default Mouse Control</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Orbit</strong></td>
+                                <td>Rotate the camera <em>around</em> your subject</td>
+                                <td>Drag with the <strong>left-drag on the orbit icon</strong>, or Alt + drag (varies by preset)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pan</strong></td>
+                                <td>Slide the view left/right/up/down without rotating</td>
+                                <td>Drag the <strong>pan (hand) icon</strong>, or the on-screen pan control</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Zoom / Dolly</strong></td>
+                                <td>Move closer to or farther from the subject</td>
+                                <td><strong>Mouse wheel</strong>, or drag the zoom icon</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Viewport navigation icons:</strong> the small cluster of controls (orbit, pan, zoom, and a nav cube) in the top-right corner of the 3D window. Dragging them moves the <em>active camera</em>. They're the reliable, mouse-only way to navigate — great while you're learning, before you memorize keyboard modifiers.</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ The single most useful shortcut: Frame</h4>
+                    <p>Select an object and press <kbd>F</kbd> (or use <strong>View → Frame Selected</strong>) to snap the camera to nicely fill the view with it. Lost in space, zoomed off into the void, or can't find your figure? <kbd>F</kbd> brings it right back. <strong>Aim</strong> (<kbd>A</kbd>) similarly centers the camera on the selection without changing distance.</p>
+                </div>
+
+                <h3>Cameras vs. the default view</h3>
+                <p>When you first open a scene you're looking through the <strong>Perspective View</strong> — a built-in default camera. You can also create real <strong>cameras</strong> (we'll do this properly in Module 3) and switch between them using the <strong>view selector</strong> dropdown at the top-left of the viewport. That dropdown also holds orthographic views — <strong>Front</strong>, <strong>Back</strong>, <strong>Left</strong>, <strong>Right</strong>, <strong>Top</strong>, <strong>Bottom</strong> — which are invaluable for lining things up precisely.</p>
+
+                <div class="card card-info">
+                    <h4>💡 DrawStyle — how the scene is shaded</h4>
+                    <p>The <strong>DrawStyle</strong> control (top-right of the viewport) changes how the scene is <em>drawn</em> while you work — <strong>Texture Shaded</strong> for a solid preview, <strong>Wire Shaded</strong> to see geometry, or <strong>Smooth Shaded</strong>. This only affects the working preview, <em>not</em> your final Iray render. Use a lighter DrawStyle if your viewport feels sluggish on a big scene.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> If you orbit and your figure seems to swing wildly or the camera spins around the wrong point, it's usually because <em>nothing is selected</em> or a distant object is. Click your figure in the Scene pane, press <kbd>F</kbd> to frame it, and the camera will orbit around it sensibly again.
+                </blockquote>
+
+                <figure>
+                    <div class="image-placeholder" role="img" aria-label="Close-up screenshot of the viewport top corners showing the view selector dropdown, DrawStyle control, and the orbit, pan, and zoom navigation icons">
+                        🖼️ Figure placeholder — the viewport's view selector, DrawStyle, and navigation icons
+                    </div>
+                    <figcaption>Figure 2: The viewport's own controls — the view/camera selector (top-left) and the DrawStyle plus navigation icons (top-right).</figcaption>
+                </figure>
+            </section>
+
+            <!-- Section 3: Scene pane -->
+            <section id="scene-pane" class="lesson-section">
+                <h2>The Scene Pane</h2>
+                <p>If the viewport shows you the scene, the <strong>Scene pane</strong> <em>lists</em> it. Every figure, prop, light, and camera appears here as a row in a tree. It's your primary way to <strong>select</strong> things precisely — far more reliable than clicking in a crowded 3D view.</p>
+
+                <h3>What the tree tells you</h3>
+                <ul>
+                    <li><strong>Hierarchy</strong> — indented rows show parent/child relationships. A hat parented to a head sits <em>under</em> the head figure; move the figure and the hat follows.</li>
+                    <li><strong>Node type</strong> — small icons distinguish figures, props, bones, lights, and cameras at a glance.</li>
+                    <li><strong>Expand triangles</strong> — click the arrow beside a figure to drill into its <strong>bones</strong> (great for selecting a single arm or finger to pose).</li>
+                    <li><strong>Visibility</strong> — the eye toggle hides an object in the viewport without deleting it.</li>
+                </ul>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Node:</strong> Daz's word for any single item in the Scene pane — a figure, a bone, a prop, a light, or a camera. Selecting a node is what tells every other pane (Parameters, Surfaces, Posing) <em>what</em> you want to edit. "Select the node first" is the golden rule of Daz.</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — rename as you go</h4>
+                    <p>Double-click a row to <strong>rename</strong> it. In a scene with three characters, <code>Hero</code>, <code>Villain</code>, and <code>Extra</code> beat <code>Genesis 8 Female</code>, <code>Genesis 8 Female (2)</code>, and <code>Genesis 8 Female (3)</code> every time. Good names now save real confusion when scenes get busy.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Selecting in the Scene pane and selecting in the viewport are the <em>same</em> selection — they always stay in sync. When a lesson says "select the figure," clicking its top row in the Scene pane is the surest way to do it, especially once clothing and hair overlap it in 3D.
+                </blockquote>
+
+                <figure>
+                    <div class="image-placeholder" role="img" aria-label="Screenshot of the Scene pane showing a Genesis 8 figure expanded to reveal its bone hierarchy, with a parented hat prop and a camera listed">
+                        🖼️ Figure placeholder — the Scene pane tree with a figure expanded to show bones
+                    </div>
+                    <figcaption>Figure 3: The Scene pane lists every node as a tree. Expand a figure to reach its bones; parented items nest beneath their parent.</figcaption>
+                </figure>
+            </section>
+
+            <!-- Section 4: Parameters pane -->
+            <section id="parameters-pane" class="lesson-section">
+                <h2>The Parameters Pane</h2>
+                <p>Select a node, and the <strong>Parameters pane</strong> fills with every adjustable property for it — organized into groups down the left side and shown as <strong>dials</strong> (sliders) on the right. This is where posing values, transforms, and countless morphs actually live.</p>
+
+                <h3>How it's organized</h3>
+                <ul>
+                    <li><strong>Group list (left)</strong> — categories like <strong>General → Transforms</strong> (position, rotation, scale), <strong>Pose Controls</strong>, and figure-specific groups. Click a group to filter the dials.</li>
+                    <li><strong>Dials (right)</strong> — each property is a slider with a number field. Drag the slider, type an exact value, or click the gear/menu on a dial for options like <em>limits</em> and <em>reset</em>.</li>
+                    <li><strong>Search box</strong> — type a property name (e.g. <code>bend</code>, <code>scale</code>) to jump straight to matching dials across all groups. Indispensable once figures have hundreds of parameters.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 Parameters vs. Shaping vs. Posing</h4>
+                    <p>You'll meet a few panes that all show dials. <strong>Parameters</strong> is the complete list. <strong>Shaping</strong> (Lesson 2.2) is a curated view of <em>morph</em> dials for changing a figure's body/face. <strong>Posing</strong> is a curated view of <em>pose</em> dials. They're friendly front-ends onto the same underlying properties you can always find in Parameters.</p>
+                </div>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Dial (parameter):</strong> a single adjustable value — a slider from, say, 0 to 100 — that drives something about the selected node: how far an elbow bends, how tall the figure is, how wide a nose sits. Most of what you "do" to a character in Daz is turning dials.</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — right-click a dial to reset</h4>
+                    <p>Nudged a value and want it back to default? Right-click the dial (or use its little menu) and choose <strong>Zero</strong> / <strong>Restore Default</strong>. To reset a whole figure's pose, select it and use <strong>Edit → Zero → Zero Figure Pose</strong>. Knowing how to get back to neutral removes the fear of experimenting.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> If the Parameters pane looks empty or shows the "wrong" properties, check your <em>selection</em> first — the pane always reflects the currently selected node. Select a bone and you'll see that bone's rotations; select the whole figure and you'll see figure-level controls.
+                </blockquote>
+            </section>
+
+            <!-- Section 5: Content panes recap -->
+            <section id="content-panes" class="lesson-section">
+                <h2>The Content Panes</h2>
+                <p>You met these in Lesson 1.2 — here's how they fit into the <em>interface</em>. The two content panes are how items get <strong>into</strong> your scene in the first place.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pane</th>
+                                <th>How You Use It Here</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Smart Content</strong></td>
+                                <td>Select a figure, then browse compatible items — hair, clothing, poses — filtered to fit it. Double-click to load.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Content Library</strong></td>
+                                <td>Browse the raw folder tree (<code>People → Genesis 8</code> …). Double-click any preset to load it, whether or not it has metadata.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Loading is usually a double-click</h4>
+                    <p>To bring something into the scene, <strong>double-click</strong> its icon in either content pane. Figures, poses, materials, and props all load this way. If a pose or material asks "apply to which figure?", it's using your current <em>selection</em> — another reminder that selection drives everything.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> If a content pane is missing entirely, it's just closed — not gone. Reopen it from <strong>Window → Panes (Tabs) → Smart Content</strong> (or <strong>Content Library</strong>). We'll use that same menu next to rebuild any pane you want.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: Tabs & Layouts -->
+            <section id="tabs-layouts" class="lesson-section">
+                <h2>Tabs, Panes &amp; Layouts</h2>
+                <p>Here's the part that turns Daz from "cluttered" into "comfortable": the interface is fully <strong>rearrangeable</strong>, and you can <strong>save</strong> the arrangement. Every pane can be shown, hidden, docked into a tab group, or floated into its own window.</p>
+
+                <h3>The building blocks</h3>
+                <ul>
+                    <li><strong>Panes</strong> — individual tools (Scene, Parameters, Surfaces, Smart Content…). Open any from <strong>Window → Panes (Tabs)</strong>.</li>
+                    <li><strong>Tab groups</strong> — several panes stacked in one spot, each with a tab along the top. Click a tab to bring that pane forward.</li>
+                    <li><strong>Docking</strong> — drag a pane's tab to a screen edge or into another group to re-dock it; drag it out to <strong>float</strong> it as a standalone window (handy on a second monitor).</li>
+                </ul>
+
+                <h3>Built-in layouts &amp; styles</h3>
+                <p>Daz ships with ready-made <strong>layouts</strong> under <strong>Window → Workspace → Select Layout</strong>. Two you'll hear about:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Layout</th>
+                                <th>Feel</th>
+                                <th>Good For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>City Limits</strong></td>
+                                <td>The modern default — panes docked around the viewport</td>
+                                <td>Most users; what this course assumes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Hollywood Blvd</strong></td>
+                                <td>A more spread-out, panel-heavy classic</td>
+                                <td>Users who like everything visible at once on a big screen</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>You can also switch the <strong>Interface Style</strong> (colors/skin) under <strong>Window → Style</strong> — purely cosmetic, but a darker style is easier on the eyes for long sessions.</p>
+
+                <div class="card card-success">
+                    <h4>✅ Save your own layout</h4>
+                    <p>Once you've arranged panes the way you like, save it: <strong>Window → Workspace → Save Layout As…</strong>. Give it a name (e.g. <code>My Daz Setup</code>) and it joins the layout list. If you ever knock panes out of place, <strong>Window → Workspace → Select Layout → My Daz Setup</strong> restores everything in one click. This is the single best habit for a stress-free workspace.</p>
+                </div>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Layout:</strong> a saved snapshot of which panes are open and where they're docked. Switching layouts instantly rearranges the whole interface. Because it's just a saved arrangement, experimenting is risk-free — you can always reload a known-good layout.</p>
+                </div>
+
+                <p>Here's the mental model for customizing — from Daz's defaults to a workspace that's yours:</p>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Start from a built-in layout"] --> B["Open the panes you need"]
+                        B --> C["Dock or float them where you like"]
+                        C --> D["Save Layout As: My Daz Setup"]
+                        D --> E["Reload anytime in one click"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style D fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Closing a pane doesn't delete anything in your scene — it just hides the tool. Everything is reachable again from <strong>Window → Panes (Tabs)</strong>. So feel free to close panes you're not using to reduce clutter; you can never "lose" your work this way.
+                </blockquote>
+
+                <figure>
+                    <div class="image-placeholder image-placeholder--wide" role="img" aria-label="Screenshot of the Window menu open to Workspace, showing Select Layout, Save Layout As, and the list of built-in layouts including City Limits">
+                        🖼️ Figure placeholder — the Window → Workspace menu for selecting and saving layouts
+                    </div>
+                    <figcaption>Figure 4: Layouts live under Window → Workspace. Select a built-in one, rearrange, then Save Layout As to make it your own.</figcaption>
+                </figure>
+            </section>
+
+            <!-- Section 7: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Build Your Workspace</h2>
+                <p>Let's make the interface yours. We'll load a quick object to have something to navigate around, practice the core moves, and then arrange and save a layout you'll use for the rest of the course.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Practice the Core Camera Moves</h3>
+                    <p><strong>Objective:</strong> Get fluid with orbit, pan, zoom, and Frame.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>From the <strong>Content Library</strong>, double-click any primitive or starter prop (or a Genesis figure if you've installed one) to put something in the viewport.</li>
+                        <li>Using the viewport's <strong>navigation icons</strong>, practice each move: <strong>orbit</strong> around the object, <strong>pan</strong> to slide it aside, and <strong>zoom</strong> in and out with the mouse wheel.</li>
+                        <li>Deliberately zoom far away until you "lose" the object, then select it in the <strong>Scene pane</strong> and press <kbd>F</kbd> to <strong>Frame</strong> it back into view.</li>
+                        <li>Open the <strong>view selector</strong> (top-left of the viewport) and switch to <strong>Front</strong>, then <strong>Top</strong>, then back to <strong>Perspective</strong>. Notice how orthographic views flatten the scene.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Select in Scene, Adjust in Parameters</h3>
+                    <p><strong>Objective:</strong> Feel the select-then-edit loop that runs all of Daz.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>In the <strong>Scene pane</strong>, click your object's top row to select it. Double-click the row and <strong>rename</strong> it to something memorable.</li>
+                        <li>Open the <strong>Parameters pane</strong>. Under <strong>General → Transforms</strong>, drag the <strong>Y Rotate</strong> dial and watch the object spin in the viewport.</li>
+                        <li>Use the Parameters <strong>search box</strong> to find <code>scale</code>, then change the overall <strong>Scale</strong> dial and watch the size update live.</li>
+                        <li>Right-click a dial you changed and choose <strong>Zero</strong> / <strong>Restore Default</strong> to snap it back. Confirm the object returns to neutral.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — my Parameters pane looks empty</summary>
+                        <p>The Parameters pane always mirrors your <em>current selection</em>. If it's blank, nothing (or the wrong node) is selected — click your object's row in the Scene pane and the dials will appear. Selection drives every editing pane in Daz.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Arrange &amp; Save Your Layout</h3>
+                    <p><strong>Objective:</strong> End with a saved workspace you'll reuse all course long.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Make sure these panes are open (add any missing ones from <strong>Window → Panes (Tabs)</strong>): <strong>Smart Content</strong>, <strong>Content Library</strong>, <strong>Scene</strong>, and <strong>Parameters</strong>.</li>
+                        <li>Drag their tabs to dock them where you like — content on one side, Scene and Parameters on the other. Close anything you don't recognize yet to cut clutter.</li>
+                        <li>Go to <strong>Window → Workspace → Save Layout As…</strong> and name it <code>My Daz Setup</code>.</li>
+                        <li>To prove it works: knock a pane out of place, then <strong>Window → Workspace → Select Layout → My Daz Setup</strong> to restore your saved arrangement instantly.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> You've zoomed away and can't find your figure in the viewport. What's the quickest way to get it back?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Deleting and reloading is drastic — and unnecessary. The figure is still there; you just can't see it.">
+                                A) Delete the figure and load it again
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Selecting the object and pressing F (Frame Selected) snaps the camera to fill the view with it — the fastest recovery when you're lost in the viewport.">
+                                B) Select it in the Scene pane and press F to Frame it
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Switching layouts rearranges panes; it doesn't move the camera to your object.">
+                                C) Switch to a different workspace layout
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> The Parameters pane looks empty. What's the most likely reason?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="A missing pane wouldn't look 'empty' — it would be closed entirely. This is about what's inside it.">
+                                A) The Parameters pane needs to be reinstalled
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Parameters work the same in every layout; the layout isn't the cause.">
+                                B) You're using the wrong workspace layout
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="The Parameters pane always reflects the currently selected node. If nothing (or the wrong node) is selected, it appears empty — select your object in the Scene pane and its dials appear.">
+                                C) Nothing is selected — the pane reflects the current selection
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> You've arranged panes exactly how you like them. How do you make sure you can get this arrangement back after moving things around?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Window → Workspace → Save Layout As… stores your arrangement by name, so you can reload it in one click anytime panes get knocked out of place.">
+                                A) Use Window → Workspace → Save Layout As… and name it
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Closing and reopening Daz reloads the last state, but it won't restore a specific arrangement you want to keep long-term.">
+                                B) Just close and reopen Daz Studio each time
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Changing the Interface Style only changes colors — it doesn't save pane positions.">
+                                C) Switch the Interface Style under Window → Style
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 8: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Select in the Scene pane first</strong> — it's the most reliable way to target exactly the node you mean.</li>
+                    <li><strong>Learn <kbd>F</kbd> (Frame Selected)</strong> early — it's your escape hatch from any lost-in-space viewport moment.</li>
+                    <li><strong>Use the Parameters search box</strong> to find dials fast instead of scrolling hundreds of properties.</li>
+                    <li><strong>Save a custom layout</strong> once you're comfortable, and reload it whenever the interface drifts.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't fight a spinning camera</strong> — if orbit feels wrong, select your figure and Frame it so the camera pivots around it.</li>
+                    <li><strong>Don't panic when a pane vanishes</strong> — it's only closed. Reopen it from Window → Panes (Tabs).</li>
+                    <li><strong>Don't leave everything named "Genesis 8 Female"</strong> — rename nodes in busy scenes so selection stays sane.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Float a pane onto a second monitor by dragging its tab out of the main window — great for keeping Parameters huge while the viewport stays full-screen.</li>
+                    <li>Switch to a lighter <strong>DrawStyle</strong> (Wire or Smooth Shaded) if the viewport stutters on a heavy scene; it doesn't affect your render.</li>
+                    <li>Keep a spare copy of your saved layout name in mind — after a Daz update, reselecting your layout restores your comfortable setup in one click.</li>
+                </ul>
+            </section>
+
+            <!-- Section 9: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>The interface has <strong>four regions</strong>: the <strong>viewport</strong> (stage), the <strong>content panes</strong> (source), the <strong>Scene pane</strong> (list), and <strong>Parameters</strong>/tool panes (editor).</li>
+                        <li>Master three viewport moves — <strong>orbit, pan, zoom</strong> — and one shortcut, <kbd>F</kbd> to <strong>Frame Selected</strong>.</li>
+                        <li>The <strong>Scene pane</strong> is your selection hub; <strong>select the node first</strong>, because every editing pane reflects the current selection.</li>
+                        <li>The <strong>Parameters pane</strong> holds every dialable property of the selected node — use its <strong>search box</strong> and right-click to reset.</li>
+                        <li>Panes are fully rearrangeable; pick a <strong>layout</strong>, customize it, and <strong>Save Layout As…</strong> so you can restore your workspace in one click.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/interface/start" target="_blank" rel="noopener">The Daz Studio interface — official user guide</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/interface/panes/scene/start" target="_blank" rel="noopener">The Scene pane — Daz documentation</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/interface/panes/parameters/start" target="_blank" rel="noopener">The Parameters pane — Daz documentation</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>You can now move around the workspace with confidence. That completes <strong>Module 1</strong> — you understand what Daz is, you're installed with content, and your interface fits you. In <strong>Lesson 2.1 — Loading &amp; Posing Genesis Figures</strong>, we finally put a character on that stage: loading a Genesis figure and bringing it to life with pose presets and manual posing.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>🎉 Module 1 complete!</h3>
+                    <p>The interface used to look like chaos — now it's a map you can read. From here on it's pure creativity: figures, poses, morphs, light, and renders. Let's load your first character.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_02_installing_and_content_library.html" class="prev-lesson">← Previous: Installing Daz &amp; the Content Library</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_04_loading_and_posing_figures.html" class="next-lesson">Next: Loading &amp; Posing Genesis Figures →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

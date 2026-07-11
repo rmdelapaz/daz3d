@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 2.1 — Loading & Posing Genesis Figures: loading a Genesis 8/9 base figure, applying pose presets, using ActivePose and PowerPose, rotating bones by hand, pinning limbs, and saving your own pose presets.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 2.1: Loading &amp; Posing Genesis Figures - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 2</a></li>
+            <li aria-current="page">Lesson 2.1: Loading &amp; Posing Genesis Figures</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>🧍 Lesson 2.1: Loading &amp; Posing Genesis Figures</h1>
+                <p class="lead">This is the moment Daz starts to feel like magic. You'll put a real Genesis figure on the stage, drop it into a finished pose with a single click, then learn to bend it to your will by hand — bone by bone. Posing is the skill that separates stiff, default-looking renders from images with life in them, and it starts here.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li><strong>Load a Genesis 8 (or 9) base figure</strong> into an empty scene</li>
+                        <li>Apply <strong>pose presets</strong> and understand what they do (and don't) change</li>
+                        <li>Use <strong>ActivePose</strong> and <strong>PowerPose</strong> to pose by dragging directly on the figure</li>
+                        <li><strong>Rotate individual bones</strong> with the Universal tool and the Parameters dials</li>
+                        <li><strong>Pin</strong> hands or feet so limbs stay put while you adjust the rest</li>
+                        <li><strong>Save your own pose</strong> as a reusable preset</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 55 minutes</p>
+                    <p><strong>Project:</strong> A Genesis figure loaded and posed into a natural, standing-with-attitude pose — saved as your first custom pose preset.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#genesis" class="toc-link">Meet Genesis</a></li>
+                        <li><a href="#loading" class="toc-link">Loading a Figure</a></li>
+                        <li><a href="#pose-presets" class="toc-link">Pose Presets: Instant Poses</a></li>
+                        <li><a href="#active-power" class="toc-link">ActivePose &amp; PowerPose</a></li>
+                        <li><a href="#manual" class="toc-link">Manual Posing with Bones</a></li>
+                        <li><a href="#pinning" class="toc-link">Pinning &amp; Zeroing</a></li>
+                        <li><a href="#saving" class="toc-link">Saving Your Own Pose</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Pose a Figure</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: Meet Genesis -->
+            <section id="genesis" class="lesson-section">
+                <h2>Meet Genesis</h2>
+                <p>Everything you'll pose, shape, and render in this course is built on the <strong>Genesis</strong> figure — Daz's flagship, rigged human base. Before we move it, it helps to know what it actually is.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> A Genesis figure is a single rigged 3D human whose <strong>skeleton of bones</strong> lets you pose it, and whose <strong>morphs</strong> let you reshape it — one base that can become almost anyone.
+                </blockquote>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Generation</th>
+                                <th>What It Is</th>
+                                <th>Use It When</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Genesis 8</strong></td>
+                                <td>The most widely supported generation — enormous free and paid content library</td>
+                                <td>Default for this course; the safe choice for compatibility</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Genesis 9</strong></td>
+                                <td>The newest base — a unified figure with updated topology and rigging</td>
+                                <td>You want the latest tech and have (or will buy) G9 content</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Rig / skeleton:</strong> the hidden framework of <strong>bones</strong> inside a figure. When you "pose," you're rotating those bones, and the skin mesh follows. Genesis figures come pre-rigged, so you never build a skeleton — you just move it.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Poses are generation-specific. A pose built for <strong>Genesis 8</strong> won't drop cleanly onto <strong>Genesis 9</strong> (their skeletons differ). Match your pose presets to your figure's generation, or use a pose-converter product. We'll stick with Genesis 8 so everything just works.
+                </blockquote>
+            </section>
+
+            <!-- Section 2: Loading -->
+            <section id="loading" class="lesson-section">
+                <h2>Loading a Figure</h2>
+                <p>Loading is a double-click — but knowing <em>where</em> to click, and what happens, saves confusion.</p>
+
+                <h3>The steps</h3>
+                <ol>
+                    <li>Start with an empty scene (<strong>File → New</strong>).</li>
+                    <li>Open <strong>Smart Content</strong> (or the <strong>Content Library</strong>). In the Content Library, browse to <code>People → Genesis 8 → Genesis 8 Female</code> (or Male).</li>
+                    <li><strong>Double-click</strong> the base figure icon (often named "Genesis 8 Female" / "Genesis 8 Basic Female"). The figure appears in the viewport, standing in its default T-ish "A-pose."</li>
+                    <li>Press <kbd>F</kbd> to <strong>Frame</strong> it so it fills the view.</li>
+                </ol>
+
+                <div class="card card-info">
+                    <h4>💡 The default pose</h4>
+                    <p>A freshly loaded Genesis figure stands in a neutral <strong>A-pose</strong> — arms slightly out, feet apart. This is the clean starting point every pose builds from. It's deliberately generic so morphs and clothing fit predictably; your job is to give it life.</p>
+                </div>
+
+                <figure>
+                    <div class="image-placeholder" role="img" aria-label="Screenshot of a freshly loaded Genesis 8 figure standing in its default neutral A-pose in the Daz Studio viewport">
+                        🖼️ Figure placeholder — a freshly loaded Genesis 8 figure in its default A-pose
+                    </div>
+                    <figcaption>Figure 1: A Genesis 8 figure just after loading, in its neutral A-pose. This is the blank canvas every pose starts from. (Art to be added; see <code>lesson_04_image_requirements.md</code>.)</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> If double-clicking a pose or material seems to do nothing, check that the <strong>figure is selected</strong> in the Scene pane first. Poses and materials apply to the <em>current selection</em> — the same "select the node first" rule from Lesson 1.3.
+                </blockquote>
+            </section>
+
+            <!-- Section 3: Pose presets -->
+            <section id="pose-presets" class="lesson-section">
+                <h2>Pose Presets: Instant Poses</h2>
+                <p>The fastest way to a good pose is to not make one at all — <strong>pose presets</strong> are finished poses saved by other artists. With your figure selected, double-click a pose preset and the whole body snaps into place.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Pose preset:</strong> a saved set of bone rotations that positions an entire figure (or just a part, like hands) in one click. Presets are the backbone of fast posing — start from one that's close, then tweak by hand rather than posing from scratch.</p>
+                </div>
+
+                <h3>Applying and blending</h3>
+                <ul>
+                    <li><strong>Whole-body presets</strong> pose everything at once. Select the figure, double-click the preset.</li>
+                    <li><strong>Partial presets</strong> pose only a region — hands, face, or feet — and layer nicely on top of a body pose.</li>
+                    <li>Applied a pose you don't like? Just apply another; poses overwrite each other. Or undo with <kbd>Ctrl</kbd>+<kbd>Z</kbd>.</li>
+                </ul>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — start close, then customize</h4>
+                    <p>Even professionals rarely pose from a T-pose. Load the preset nearest to what you want, then adjust a few bones (Section 5). "80% from a preset, 20% by hand" is faster and looks better than posing every joint yourself.</p>
+                </div>
+
+                <p>Here's the posing workflow at a glance — the path most poses actually take:</p>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Load Genesis figure"] --> B["Apply a pose preset"]
+                        B --> C["Adjust bones by hand"]
+                        C --> D["Pin hands or feet"]
+                        D --> E["Save as your own preset"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> A pose preset changes <em>bone rotations</em>, not the figure's shape, materials, or clothing. If a preset seems to "do nothing," it may be a partial pose (e.g. hands only) or aimed at a different generation. Match generation and confirm your figure is selected.
+                </blockquote>
+            </section>
+
+            <!-- Section 4: ActivePose & PowerPose -->
+            <section id="active-power" class="lesson-section">
+                <h2>ActivePose &amp; PowerPose</h2>
+                <p>Sometimes you want to grab the figure and just <em>move</em> it. Daz gives you two tools for direct, drag-to-pose interaction.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th>What It Does</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ActivePose</strong></td>
+                                <td>Drag directly on the figure in the viewport; nearby bones move together with basic inverse kinematics (IK)</td>
+                                <td>Quick, natural gestures — pull a hand and the arm follows</td>
+                            </tr>
+                            <tr>
+                                <td><strong>PowerPose</strong></td>
+                                <td>A flat, puppet-like control map of the figure; click a region and rotate it with on-screen handles</td>
+                                <td>Precise, region-by-region posing without hunting for bones in 3D</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Inverse kinematics (IK):</strong> pose math that lets you move an end point (like a hand) and have the connected chain (forearm, upper arm) rotate automatically to follow. <strong>ActivePose</strong> uses light IK so dragging a limb feels natural instead of moving one bone at a time.</p>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Finding the tools</h4>
+                    <p>Select the <strong>ActivePose</strong> tool from the <strong>Tools</strong> menu (or the toolbar), then drag on the figure. Open <strong>PowerPose</strong> from <strong>Window → Panes (Tabs) → PowerPose</strong>; its puppet map appears as a pane you click and drag. Both work on the currently selected figure.</p>
+                </div>
+
+                <figure>
+                    <div class="image-placeholder image-placeholder--wide" role="img" aria-label="Side-by-side screenshot of ActivePose dragging a figure's hand in the viewport next to the PowerPose pane showing its flat puppet control map">
+                        🖼️ Figure placeholder — ActivePose dragging in the viewport beside the PowerPose control map
+                    </div>
+                    <figcaption>Figure 2: Two ways to pose directly — ActivePose (drag on the 3D figure) and PowerPose (a flat puppet map you click and rotate).</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> ActivePose's IK is convenient but can over-rotate a whole chain when you only meant to nudge a wrist. If a drag moves too much, undo and either drag more gently or switch to selecting the single bone and rotating it (Section 5).
+                </blockquote>
+            </section>
+
+            <!-- Section 5: Manual posing -->
+            <section id="manual" class="lesson-section">
+                <h2>Manual Posing with Bones</h2>
+                <p>For full control, pose one bone at a time. This is the bedrock skill — every other method is a shortcut on top of it.</p>
+
+                <h3>Two ways to rotate a bone</h3>
+                <ol>
+                    <li><strong>In the viewport with the Universal / Rotate tool:</strong> select a bone (click it, or expand the figure in the Scene pane and pick it there), and drag the colored rotation rings that appear around it. Each ring rotates one axis.</li>
+                    <li><strong>In the Parameters pane:</strong> with a bone selected, use dials like <strong>Bend</strong>, <strong>Twist</strong>, and <strong>Side-Side</strong> to type or drag exact values. Precise and repeatable.</li>
+                </ol>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Bend / Twist / Side-Side:</strong> the three rotation dials most bones expose. <em>Bend</em> flexes the joint (an elbow closing), <em>Twist</em> rotates along the limb's length (turning a forearm), and <em>Side-Side</em> swings it sideways. Together they describe any joint rotation.</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — respect the joint limits</h4>
+                    <p>Genesis bones ship with <strong>limits</strong> that stop joints bending into anatomically impossible angles. Leave limits <em>on</em> while learning — they keep poses believable. If a pose genuinely needs an extreme angle, you can turn a dial's limit off from its menu, but that's the exception, not the rule.</p>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Select the right bone, not the mesh</h4>
+                    <p>Clicking the figure in the viewport selects a bone under the cursor — but overlapping geometry can grab the wrong one. When in doubt, expand the figure in the <strong>Scene pane</strong> and click the exact bone (e.g. <code>rForearmBend</code>). The Parameters dials then apply to precisely that joint.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Rotating the <strong>hip</strong> bone moves the whole figure, since it's near the root of the skeleton. To move just an arm, select an arm bone — not the hip. Understanding the hierarchy (Lesson 1.3's Scene pane) pays off directly here.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: Pinning & Zeroing -->
+            <section id="pinning" class="lesson-section">
+                <h2>Pinning &amp; Zeroing</h2>
+                <p>Two small features prevent most posing frustration: <strong>pinning</strong> to lock parts in place, and <strong>zeroing</strong> to start clean.</p>
+
+                <h3>Pinning</h3>
+                <p>A <strong>pin</strong> tells Daz "keep this node where it is" while you move other things. Pin a hand to a tabletop and it stays planted as you adjust the torso. Pin both feet so the figure doesn't slide while you pose the upper body.</p>
+                <ul>
+                    <li>Pin from the <strong>Scene pane</strong> (right-click a node → <strong>Node Pinning</strong>) or via the ActivePose tool's options.</li>
+                    <li>Pins work hand-in-hand with IK: with a hand pinned, dragging the shoulder bends the arm to keep the hand put.</li>
+                    <li>Remember to <strong>unpin</strong> when you're done — a forgotten pin causes "why won't this limb move?" puzzles.</li>
+                </ul>
+
+                <h3>Zeroing</h3>
+                <p>To wipe a pose and return to the neutral A-pose, select the figure and use <strong>Edit → Zero → Zero Figure Pose</strong>. To reset a single bone, right-click its dial and choose <strong>Zero</strong>. Zeroing is your reliable "start over" button.</p>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — pin the feet before anything else</h4>
+                    <p>A classic workflow: load the figure, pin both feet, <em>then</em> pose. The figure stays grounded instead of drifting or floating as you rotate the hips and spine. Small habit, big time-saver — especially for standing poses.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Zeroing the figure pose removes <em>all</em> posing, including any preset you applied — but it does <em>not</em> undo morphs or materials. It's specifically a pose reset. If you want to keep a pose you like, save it first (next section).
+                </blockquote>
+            </section>
+
+            <!-- Section 7: Saving -->
+            <section id="saving" class="lesson-section">
+                <h2>Saving Your Own Pose</h2>
+                <p>Once you've built a pose worth keeping, save it as a <strong>pose preset</strong> so you can reapply it to any compatible figure, in any scene, forever.</p>
+
+                <h3>The steps</h3>
+                <ol>
+                    <li>Select the posed figure.</li>
+                    <li>Go to <strong>File → Save As → Pose Preset…</strong></li>
+                    <li>Choose a folder inside your content library (e.g. a <code>My Poses</code> folder), name it clearly, and save.</li>
+                    <li>In the save dialog you can choose <em>what</em> to include — whole body, or only certain nodes/properties. For a full pose, accept the defaults.</li>
+                </ol>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Pose Preset (.duf):</strong> a small file storing the bone rotations you saved. It contains no mesh — just the numbers needed to reproduce the pose — so it's tiny and reusable across figures of the same generation.</p>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Save selectively for reusable partials</h4>
+                    <p>The save dialog lets you include only certain nodes. Pose a great <em>hand</em> gesture, save just the hand bones, and you've made a reusable partial pose you can layer onto any future figure. Building a small personal library of hands, feet, and expressions speeds up every project.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Save your pose into a folder that's inside a <strong>mapped content directory</strong> (Lesson 1.2). Save it somewhere Daz doesn't scan and it won't appear in your content panes — the file's fine, it's just not where the app is looking.
+                </blockquote>
+            </section>
+
+            <!-- Section 8: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Pose a Figure</h2>
+                <p>Time to put it together: load a figure, pose it three ways, and save the result as your first custom preset.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Load &amp; Preset</h3>
+                    <p><strong>Objective:</strong> Get a figure on stage and into a starting pose.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li><strong>File → New</strong>, then load a <strong>Genesis 8</strong> figure from the Content Library. Press <kbd>F</kbd> to frame it.</li>
+                        <li>With the figure selected, apply a <strong>full-body pose preset</strong> from the Starter Essentials (or any pose you own). Watch the whole figure snap into place.</li>
+                        <li>Apply a second preset to see how poses overwrite each other, then <kbd>Ctrl</kbd>+<kbd>Z</kbd> back to the one you preferred.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Adjust by Hand</h3>
+                    <p><strong>Objective:</strong> Customize the preset with manual bone rotation and pinning.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li><strong>Pin both feet</strong> (Scene pane → right-click each foot → Node Pinning) so the figure stays grounded.</li>
+                        <li>Expand the figure in the Scene pane, select a <strong>forearm</strong> bone, and use the Parameters <strong>Bend</strong> dial to adjust the arm.</li>
+                        <li>Tilt the <strong>head</strong> slightly with its Side-Side and Bend dials to add life. Try the <strong>ActivePose</strong> tool to nudge a hand and feel the IK.</li>
+                        <li>Unpin the feet when the pose reads naturally.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — a limb won't move no matter what I do</summary>
+                        <p>You've almost certainly left a <strong>pin</strong> on it (or on a connected node). Check the Scene pane for pinned nodes and remove the pin. Pins are the number-one cause of "stuck" limbs — including the very feet you pinned in step 1.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Save Your Pose</h3>
+                    <p><strong>Objective:</strong> Bank your work as a reusable preset.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>With the figure selected, choose <strong>File → Save As → Pose Preset…</strong></li>
+                        <li>Save it into a <code>My Poses</code> folder inside your content library, named something like <code>Standing Confident 01</code>.</li>
+                        <li>Load a fresh Genesis 8 figure and apply your saved preset to prove it works. Congratulations — that's a complete pose workflow.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> You apply a Genesis 8 pose preset to a Genesis 9 figure and it looks broken. Why?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Pose presets contain no mesh and can't corrupt a figure — the file just doesn't match the skeleton.">
+                                A) The preset file is corrupted and needs re-downloading
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Poses are bone rotations tied to a specific skeleton. Genesis 8 and Genesis 9 have different rigs, so a G8 pose doesn't map cleanly onto G9 — match the pose to the figure's generation.">
+                                B) Poses are generation-specific; G8 and G9 have different skeletons
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Selection matters for applying, but even correctly applied, a cross-generation pose won't map right.">
+                                C) You forgot to select the figure first
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> A limb refuses to move no matter which dial you drag. What's the most likely cause?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Joint limits restrict how far a bone rotates, but they don't freeze it completely.">
+                                A) The bone's joint limits are turned on
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="A pin locks a node in place, so the limb (or a node connected to it) won't move until you unpin it. Forgotten pins are the classic cause of a 'stuck' limb.">
+                                B) The limb (or a connected node) is still pinned
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="A missing morph would change shape, not lock a bone's rotation.">
+                                C) The figure is missing a required morph
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> What does a saved Pose Preset (.duf) actually store?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="A pose preset stores only the bone rotations needed to reproduce the pose — no mesh, materials, or morphs — which is why it's tiny and reusable across figures of the same generation.">
+                                A) The bone rotations of the pose — no mesh, materials, or morphs
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="If it stored the mesh, the file would be huge and tied to one figure — poses are deliberately lightweight.">
+                                B) A full copy of the figure's mesh and textures
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Morphs are shape data saved separately; a pose preset is about rotation, not shape.">
+                                C) The figure's morphs and body shape
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Start from a preset</strong> that's close, then refine by hand — faster and better than posing from the A-pose.</li>
+                    <li><strong>Pin the feet</strong> before posing a standing figure so it stays grounded.</li>
+                    <li><strong>Select the exact bone in the Scene pane</strong> when the viewport grabs the wrong one.</li>
+                    <li><strong>Leave joint limits on</strong> while learning to keep poses anatomically believable.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't mix pose generations</strong> — keep G8 poses on G8 figures unless you're using a converter.</li>
+                    <li><strong>Don't forget to unpin</strong> — a stray pin is the top cause of "stuck" limbs.</li>
+                    <li><strong>Don't rotate the hip when you mean an arm</strong> — the hip moves the whole figure.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Build a small personal library of partial poses — hands, feet, head tilts — and layer them onto future figures.</li>
+                    <li>Zero Figure Pose is your safe "undo everything" for posing; use it freely to experiment.</li>
+                    <li>Type exact values into Bend/Twist/Side-Side dials when you need a pose to be repeatable across shots.</li>
+                </ul>
+            </section>
+
+            <!-- Section 10: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>A <strong>Genesis figure</strong> is a pre-rigged human; posing means rotating its <strong>bones</strong>, and poses are <strong>generation-specific</strong>.</li>
+                        <li><strong>Load</strong> a figure by double-clicking it; it arrives in a neutral <strong>A-pose</strong> ready to work.</li>
+                        <li><strong>Pose presets</strong> give instant, finished poses — start from the closest one and customize.</li>
+                        <li><strong>ActivePose</strong> and <strong>PowerPose</strong> let you drag to pose; <strong>manual bone rotation</strong> (Bend/Twist/Side-Side) gives full control.</li>
+                        <li><strong>Pin</strong> hands/feet to lock them, <strong>zero</strong> to start over, and <strong>save a Pose Preset</strong> to reuse your work.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/posing/start" target="_blank" rel="noopener">Posing figures — official Daz user guide</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/interface/panes/powerpose/start" target="_blank" rel="noopener">The PowerPose pane — Daz documentation</a></li>
+                    <li><a href="https://www.daz3d.com/genesis-8" target="_blank" rel="noopener">About the Genesis 8 figure</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your figure can now strike any pose you like. But it still looks like the default person. In <strong>Lesson 2.2 — Shaping Characters with Morphs</strong>, we change <em>who</em> the figure is — sculpting the face and body with morph dials to turn the generic base into a distinct character of your own.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>🎉 You're posing!</h3>
+                    <p>From double-click to a saved, custom pose — you've done the thing that makes Daz feel alive. Every render from here starts with a pose you now know how to build. Next, let's make the figure truly yours.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_03_the_daz_studio_interface.html" class="prev-lesson">← Previous: The Daz Studio Interface</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_05_shaping_characters_with_morphs.html" class="next-lesson">Next: Shaping Characters with Morphs →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>
