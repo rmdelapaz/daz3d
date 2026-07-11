@@ -15,5 +15,5 @@ Art/screenshots needed to replace the `.image-placeholder` blocks in `lesson_05_
 - Keep alt text descriptive for accessibility (WCAG AA — matches course standard).
 
 ## Status
-- [ ] Figure 1 — Shaping pane (Actor / Head / Body)
-- [ ] Figure 2 — face before &amp; after head morphs
+- [x] Figure 1 — Shaping pane (Actor / Head / Body)
+- [x] Figure 2 — face before &amp; after head morphs

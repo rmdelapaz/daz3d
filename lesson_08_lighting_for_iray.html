@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 3.2 — Lighting for Iray: HDRI dome lighting, emissive surfaces as mesh lights, photometric point and spot lights, building a three-point setup in Daz, and the tone-mapping basics that turn a lit scene into a photograph.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 3.2: Lighting for Iray - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 3</a></li>
+            <li aria-current="page">Lesson 3.2: Lighting for Iray</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>💡 Lesson 3.2: Lighting for Iray</h1>
+                <p class="lead">Lighting is where a render stops looking like a 3D model and starts looking like a photograph. Iray is a physically based engine — it treats light the way a real camera does, which means the same tools that light a photo studio light your scene. In this lesson you'll meet the four ways to put light into an Iray scene — HDRI domes, emissive surfaces, and point and spot lights — then arrange them into a classic three-point setup and finish with the tone mapping that controls exposure and mood. Master this and every render you make from here on will have depth, direction, and intent.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain why <strong>Iray lighting is physically based</strong> and what that means for you</li>
+                        <li>Light a scene with an <strong>HDRI environment dome</strong></li>
+                        <li>Turn any object into a light using <strong>emissive surfaces</strong></li>
+                        <li>Place and aim <strong>photometric point and spot lights</strong></li>
+                        <li>Build a classic <strong>three-point lighting</strong> setup in Daz</li>
+                        <li>Use <strong>tone mapping</strong> — exposure, ISO, shutter, and f-stop — to control brightness and mood</li>
+                        <li>Choose the right <strong>lighting approach</strong> for a given shot</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 60 minutes</p>
+                    <p><strong>Project:</strong> Your staged scene from Lesson 3.1, now lit with a deliberate setup — a dome or three-point rig, exposure dialed in — ready for a final Iray render in Lesson 3.3.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#why-lighting" class="toc-link">Why Lighting Matters</a></li>
+                        <li><a href="#hdri-dome" class="toc-link">The HDRI Environment Dome</a></li>
+                        <li><a href="#photometric" class="toc-link">Point &amp; Spot Lights</a></li>
+                        <li><a href="#emissive" class="toc-link">Emissive Surfaces</a></li>
+                        <li><a href="#three-point" class="toc-link">Three-Point Lighting</a></li>
+                        <li><a href="#tone-mapping" class="toc-link">Tone Mapping &amp; Exposure</a></li>
+                        <li><a href="#choosing" class="toc-link">Choosing an Approach</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Light a Portrait</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: Why Lighting Matters -->
+            <section id="why-lighting" class="lesson-section">
+                <h2>Why Lighting Matters</h2>
+                <p>You've staged a scene and framed a camera, but with only the placeholder dome it still looks flat and grey. Lighting is the fix — and in Iray, lighting is <strong>physically based</strong>, meaning the renderer simulates how real light travels, bounces, and falls off. The upshot: photographic intuition works here. Light that would flatter a real face flatters this one too.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> Iray simulates real light physics, so lighting a scene is much like lighting a photo studio — direction, softness, and intensity create form, mood, and realism.
+                </blockquote>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Physically based rendering (PBR):</strong> a rendering approach that models light using real-world physical rules — energy conservation, inverse-square falloff, real reflectance. Because the math mirrors reality, materials and lights behave predictably and consistently across different scenes.</p>
+                </div>
+
+                <p>Iray gives you four ways to add light. Each has a job, and most good renders combine two or three of them.</p>
+
+                <div class="mermaid">
+                    graph TD
+                        A["Light in an Iray scene"] --> B["HDRI environment dome"]
+                        A --> C["Photometric point and spot lights"]
+                        A --> D["Emissive surfaces as mesh lights"]
+                        A --> E["Sun-Sky system for daylight"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style B fill:#3b82f6,stroke:#333,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Real units mean real behavior</h4>
+                    <p>Iray lights use photometric units (lumens, kelvin for color temperature) and fall off with the <strong>inverse-square law</strong> — double the distance, a quarter of the light. That's why a light feels dramatic up close and gentle far away. Thinking in real-world terms will steer you right far more often than guessing.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Everything here assumes the <strong>Iray</strong> render engine and that the <strong>headlamp is off</strong> (Lesson 3.1). If your careful lighting looks washed out, a still-on headlamp is the usual culprit — turn it to <em>Never</em> in Render Settings before you judge any setup.
+                </blockquote>
+            </section>
+
+            <!-- Section 2: The HDRI Environment Dome -->
+            <section id="hdri-dome" class="lesson-section">
+                <h2>The HDRI Environment Dome</h2>
+                <p>The fastest way to great-looking light is an <strong>HDRI</strong> loaded into the environment dome. A single 360° image wraps the whole scene and lights it with realistic, directional, colored light captured from a real place — all in one step.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>HDRI (High Dynamic Range Image):</strong> a 360° photograph that stores a huge range of brightness — from deep shadow to the blazing sun. Applied to Iray's environment dome, it both <em>lights</em> the scene (bright spots act like light sources) and can serve as the <em>background</em> behind the figure.</p>
+                </div>
+
+                <p>You set the dome in <strong>Render Settings → Environment</strong>. Two choices drive it:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Setting</th>
+                                <th>What It Does</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Environment Mode</strong></td>
+                                <td>Dome, Dome-and-Scene, Sun-Sky Only, or Scene Only</td>
+                                <td>Use <strong>Dome</strong> or <strong>Dome-and-Scene</strong> to light with an HDRI</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Environment Map</strong></td>
+                                <td>The HDRI image loaded into the dome</td>
+                                <td>Point it at a <code>.hdr</code> / <code>.exr</code> file</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Environment Intensity</strong></td>
+                                <td>How bright the dome lights the scene</td>
+                                <td>Your main brightness dial for dome lighting</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dome Rotation</strong></td>
+                                <td>Spins the HDRI around the scene</td>
+                                <td>Rotate to aim the brightest part where you want key light</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — rotate the dome to place your key light</h4>
+                    <p>An HDRI's sun or brightest window is effectively your key light. Instead of adding a separate light, <strong>rotate the dome</strong> so that bright spot falls where you want the strongest light on the face. It's the quickest way to get flattering directional light for free.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> If you don't want the HDRI <em>visible</em> as a background but still want its light, set the environment so the dome is <strong>drawn as light only</strong> (or use a backdrop/backplane in front of it). That way you keep the beautiful lighting without the photographic background showing behind your subject.
+                </blockquote>
+            </section>
+
+            <!-- Section 3: Point & Spot Lights -->
+            <section id="photometric" class="lesson-section">
+                <h2>Point &amp; Spot Lights</h2>
+                <p>For precise control you add <strong>photometric lights</strong> — the same point, spot, and distant lights a studio photographer uses. Create them from <strong>Create → New Light…</strong> (or the light presets in the menu), then position and aim them like any node.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Photometric light:</strong> a light defined in real-world units (lumens, kelvin). Iray offers three core types — <strong>Point</strong> (radiates in all directions, like a bare bulb), <strong>Spot</strong> (a directed cone you can aim), and <strong>Distant</strong> (parallel rays from infinitely far, like the sun).</p>
+                </div>
+
+                <h3>The three light types at a glance</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Behavior</th>
+                                <th>Reach for it when…</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Point</strong></td>
+                                <td>Radiates equally in all directions from a spot</td>
+                                <td>Lamps, bulbs, general fill</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Spot</strong></td>
+                                <td>A focused, aimable cone with adjustable spread</td>
+                                <td>Key lights, stage effects, controlled pools of light</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Distant</strong></td>
+                                <td>Parallel rays, even everywhere, direction-only</td>
+                                <td>Sunlight, moonlight, broad even light</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Bigger lights make softer shadows</h4>
+                    <p>A light's <strong>size</strong> controls shadow softness: a small light gives hard, crisp shadows; a large one gives soft, gradual shadows. Photographers enlarge a light with a softbox — in Iray you just raise the light's geometry size. For flattering portraits, go bigger and softer.</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — point a spot with its target</h4>
+                    <p>Aiming a spot light by rotating it is fiddly. Instead, give it a <strong>point-at target</strong> (or use the light's built-in aim) so it always looks at your figure's head — then you can move the light freely and it keeps pointing where it should.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Iray uses <strong>real intensity units</strong>, so a new light can look shockingly bright or dim until you set it in context. Adjust the light's <strong>Lumens</strong> and your camera's exposure together — brightness is a duet between the light and the tone mapping (covered below), not the light alone.
+                </blockquote>
+            </section>
+
+            <!-- Section 4: Emissive Surfaces -->
+            <section id="emissive" class="lesson-section">
+                <h2>Emissive Surfaces</h2>
+                <p>Any surface can become a light. An <strong>emissive surface</strong> glows and casts real light into the scene — perfect for screens, neon signs, glowing panels, and the soft studio look of a large glowing plane standing in for a softbox.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Emissive surface (mesh light):</strong> a surface whose Iray Uber <strong>Emission</strong> property is turned on, so the mesh itself emits light. Because the light comes from actual geometry, it's inherently an <em>area light</em> — large emissive planes give beautifully soft, wrapping illumination.</p>
+                </div>
+
+                <p>You already met Emission back in the Uber shader (Lesson 2.3). To make a mesh light: select a surface, set its <strong>Emission Color</strong> to something other than black, and dial <strong>Luminance</strong> for brightness. A simple primitive plane makes an excellent DIY softbox.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Emissives are soft by nature</h4>
+                    <p>Because an emissive plane is a big area light, its shadows are soft and its light wraps gently around the subject — flattering for skin. The trade-off is render time: area lights add noise that takes more samples to clean up. It's usually worth it for the quality.</p>
+                </div>
+
+                <figure>
+                    <img src="images/l08_emissive_surface.png" alt="The Surfaces Editor showing a plane's Emission Color and Luminance set to turn it into a mesh light">
+                    <figcaption>Figure 1: Turning a primitive plane into a softbox — set Emission Color away from black and enter a Luminance value in the Surfaces Editor.</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Emissive brightness is set by <strong>Luminance</strong> with a chosen <strong>unit</strong> (e.g. cd/m²). The same number means very different brightness under different units, so if a glowing plane blows out or barely registers, check the <strong>Luminance unit</strong> before endlessly tweaking the number.
+                </blockquote>
+            </section>
+
+            <!-- Section 5: Three-Point Lighting -->
+            <section id="three-point" class="lesson-section">
+                <h2>Three-Point Lighting</h2>
+                <p>The most reliable portrait recipe in the world is <strong>three-point lighting</strong>: a key, a fill, and a rim. It's a century-old studio and film standard, and it works exactly the same in Daz because Iray light behaves like real light.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Three-point lighting:</strong> a setup using three roles — a <strong>key</strong> (the main, brightest light setting the mood), a <strong>fill</strong> (a softer light softening the key's shadows), and a <strong>rim/back light</strong> (behind the subject, separating them from the background with a bright edge).</p>
+                </div>
+
+                <h3>The three roles</h3>
+                <ul>
+                    <li><strong>Key</strong> — your main light, off to one side and slightly above; it defines the primary shadows and the mood. Brightest of the three.</li>
+                    <li><strong>Fill</strong> — opposite the key, softer and dimmer; it lifts the shadows so they're not pure black. A large emissive or a bounce works well here.</li>
+                    <li><strong>Rim (back/hair light)</strong> — behind and above the subject, aimed at the back of the head; it draws a bright outline that pops the figure off the background.</li>
+                </ul>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Place the key light off to one side"] --> B["Add a softer fill opposite the key"]
+                        B --> C["Add a rim light behind the subject"]
+                        C --> D["Balance intensities and exposure"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                        style D fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — set the key first, alone</h4>
+                    <p>Build the setup one light at a time. Turn on <strong>only the key</strong> and get it looking good, then add the fill, then the rim — judging each addition on its own. Trying to balance three lights all glowing at once is how beginners end up with a flat, over-lit mess.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> You can mix methods freely — an HDRI dome makes a lovely <strong>fill</strong> while a spot serves as the <strong>key</strong>, or an emissive plane is the key while a distant light is the rim. Three-point is a recipe of <em>roles</em>, not specific light types; assign the role to whatever tool gives the look you want.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: Tone Mapping & Exposure -->
+            <section id="tone-mapping" class="lesson-section">
+                <h2>Tone Mapping &amp; Exposure</h2>
+                <p>Here's the part that surprises newcomers: in Iray, your <strong>camera</strong> controls brightness as much as your lights do. Iray's <strong>tone mapping</strong> gives every camera photographic exposure controls — ISO, shutter speed, and f-stop — so you set exposure exactly like a real photographer.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Tone mapping:</strong> the process of converting Iray's huge internal range of light values into the limited range a screen or image can show. Its controls live on the camera (and in Render Settings) as <strong>Exposure Value (EV)</strong>, or the individual <strong>ISO</strong>, <strong>Shutter Speed</strong>, and <strong>F-Stop</strong>.</p>
+                </div>
+
+                <h3>The exposure trio</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Control</th>
+                                <th>Photographic meaning</th>
+                                <th>Effect on the render</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ISO</strong></td>
+                                <td>Sensor sensitivity</td>
+                                <td>Higher = brighter image</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Shutter Speed</strong></td>
+                                <td>How long the sensor is exposed</td>
+                                <td>Slower shutter = more light = brighter</td>
+                            </tr>
+                            <tr>
+                                <td><strong>F-Stop</strong></td>
+                                <td>Aperture size</td>
+                                <td>Lower f-number = brighter (and shallower depth of field)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Fix overall brightness with exposure, not the lights</h4>
+                    <p>If a whole render is too dark or too bright but the <em>balance</em> between lights looks right, don't touch the lights — adjust the camera's <strong>Exposure Value</strong>. Lower EV brightens, higher EV darkens. This keeps your carefully balanced key/fill/rim ratios intact while fixing overall level.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Tone-mapping settings are <strong>per camera</strong>. Two cameras in the same scene can render at different exposures, which is great for variety but confusing if you forget — a shot that's suddenly too dark may just be a different camera's exposure, not a lighting change.
+                </blockquote>
+            </section>
+
+            <!-- Section 7: Choosing an Approach -->
+            <section id="choosing" class="lesson-section">
+                <h2>Choosing an Approach</h2>
+                <p>With four lighting tools and a recipe, which do you use? It depends on the shot. Here's a quick decision guide to keep you from over-thinking it.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>You want…</th>
+                                <th>Reach for…</th>
+                                <th>Why</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Fast, realistic light with a background</td>
+                                <td><strong>HDRI dome</strong></td>
+                                <td>One image lights and backgrounds the whole scene</td>
+                            </tr>
+                            <tr>
+                                <td>Full control of a portrait</td>
+                                <td><strong>Three-point rig</strong></td>
+                                <td>Key/fill/rim shapes the face deliberately</td>
+                            </tr>
+                            <tr>
+                                <td>Soft, flattering studio skin</td>
+                                <td><strong>Emissive planes</strong></td>
+                                <td>Large area lights wrap gently and softly</td>
+                            </tr>
+                            <tr>
+                                <td>A specific practical (lamp, screen, neon)</td>
+                                <td><strong>Point light or emissive</strong></td>
+                                <td>Motivated light that matches an object in frame</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 The best setups combine methods</h4>
+                    <p>Real renders rarely use one tool alone. A common, reliable combo: an <strong>HDRI dome</strong> for ambient realism and fill, plus one <strong>spot or emissive key</strong> to shape the face, and maybe a <strong>rim</strong> for separation. Start simple, add only what the shot needs.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> More lights is not better lighting. Each added light multiplies decisions and render time, and competing lights flatten a scene just like the headlamp does. If a render looks muddy, try <strong>removing</strong> a light rather than adding one — restraint reads as intent.
+                </blockquote>
+
+                <figure>
+                    <img src="images/l08_lighting_comparison.png" alt="The same portrait under flat light, an HDRI dome, and a three-point setup, showing how lighting changes mood and depth">
+                    <figcaption>Figure 2: One character, three lighting approaches — flat single light, HDRI dome, and a full three-point rig — showing how much lighting alone changes the mood and depth of a shot.</figcaption>
+                </figure>
+            </section>
+
+            <!-- Section 8: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Light a Portrait</h2>
+                <p>Let's light the scene you staged in Lesson 3.1 — first the quick way with an HDRI, then the controlled way with a three-point rig, and finish by dialing exposure.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: HDRI Dome</h3>
+                    <p><strong>Objective:</strong> Get flattering light in under a minute.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>In <strong>Render Settings → Environment</strong>, set Environment Mode to <strong>Dome-and-Scene</strong> and load an <strong>HDRI</strong> into the Environment Map.</li>
+                        <li>Adjust <strong>Environment Intensity</strong> until the scene is well-lit, then <strong>rotate the dome</strong> so the brightest part lights the face from a flattering angle.</li>
+                        <li>Do a quick render or Iray preview and note how directional and realistic it already looks.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Three-Point Rig</h3>
+                    <p><strong>Objective:</strong> Build a controlled portrait setup one light at a time.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Add a <strong>spot light</strong> as your <strong>key</strong>, off to one side and slightly above; aim it at the head and get it looking good <em>alone</em>.</li>
+                        <li>Add a softer, dimmer <strong>fill</strong> opposite the key (an emissive plane or a large spot) to lift the shadows.</li>
+                        <li>Add a <strong>rim light</strong> behind and above the subject, aimed at the back of the head, to separate them from the background.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — my scene renders almost black or blown out</summary>
+                        <p>That's exposure, not necessarily your lights. Open the camera's <strong>tone mapping</strong> and adjust the <strong>Exposure Value</strong> — lower to brighten, raise to darken. Also confirm the <strong>headlamp is off</strong> and that light <strong>Lumens</strong> are in a sane range. Balance the lights to each other first, then fix overall level with EV.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Dial Exposure &amp; Save</h3>
+                    <p><strong>Objective:</strong> Finish the look with tone mapping and preserve it.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>With the balance right, set overall brightness using the camera's <strong>Exposure Value</strong> (or ISO/shutter/f-stop).</li>
+                        <li>Nudge the <strong>white balance / color temperature</strong> if the mood wants to be warmer or cooler.</li>
+                        <li><strong>Save your scene</strong> — a lit, exposed setup is exactly what Lesson 3.3 turns into a finished, denoised render.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What does an HDRI applied to the environment dome do?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="That's a morph — it reshapes the figure. An HDRI has nothing to do with geometry.">
+                                A) Reshapes the figure to match a reference photo
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="An HDRI is a 360° high-dynamic-range image that both lights the scene — its bright regions act as light sources — and can serve as the background. Rotating the dome aims that light where you want it.">
+                                B) Lights the scene with a 360° image and can act as the background
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Denoising happens at render time in Render Settings; an HDRI is a lighting/background source, not a noise filter.">
+                                C) Removes render noise from the final image
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> In a three-point setup, what is the rim (back) light's job?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Softening the key's shadows is the fill light's role, not the rim's.">
+                                A) Soften the shadows cast by the key light
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Setting the primary mood and main shadows is the key light's job — the brightest of the three.">
+                                B) Provide the main, brightest light and set the mood
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="The rim (back/hair) light sits behind and above the subject and draws a bright outline along their edge, separating them from the background so they don't blend into it.">
+                                C) Draw a bright edge that separates the subject from the background
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Your render's light balance looks right, but the whole image is too dark. Best fix?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Iray's tone mapping lives on the camera, so lowering the Exposure Value (or adjusting ISO/shutter/f-stop) brightens the whole image while preserving the key/fill/rim balance you already dialed in.">
+                                A) Lower the camera's Exposure Value in tone mapping
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Cranking every light up risks breaking the balance you already like and can introduce noise — adjust exposure instead when the balance is already right.">
+                                B) Increase every light's intensity by the same amount
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="The headlamp adds flat light and is normally off; turning it on would flatten the shot, not fix exposure cleanly.">
+                                C) Turn the headlamp back on to add brightness
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Turn the headlamp off</strong> before judging any lighting setup.</li>
+                    <li><strong>Start with an HDRI</strong> for fast, realistic light, then add lights only as needed.</li>
+                    <li><strong>Build three-point rigs one light at a time</strong>, key first.</li>
+                    <li><strong>Use large or emissive lights</strong> for soft, flattering shadows on skin.</li>
+                    <li><strong>Set overall brightness with camera exposure</strong>, not by cranking every light.</li>
+                    <li><strong>Think in real-world terms</strong> — direction, size, and distance behave like real light.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't over-light</strong> — competing lights flatten a scene as badly as the headlamp.</li>
+                    <li><strong>Don't balance all lights at once</strong> — you'll lose track of what each one does.</li>
+                    <li><strong>Don't ignore the Luminance unit</strong> on emissives before tweaking numbers.</li>
+                    <li><strong>Don't forget exposure is per-camera</strong> — a dark shot may be the wrong camera's EV.</li>
+                    <li><strong>Don't judge lighting in the OpenGL preview</strong> — use an Iray preview or render.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Rotate the HDRI dome to place its brightest spot as your key light.</li>
+                    <li>Give spot lights a point-at target so they track the head as you move them.</li>
+                    <li>Make a big emissive plane your softbox for gorgeous, soft studio skin.</li>
+                    <li>Use color temperature (kelvin) to set warm indoor or cool daylight mood.</li>
+                    <li>When a render looks muddy, remove a light before adding one.</li>
+                </ul>
+            </section>
+
+            <!-- Section 10: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>Iray is <strong>physically based</strong>, so photographic lighting intuition — direction, size, distance, inverse-square falloff — works directly in Daz.</li>
+                        <li>An <strong>HDRI environment dome</strong> lights and backgrounds a scene from one 360° image; rotate it to aim its brightest region as your key.</li>
+                        <li><strong>Point, spot, and distant lights</strong> give precise control, and <strong>emissive surfaces</strong> turn geometry into soft area lights.</li>
+                        <li><strong>Three-point lighting</strong> — key, fill, rim — is a recipe of roles you can fill with any light type; build it one light at a time.</li>
+                        <li><strong>Tone mapping</strong> puts ISO, shutter, f-stop, and Exposure Value on the camera — set overall brightness there to preserve your light balance.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/environment_and_cameras/render_settings/start" target="_blank" rel="noopener">Render Settings &amp; Environment — official Daz user guide</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/shaders/iray_uber/start" target="_blank" rel="noopener">Iray Uber shader (Emission) — Daz documentation</a></li>
+                    <li><a href="https://www.daz3d.com/iray" target="_blank" rel="noopener">About Iray in Daz Studio</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your scene is staged and beautifully lit — now it's time to make the final image. In <strong>Lesson 3.3 — Rendering with Iray</strong>, we open Render Settings for real: samples and convergence, the denoiser, spot-rendering, render canvases, and saving and lightly post-processing a finished picture worth showing off.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>💡 You can light now!</h3>
+                    <p>Dome, spots, emissives, three-point, and exposure — you've got the whole photographer's toolkit working inside Daz. Lighting is the single biggest lever on how professional a render looks, and you just learned to pull it. One more lesson and you'll have a finished, framed, lit, rendered image.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_07_building_a_scene.html" class="prev-lesson">← Previous: Building a Scene</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_09_rendering_with_iray.html" class="next-lesson">Next: Rendering with Iray →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

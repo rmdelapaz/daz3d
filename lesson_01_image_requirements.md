@@ -14,5 +14,5 @@ Art/screenshots needed to replace the `.image-placeholder` blocks in `lesson_01_
 - If producing the §3 diagram as SVG, use `currentColor`/CSS-variable-friendly strokes so it works in both light and dark themes (course convention: `svgDarkModeSupport`).
 
 ## Status
-- [ ] Figure 1 — interface overview
-- [ ] Figure 2 — Genesis anatomy diagram
+- [x] Figure 1 — interface overview
+- [x] Figure 2 — Genesis anatomy diagram

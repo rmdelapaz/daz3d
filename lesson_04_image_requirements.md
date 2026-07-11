@@ -15,5 +15,5 @@ Art/screenshots needed to replace the `.image-placeholder` blocks in `lesson_04_
 - Keep alt text descriptive for accessibility (WCAG AA — matches course standard).
 
 ## Status
-- [ ] Figure 1 — default A-pose
-- [ ] Figure 2 — ActivePose &amp; PowerPose
+- [x] Figure 1 — default A-pose
+- [x] Figure 2 — ActivePose &amp; PowerPose

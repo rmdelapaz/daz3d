@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 2.3 — Materials & Iray Surfaces: using the Surfaces pane, understanding the Iray Uber shader, applying material presets, working with skin, eyes, and hair surfaces, and making quick surface tweaks for believable, render-ready characters.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 2.3: Materials &amp; Iray Surfaces - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 2</a></li>
+            <li aria-current="page">Lesson 2.3: Materials &amp; Iray Surfaces</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>🎨 Lesson 2.3: Materials &amp; Iray Surfaces</h1>
+                <p class="lead">Your character is posed and shaped — but the skin still looks like plastic. This lesson fixes that. Surfaces are how light interacts with a figure: what's shiny, what's soft, what glows, what light sinks into. With the Surfaces pane and the Iray Uber shader, you'll turn a flat-looking figure into skin that catches light like skin, eyes that read as wet and alive, and hair that looks like hair. This is the last step that makes a figure believable.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain what a <strong>surface (material)</strong> is and how it differs from shape and pose</li>
+                        <li>Navigate the <strong>Surfaces pane</strong> and select surfaces on a figure</li>
+                        <li>Describe what the <strong>Iray Uber shader</strong> does and its key properties</li>
+                        <li>Apply <strong>material presets</strong> to skin, eyes, and hair in one click</li>
+                        <li>Understand <strong>skin surfaces</strong>, including subsurface scattering (SSS)</li>
+                        <li>Set up <strong>eye and hair surfaces</strong> so they read correctly in Iray</li>
+                        <li>Make <strong>quick surface tweaks</strong> — roughness, bump, and color — with confidence</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 60 minutes</p>
+                    <p><strong>Project:</strong> Your shaped character with polished, render-ready surfaces — believable skin, lively eyes, and correct hair — ready for lighting in Module 3.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#surfaces" class="toc-link">What Are Surfaces?</a></li>
+                        <li><a href="#surfaces-pane" class="toc-link">The Surfaces Pane</a></li>
+                        <li><a href="#uber" class="toc-link">The Iray Uber Shader</a></li>
+                        <li><a href="#presets" class="toc-link">Applying Material Presets</a></li>
+                        <li><a href="#skin" class="toc-link">Skin Surfaces &amp; SSS</a></li>
+                        <li><a href="#eyes-hair" class="toc-link">Eyes &amp; Hair Surfaces</a></li>
+                        <li><a href="#tweaks" class="toc-link">Quick Surface Tweaks</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Surface a Character</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: What Are Surfaces? -->
+            <section id="surfaces" class="lesson-section">
+                <h2>What Are Surfaces?</h2>
+                <p>You've now reshaped a figure two ways: <strong>poses</strong> move the bones, <strong>morphs</strong> reshape the mesh. A <strong>surface</strong> is the third system — it decides how each part of that mesh <em>responds to light</em>. Same shape, different surface, and a figure can look like marble, wax, rubber, or living skin.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> A surface (or material) is the set of instructions telling the renderer how a piece of mesh reflects, absorbs, and scatters light — its color, shininess, bumpiness, and translucency.
+                </blockquote>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Surface / material:</strong> the light-response recipe assigned to a named region of a figure — "Face," "Lips," "Eye Moisture," "Fingernails," and so on. Each region is a separate surface with its own properties, which is why you can make lips glossy while keeping skin matte.</p>
+                </div>
+
+                <p>A single Genesis figure is divided into many surfaces. The renderer treats each independently, so a character's look is really the sum of dozens of small surface recipes working together.</p>
+
+                <div class="mermaid">
+                    graph TD
+                        A["Genesis figure surfaces"] --> B["Skin: face, torso, limbs"]
+                        A --> C["Eyes: cornea, iris, moisture"]
+                        A --> D["Mouth: lips, teeth, gums"]
+                        A --> E["Nails and lashes"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style B fill:#3b82f6,stroke:#333,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Surfaces are independent of shape and pose</h4>
+                    <p>Changing a surface never moves a bone or a vertex, and reshaping a figure never disturbs its surfaces. You can pose, shape, and surface in any order — though surfacing usually comes <em>after</em> shaping, so you're polishing the character you've actually built.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> This lesson assumes you'll render with <strong>Iray</strong>, Daz's photoreal engine. Surfaces are engine-specific: an Iray surface and a 3Delight surface use different properties. If a figure looks wrong, confirm you're using <strong>Iray</strong> materials on an Iray render — mixing engines is a common source of chalky or flat skin.
+                </blockquote>
+            </section>
+
+            <!-- Section 2: The Surfaces Pane -->
+            <section id="surfaces-pane" class="lesson-section">
+                <h2>The Surfaces Pane</h2>
+                <p>Every surface property lives in the <strong>Surfaces pane</strong>. Open it from <strong>Window → Panes (Tabs) → Surfaces</strong> if it isn't in your layout. It has two halves you'll switch between constantly.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tab</th>
+                                <th>What It Shows</th>
+                                <th>Use It To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Presets</strong></td>
+                                <td>Shader and material presets you can apply to the selected surface</td>
+                                <td>Drop a ready-made look onto a surface in one click</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Editor</strong></td>
+                                <td>The full list of properties for the selected surface(s) — color, roughness, bump, SSS, and more</td>
+                                <td>Tweak individual properties by hand</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Surface selection:</strong> in the Editor tab, the figure's surfaces are listed by name in a tree. Click one (like "Face") to edit just that surface, or <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>-click several to edit them together — handy when the same tweak should hit face, torso, and limbs at once.</p>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 The Surface Selection tool</h4>
+                    <p>Not sure which surface a spot on the figure belongs to? Grab the <strong>Surface Selection</strong> tool from the toolbar and click directly on the figure in the viewport — the matching surface highlights in the Editor. It's the fastest way to answer "what is <em>this</em> bit called?"</p>
+                </div>
+
+                <figure>
+                    <img src="images/l06_surfaces_pane.png" alt="The Surfaces pane Editor tab with a Genesis figure selected, showing the named surface list and property dials">
+                    <figcaption>Figure 1: The Surfaces pane (Editor tab). Named surfaces list on the left; the selected surface's properties fill the right.</figcaption>
+                </figure>
+            </section>
+
+            <!-- Section 3: The Iray Uber Shader -->
+            <section id="uber" class="lesson-section">
+                <h2>The Iray Uber Shader</h2>
+                <p>Almost every Iray surface you'll meet is built on one shader: the <strong>Iray Uber</strong>. Understanding its handful of key properties means you can read — and fix — nearly any material in Daz.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Shader:</strong> the program that turns a surface's property values into a rendered result. The <strong>Iray Uber shader</strong> is a single, general-purpose shader that can represent skin, metal, glass, plastic, and cloth — you just feed it different property values. "Uber" means one shader to rule them all.</p>
+                </div>
+
+                <h3>The properties that matter most</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>What It Controls</th>
+                                <th>Turn it up for…</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Base Color</strong></td>
+                                <td>The surface's underlying color (usually driven by a texture map)</td>
+                                <td>Changing the overall hue of a surface</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Glossy Roughness</strong></td>
+                                <td>How sharp or blurred reflections are</td>
+                                <td>Lower = sharper, shinier; higher = softer, matte</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bump / Normal</strong></td>
+                                <td>Fine surface detail faked with maps (pores, wrinkles)</td>
+                                <td>Adding tactile detail without more geometry</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Translucency / SSS</strong></td>
+                                <td>How much light passes into and scatters under the surface</td>
+                                <td>Skin, wax, leaves — anything light sinks into</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Emission</strong></td>
+                                <td>Whether the surface emits its own light</td>
+                                <td>Screens, glowing signs, light panels</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Textures do the heavy lifting</h4>
+                    <p>Most properties can take a flat value <em>or</em> a <strong>texture map</strong> — an image that varies the value across the surface. Skin's Base Color is a photographic map; its bump is a pore map. When you apply a character's skin, you're mostly loading a matched set of these maps into Uber's slots.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> If a surface renders flat and chalky, it may still be on a <strong>non-Iray shader</strong> (like the default 3Delight shader). Applying an <strong>Iray Uber Base</strong> shader preset converts it, but that <em>resets</em> the surface — you'll rely on a material preset or re-load the maps afterward. Prefer applying a proper Iray material preset over converting by hand.
+                </blockquote>
+            </section>
+
+            <!-- Section 4: Applying Material Presets -->
+            <section id="presets" class="lesson-section">
+                <h2>Applying Material Presets</h2>
+                <p>You rarely build a surface from scratch. <strong>Material presets</strong> load a complete, matched set of surface properties — including all the texture maps — in a single double-click, just like pose and character presets.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Material preset (.duf):</strong> a saved package of surface settings and texture-map assignments for one or more surfaces. Applying a character's "skin" material preset sets Base Color, SSS, roughness, and bump across all skin surfaces at once — an instant, professionally-tuned look.</p>
+                </div>
+
+                <p>The surfacing workflow mirrors everything you've learned: start from a preset, then refine.</p>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Select the figure"] --> B["Apply a skin material preset"]
+                        B --> C["Apply eye and hair materials"]
+                        C --> D["Tweak roughness and bump"]
+                        D --> E["Test render a crop"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style D fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — match the preset to the whole selection</h4>
+                    <p>A skin material preset expects the <strong>whole figure</strong> selected so it can hit every skin surface. If you apply it with only one surface selected, you may re-skin just the face and leave the body mismatched. Select the figure node in the Scene pane, then apply.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Material presets are figure-specific — a Genesis 8 skin won't map onto a Genesis 9 figure, because their surface names and UV layouts differ. Just like poses and morphs, keep materials matched to the figure's generation.
+                </blockquote>
+            </section>
+
+            <!-- Section 5: Skin Surfaces & SSS -->
+            <section id="skin" class="lesson-section">
+                <h2>Skin Surfaces &amp; SSS</h2>
+                <p>Skin is the hardest surface to fake, and the one property that sells it is <strong>subsurface scattering</strong>. Without it, skin looks like painted plastic; with it, light glows softly through ears, noses, and fingertips exactly as it does in life.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Subsurface scattering (SSS):</strong> the effect of light entering a translucent surface, bouncing around inside, and leaving at a different point — giving skin its soft, slightly glowing quality. In Iray Uber it's driven by <strong>Translucency</strong>, <strong>SSS color</strong>, and <strong>scattering</strong> settings.</p>
+                </div>
+
+                <h3>What makes skin read as skin</h3>
+                <ul>
+                    <li><strong>SSS / translucency</strong> for that inner glow — the single biggest factor in believable skin.</li>
+                    <li><strong>Realistic roughness</strong> — real skin is fairly matte with subtle sheen, not glossy. Overly shiny skin looks sweaty or waxy.</li>
+                    <li><strong>Bump / normal detail</strong> — pores and fine wrinkles that catch light and break up the surface.</li>
+                    <li><strong>A good base texture</strong> — the photographic color map underneath it all.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 Backlight to see SSS</h4>
+                    <p>SSS is most visible when light comes from <em>behind</em> the figure — the classic glowing-ear effect. If you're judging skin under flat front light you'll barely see it. We'll set up proper lighting in Module 3, but keep in mind that skin and lighting are judged together.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> SSS is render-intensive and looks different across engines. A skin material that's gorgeous in Iray can look grey or plastic if the render is accidentally set to 3Delight, or if SSS is disabled in Render Settings. When skin looks off, check the engine and that translucency is actually on.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: Eyes & Hair Surfaces -->
+            <section id="eyes-hair" class="lesson-section">
+                <h2>Eyes &amp; Hair Surfaces</h2>
+                <p>Two surfaces punch far above their size in selling a character: the <strong>eyes</strong> and the <strong>hair</strong>. Both have quirks worth knowing.</p>
+
+                <h3>Eyes</h3>
+                <p>A Genesis eye is several surfaces stacked: the <strong>cornea</strong> and <strong>eye moisture</strong> are clear, wet layers over the colored <strong>iris</strong> and white <strong>sclera</strong>. That transparent moisture layer is what makes eyes look wet and alive.</p>
+                <ul>
+                    <li>Eye materials usually come with the character's skin preset — apply skin, get eyes.</li>
+                    <li>The moisture and cornea surfaces should stay <strong>transparent and glossy</strong>; if eyes look dull or "dead," those layers may have lost their Iray glass-like settings.</li>
+                    <li>A tiny <strong>specular highlight</strong> (a catchlight from a light source) is what makes an eye read as living — lighting supplies it, but the surface has to be glossy enough to show it.</li>
+                </ul>
+
+                <h3>Hair</h3>
+                <p>Hair comes in two broad kinds, and they surface differently:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Hair type</th>
+                                <th>What It Is</th>
+                                <th>Surface note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Strand-based (dForce) hair</strong></td>
+                                <td>Actual thin geometry strands</td>
+                                <td>Uses a dedicated hair shader; realistic but heavier to render</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Card / mesh hair</strong></td>
+                                <td>Transparent-textured sheets shaped like hair</td>
+                                <td>Relies on <strong>opacity/cutout</strong> maps — the transparency must read correctly in Iray</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — apply the hair's own Iray material</h4>
+                    <p>Hair products ship with their own material presets — <strong>use them</strong> rather than hand-building. If card hair looks like solid blocks, its <strong>cutout opacity</strong> map likely isn't applied or the shader isn't Iray. Re-applying the product's Iray material preset almost always fixes it.</p>
+                </div>
+
+                <figure>
+                    <img src="images/l06_eyes_hair_before_after.png" alt="Eyes and hair before and after correct Iray surfaces - flat eyes and blocky hair on the left, glossy catchlit eyes and transparent strand hair on the right">
+                    <figcaption>Figure 2: Eyes and hair before and after correct Iray surfacing — a glossy moisture layer gives the eye a catchlight, and a working cutout map lets hair read as strands rather than sheets.</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Card hair's transparency depends on a <strong>cutout opacity</strong> map. If you convert the hair to a plain Iray Uber Base by hand, you can wipe that map and the hair turns into solid slabs. Always prefer the hair's supplied Iray preset over a manual shader swap.
+                </blockquote>
+            </section>
+
+            <!-- Section 7: Quick Surface Tweaks -->
+            <section id="tweaks" class="lesson-section">
+                <h2>Quick Surface Tweaks</h2>
+                <p>Presets get you 90% there. The last 10% — the part that makes a render feel intentional — comes from a few small, safe tweaks you'll reach for constantly.</p>
+
+                <h3>The tweaks worth knowing</h3>
+                <ul>
+                    <li><strong>Glossy Roughness</strong> — nudge up to matte down sweaty-looking skin, or down for wet lips and eyes.</li>
+                    <li><strong>Bump Strength</strong> — raise slightly to bring out pores and fabric weave; lower if detail looks harsh or noisy.</li>
+                    <li><strong>Base Color tint</strong> — a subtle multiply on lips or cheeks adds warmth without a new texture.</li>
+                    <li><strong>Metallic Flakes / top-coat</strong> — leave off for skin; useful for car paint, nails, and stylized looks.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 Edit several surfaces at once</h4>
+                    <p>To keep skin consistent, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>-select <strong>Face</strong>, <strong>Torso</strong>, <strong>Legs</strong>, and <strong>Arms</strong> together in the Editor, then change roughness once — it applies to all of them. Tweaking body surfaces one at a time is how you end up with a face that doesn't match the neck.</p>
+                </div>
+
+                <div class="card card-warning">
+                    <h4>⚠️ Change small, test often</h4>
+                    <p>Surface values are sensitive — a roughness shift that looks tiny in the number can be dramatic in a render. Make <strong>small</strong> changes and do a quick <strong>spot render</strong> (Module 3) of the face to judge them. Guessing from the OpenGL preview alone will mislead you, because it doesn't show SSS or true reflections.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Before a big session of hand-tweaking, <strong>save your scene</strong> (or the surfaces as a material preset). There's no single "reset this surface" button once you've changed many values — a saved copy is your undo of last resort if a tweak spiral goes wrong.
+                </blockquote>
+            </section>
+
+            <!-- Section 8: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Surface a Character</h2>
+                <p>Let's make your shaped character render-ready: skin, eyes, and hair surfaced correctly, then polished with a couple of tweaks.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Skin &amp; Eyes</h3>
+                    <p><strong>Objective:</strong> Apply believable Iray skin and confirm the eyes read as alive.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Select the <strong>figure node</strong> in the Scene pane and apply a character's <strong>skin material preset</strong> (Iray).</li>
+                        <li>Open the <strong>Surfaces</strong> pane (Editor tab) and confirm skin surfaces show <strong>Translucency/SSS</strong> values — that's what makes skin glow.</li>
+                        <li>Use the <strong>Surface Selection</strong> tool to click an eye, and confirm the <strong>cornea/moisture</strong> surfaces are transparent and glossy.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Hair &amp; Tweaks</h3>
+                    <p><strong>Objective:</strong> Surface the hair and make two safe adjustments.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Add a hair product to the figure and apply its <strong>own Iray material preset</strong>. Confirm card hair reads as strands, not solid sheets.</li>
+                        <li>In the Editor, <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>-select all <strong>skin surfaces</strong> and nudge <strong>Glossy Roughness</strong> up slightly to matte the skin.</li>
+                        <li>Raise <strong>Bump Strength</strong> a touch on the face to bring out pores. Keep both changes small.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — the skin looks flat, grey, or plastic</summary>
+                        <p>Nine times out of ten the render (or surface) isn't on <strong>Iray</strong>, or <strong>SSS/translucency</strong> is off. Confirm the render engine is Iray in Render Settings, re-apply the Iray skin material preset, and check that translucency values are present in the Surfaces Editor.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Lock It In</h3>
+                    <p><strong>Objective:</strong> Preserve your surfaced character.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li><strong>Save your scene</strong> so the whole surfaced, shaped, posed character is safe.</li>
+                        <li>Optionally, with the figure selected, choose <strong>File → Save As → Material(s) Preset…</strong> to bank your tweaked skin for reuse.</li>
+                        <li>Note that your character is now complete for Module 2 — posed, shaped, and surfaced. Next module, we light and render it.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What does a surface (material) control on a figure?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="That's a morph — it reshapes the mesh. Surfaces don't move any geometry.">
+                                A) The shape of the mesh, like a longer nose or wider jaw
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="A surface is the light-response recipe for a region of mesh — its color, shininess, bumpiness, and translucency. It changes how the mesh reacts to light without moving any geometry or bones.">
+                                B) How a region of mesh reflects, absorbs, and scatters light
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Rotating bones is posing. Surfaces have nothing to do with the skeleton.">
+                                C) The rotation of the figure's bones
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> A character's skin renders flat and plastic-looking. What's the most likely cause?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="A missing morph changes shape, not how skin responds to light.">
+                                A) The figure is missing a body morph
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Pins lock nodes during posing; they have no effect on surfaces or rendering.">
+                                B) A limb is still pinned from posing
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Flat, plastic skin usually means the render or surface isn't on Iray, or subsurface scattering (translucency) is off. Confirm the engine is Iray and that the Iray skin material with SSS is applied.">
+                                C) The surface isn't on Iray, or subsurface scattering is off
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Why should you apply a card hair's own Iray material preset instead of converting it to Iray Uber Base by hand?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Card hair relies on a cutout opacity map for its transparency. A manual shader swap can wipe that map, turning the hair into solid sheets. The supplied Iray preset keeps the cutout map intact.">
+                                A) A manual swap can wipe the cutout opacity map, making hair solid
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Hand-converting isn't faster here, and it risks breaking transparency — the preset is both faster and safer.">
+                                B) Hand-converting renders faster than using the preset
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Shaders don't change a figure's shape; that's morphs. The real risk is losing the transparency map.">
+                                C) Converting the shader would alter the hair's shape morphs
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Start from material presets</strong> — apply skin, eyes, and hair from the products, then refine.</li>
+                    <li><strong>Select the figure node</strong> before applying a skin preset so every skin surface updates together.</li>
+                    <li><strong>Edit skin surfaces as a group</strong> to keep face, torso, and limbs consistent.</li>
+                    <li><strong>Confirm you're on Iray</strong> whenever skin or eyes look wrong.</li>
+                    <li><strong>Save your scene</strong> before a hand-tweaking session.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't hand-convert hair or eyes</strong> to Iray Uber Base — you can wipe transparency maps.</li>
+                    <li><strong>Don't over-gloss skin</strong> — real skin is fairly matte; shiny skin reads as sweaty or waxy.</li>
+                    <li><strong>Don't judge surfaces from the OpenGL preview</strong> — it hides SSS and true reflections.</li>
+                    <li><strong>Don't mix render engines</strong> — Iray materials belong on Iray renders.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Backlight the figure to actually see subsurface scattering at work.</li>
+                    <li>Spot-render the face to judge small roughness and bump changes accurately.</li>
+                    <li>Save a tweaked skin as a Material(s) Preset to reuse your look across characters.</li>
+                    <li>Use the Surface Selection tool to identify any mystery region on a figure.</li>
+                </ul>
+            </section>
+
+            <!-- Section 10: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>A <strong>surface (material)</strong> is a region's light-response recipe — color, gloss, bump, and translucency — independent of shape and pose.</li>
+                        <li>The <strong>Surfaces pane</strong> has a <strong>Presets</strong> tab (apply looks) and an <strong>Editor</strong> tab (tweak properties); the Surface Selection tool identifies regions.</li>
+                        <li>The <strong>Iray Uber shader</strong> powers nearly every surface; its key dials are Base Color, Glossy Roughness, Bump, Translucency/SSS, and Emission.</li>
+                        <li><strong>Material presets</strong> load matched skin, eye, and hair looks in one click — select the figure node first, and match the generation.</li>
+                        <li>Believable <strong>skin needs SSS</strong>; eyes need a glossy moisture layer; card hair needs its cutout map — so prefer supplied Iray presets over hand conversion.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/finding_your_way_around/interface/panes/surfaces/start" target="_blank" rel="noopener">The Surfaces pane — official Daz user guide</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/shaders/iray_uber/start" target="_blank" rel="noopener">The Iray Uber shader — Daz documentation</a></li>
+                    <li><a href="https://www.daz3d.com/genesis-8" target="_blank" rel="noopener">About the Genesis 8 figure</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>That's Module 2 complete — your character is <strong>posed, shaped, and surfaced</strong>. But surfaces only come alive under light. In <strong>Lesson 3.1 — Building a Scene</strong>, we start Module 3 by giving your character a world to stand in: environments and props, hair and clothing, and the cameras that frame a shot worth rendering.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>🎉 Your character is ready!</h3>
+                    <p>Posed, shaped, and now surfaced with believable skin, living eyes, and real hair — you've built a complete character from the Genesis base. Everything from here is about putting them in a scene and lighting them beautifully. That's exactly where Module 3 begins.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_05_shaping_characters_with_morphs.html" class="prev-lesson">← Previous: Shaping Characters with Morphs</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_07_building_a_scene.html" class="next-lesson">Next: Building a Scene →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

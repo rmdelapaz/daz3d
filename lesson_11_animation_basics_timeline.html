@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 4.2 — Animation Basics with the Timeline: keyframes and interpolation, the Timeline pane, aniMate2 and aniBlocks, building a simple turntable, and rendering an image sequence out to video.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 4.2: Animation Basics with the Timeline - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 4</a></li>
+            <li aria-current="page">Lesson 4.2: Animation Basics with the Timeline</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>🎬 Lesson 4.2: Animation Basics with the Timeline</h1>
+                <p class="lead">You've built a character that poses, drapes, lights, and renders as a still — now let's make it move. Animation in Daz is more approachable than it looks: you set a pose at one moment, a different pose at a later moment, and Daz fills in everything between. In this lesson you'll learn keyframes and interpolation, navigate the Timeline pane, meet aniMate2 and its drag-and-drop aniBlocks, build a clean 360° turntable of your character, and render the whole thing out as an image sequence you can turn into a video. It's the bridge from portrait artist to motion — and it's the perfect showcase for a finished figure.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain what <strong>keyframes</strong> and <strong>interpolation</strong> are</li>
+                        <li>Navigate the <strong>Timeline</strong> pane and set keyframes</li>
+                        <li>Understand when to use <strong>aniMate2</strong> and <strong>aniBlocks</strong></li>
+                        <li>Build a smooth <strong>360° turntable</strong> of your character</li>
+                        <li>Set the <strong>frame rate and range</strong> for an animation</li>
+                        <li>Render an <strong>image sequence</strong> and assemble it into <strong>video</strong></li>
+                        <li>Follow a sensible <strong>animation workflow</strong> from pose to playback</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 55 minutes</p>
+                    <p><strong>Project:</strong> A short 360° turntable animation of your posed, dressed character, rendered as an image sequence and assembled into a shareable video clip.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#why-animation" class="toc-link">From Still to Motion</a></li>
+                        <li><a href="#keyframes" class="toc-link">Keyframes &amp; Interpolation</a></li>
+                        <li><a href="#timeline-pane" class="toc-link">The Timeline Pane</a></li>
+                        <li><a href="#animate2" class="toc-link">aniMate2 &amp; aniBlocks</a></li>
+                        <li><a href="#turntable" class="toc-link">Building a Turntable</a></li>
+                        <li><a href="#rendering-video" class="toc-link">Rendering to Video</a></li>
+                        <li><a href="#workflow" class="toc-link">An Animation Workflow</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Turntable</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: From Still to Motion -->
+            <section id="why-animation" class="lesson-section">
+                <h2>From Still to Motion</h2>
+                <p>Animation is just a series of still images — <strong>frames</strong> — played fast enough that the eye reads them as continuous motion. In Daz, you don't draw every frame; you set a few important poses at specific times and let the software calculate the in-between frames automatically. That calculation is the heart of computer animation.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> You define key poses at chosen moments (keyframes), and Daz interpolates the frames between them, producing smooth motion from just a handful of set positions.
+                </blockquote>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Frame rate (fps):</strong> how many frames play per second — commonly 30 or 24 for video. <strong>Frame range:</strong> the total number of frames in your animation. A 5-second clip at 30 fps is 150 frames. Set both before animating so your timing math works out.</p>
+                </div>
+
+                <p>Because Daz fills the gaps for you, animation becomes a matter of deciding <em>what</em> should happen and <em>when</em> — not hand-placing hundreds of positions. Nail a few key moments and the software makes them flow.</p>
+
+                <div class="mermaid">
+                    graph TD
+                        A["Ways to animate in Daz"] --> B["Keyframes on the Timeline"]
+                        A --> C["aniBlocks in aniMate2"]
+                        B --> D["Daz interpolates the in-between frames"]
+                        C --> D
+                        D --> E["A rendered image sequence"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style D fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Rendering animation is rendering, times N frames</h4>
+                    <p>Every frame of an animation is a full Iray render. A 150-frame turntable is 150 renders — so animation render times add up fast. This is why turntables and simple motions are the right first projects: they look impressive without demanding hundreds of heavy, softly-lit frames.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Set your <strong>frame rate and range first</strong>. Changing the frame rate after animating rescales your timing and can throw off carefully placed keyframes. Decide "5 seconds at 30 fps" up front, and animate within that plan.
+                </blockquote>
+            </section>
+
+            <!-- Section 2: Keyframes & Interpolation -->
+            <section id="keyframes" class="lesson-section">
+                <h2>Keyframes &amp; Interpolation</h2>
+                <p>The two words that unlock all of animation are <strong>keyframe</strong> and <strong>interpolation</strong>. Understand them and everything else is just interface.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Keyframe:</strong> a recorded value (a pose, a position, a rotation) at a specific frame. <strong>Interpolation:</strong> the automatic calculation of the values <em>between</em> two keyframes, so the figure moves smoothly from one to the next instead of jumping.</p>
+                </div>
+
+                <p>To animate the simplest possible move: go to frame 0, set a pose (that creates keyframes); go to frame 60, change the pose (new keyframes); play back, and Daz smoothly interpolates the whole journey. That's it — the same pattern scales to any animation.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Interpolation has a "shape" — easing</h4>
+                    <p>By default Daz eases motion in and out, so it accelerates and decelerates naturally rather than moving at a robotic constant speed. This <strong>TCB / linear</strong> interpolation choice lives on the keyframes. Linear is perfect for a <em>constant-speed turntable</em>; eased is better for lifelike body motion.</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — use linear interpolation for turntables</h4>
+                    <p>A turntable should spin at a perfectly even rate. Set the rotation keyframes to <strong>linear</strong> interpolation so the figure turns at constant speed with no ease-in/ease-out. Eased interpolation would make the spin slow at the start and end — fine for a gesture, wrong for a smooth 360°.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Keyframes record <em>whatever changed</em> at that frame. If you accidentally nudge a light, camera, or morph while on a later frame, you may create keyframes you didn't intend — leaving something drifting through the animation. When motion looks odd, inspect the Timeline for stray keys.
+                </blockquote>
+            </section>
+
+            <!-- Section 3: The Timeline Pane -->
+            <section id="timeline-pane" class="lesson-section">
+                <h2>The Timeline Pane</h2>
+                <p>The <strong>Timeline</strong> pane (<strong>Window → Panes → Timeline</strong>) is your basic, precise animation tool. It shows the current frame, a playhead you scrub, and the keyframes on whatever's selected — the direct, keyframe-level control under everything.</p>
+
+                <figure>
+                    <img src="images/l11_timeline_pane.png" alt="The Timeline pane showing the frame ruler, playhead, keyframe markers on a figure, current-frame and total-frames fields, and playback controls">
+                    <figcaption>Figure 1: The Timeline pane — the frame ruler and playhead, keyframe markers on the selected figure, the current-frame and total-frames fields, and playback controls.</figcaption>
+                </figure>
+
+                <h3>Timeline essentials</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Control</th>
+                                <th>What it does</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Current Frame</strong></td>
+                                <td>Which frame you're viewing/editing</td>
+                                <td>Move here before making a change to key it</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total Frames</strong></td>
+                                <td>The length of the animation</td>
+                                <td>Frames ÷ fps = duration in seconds</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Playhead / Scrubber</strong></td>
+                                <td>Drag to preview motion frame by frame</td>
+                                <td>Fast way to check timing without rendering</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Keyframe markers</strong></td>
+                                <td>Show where values are recorded</td>
+                                <td>Select and move them to retime</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — scrub before you render</h4>
+                    <p>Dragging the playhead is a free, instant preview of your motion in the OpenGL viewport. Scrub the whole range and watch for hitches, foot-slides, or intersections <em>before</em> committing to a long Iray render. Fixing timing at the scrub stage costs seconds; fixing it after a render costs hours.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> The Timeline shows keys for the <strong>currently selected</strong> node. If you don't see the keyframes you expect, you may have the wrong item selected — select the figure (or the specific bone, camera, or light) whose animation you want to inspect or edit.
+                </blockquote>
+            </section>
+
+            <!-- Section 4: aniMate2 & aniBlocks -->
+            <section id="animate2" class="lesson-section">
+                <h2>aniMate2 &amp; aniBlocks</h2>
+                <p>Where the Timeline is precise and manual, <strong>aniMate2</strong> is fast and library-driven. It's a separate animation pane that works with <strong>aniBlocks</strong> — pre-made motion clips you drag onto a track and combine, like audio loops in a music app.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>aniMate2:</strong> a timeline-style pane for assembling animation from <strong>aniBlocks</strong> — ready-made motion clips (a walk, a wave, an idle) you drag, drop, trim, and blend. It's the quickest way to get believable full-body motion without keyframing every joint by hand.</p>
+                </div>
+
+                <h3>Timeline vs aniMate2</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Approach</th>
+                                <th>Strength</th>
+                                <th>Best for</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Timeline (keyframes)</strong></td>
+                                <td>Exact, custom control over every value</td>
+                                <td>Turntables, precise custom moves, fixes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>aniMate2 (aniBlocks)</strong></td>
+                                <td>Fast, pre-animated, believable body motion</td>
+                                <td>Walks, gestures, idles, quick shots</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 They work together</h4>
+                    <p>You can build a base with aniBlocks in aniMate2, then <strong>bake it to the Timeline</strong> (Studio keyframes) to fine-tune individual poses. Many artists rough in motion with aniBlocks for speed, then polish specific frames with keyframes for control — best of both tools.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> aniBlocks are authored for specific figure generations (e.g. Genesis 8). A block made for one generation may not fit another cleanly. Match aniBlocks to your figure's generation, or expect to retarget/adjust — mismatches cause odd limb positions.
+                </blockquote>
+            </section>
+
+            <!-- Section 5: Building a Turntable -->
+            <section id="turntable" class="lesson-section">
+                <h2>Building a Turntable</h2>
+                <p>The perfect first animation is a <strong>turntable</strong> — your character rotating a full 360° so viewers see them from every angle. It's simple, it's the industry-standard way to show off a model, and it needs just two keyframes.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Turntable:</strong> an animation where the subject (or the camera) rotates a full 360° at constant speed, revealing the model from all sides. It's the classic portfolio piece for a 3D character — a rotisserie tour of your work.</p>
+                </div>
+
+                <h3>Two ways to spin</h3>
+                <ul>
+                    <li><strong>Rotate the figure</strong> — group the figure (or use its root) and keyframe Y-rotation from 0° at frame 0 to 360° at the last frame. Simplest approach.</li>
+                    <li><strong>Orbit the camera</strong> — keep the figure still and rotate the camera around it. Better when a floor, hair sim, or dForce drape should stay physically settled.</li>
+                </ul>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — rotate the camera when physics is involved</h4>
+                    <p>If your character has a dForce drape or hair sim, <strong>spinning the figure</strong> can disturb the settled cloth. Instead, keep the figure planted and <strong>orbit the camera</strong> around it — the drape stays perfect and only the viewpoint moves. Cleaner turntables, no re-simulating.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> For a seamless loop, the first and last frames must match. Rotate exactly <strong>360°</strong> and make sure interpolation is <strong>linear</strong>, or you'll get a visible stutter or speed change at the loop point. A turntable that hitches on repeat almost always has non-linear keys or an off-by-a-frame range.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: Rendering to Video -->
+            <section id="rendering-video" class="lesson-section">
+                <h2>Rendering to Video</h2>
+                <p>Animation done, it's time to render. The professional habit is to render an <strong>image sequence</strong> — one file per frame — rather than straight to a movie file, then assemble those frames into video afterward.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Image sequence:</strong> an animation rendered as numbered still images (frame_0001.png, frame_0002.png, …) instead of a single video file. Each frame is a full render; the sequence is later encoded into a video with Daz or an external tool.</p>
+                </div>
+
+                <p>In <strong>Render Settings</strong>, choose to render the animation (the frame range, not just the current frame) and set the output. Rendering to a sequence has real advantages:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Benefit</th>
+                                <th>Why it matters</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Crash-safe</strong></td>
+                                <td>If Daz crashes at frame 120, you keep frames 1–119 and resume</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Re-encode freely</strong></td>
+                                <td>Make MP4, GIF, or different resolutions from the same frames</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fix single frames</strong></td>
+                                <td>Re-render only a bad frame instead of the whole clip</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Set frame rate and range"] --> B["Animate keyframes or aniBlocks"]
+                        B --> C["Scrub to check the motion"]
+                        C --> D["Render an image sequence"]
+                        D --> E["Encode the frames to video"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Animation renders are long — budget accordingly. Use a <strong>lower resolution and a denoiser-friendly sample cap</strong> for motion tests, and reserve full-res renders for the final. A 5-second clip that's clean at test quality beats a gorgeous one you never finish because each frame took ten minutes.
+                </blockquote>
+            </section>
+
+            <!-- Section 7: An Animation Workflow -->
+            <section id="workflow" class="lesson-section">
+                <h2>An Animation Workflow</h2>
+                <p>Animation rewards planning. Here's a dependable order that keeps render time and rework under control.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Step</th>
+                                <th>Do this</th>
+                                <th>Why</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1. Plan</strong></td>
+                                <td>Set frame rate and range (e.g. 150 frames @ 30 fps)</td>
+                                <td>Timing depends on this being fixed first</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Animate</strong></td>
+                                <td>Keyframe the motion (or drop aniBlocks)</td>
+                                <td>Define the key moments; Daz fills the rest</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Preview</strong></td>
+                                <td>Scrub the Timeline in the viewport</td>
+                                <td>Catch hitches before rendering anything</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. Test render</strong></td>
+                                <td>Low-res sequence to check motion + lighting</td>
+                                <td>Cheap proof before the expensive pass</td>
+                            </tr>
+                            <tr>
+                                <td><strong>5. Final</strong></td>
+                                <td>Full-res image sequence, then encode to video</td>
+                                <td>Crash-safe frames you can re-encode anytime</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Simulate after animating, across the range</h4>
+                    <p>If your animated character wears dForce cloth, run the simulation <strong>over the full Timeline range</strong> so the fabric moves with the motion, not just one frame. Order matters: animate the body first, then simulate cloth across the whole clip, then render — reversing this means re-simulating.</p>
+                </div>
+
+                <figure>
+                    <img src="images/l11_turntable_filmstrip.png" alt="A filmstrip of turntable frames showing a character rotating from front to side to back as a rendered image sequence">
+                    <figcaption>Figure 2: A turntable rendered as an image sequence — several numbered frames showing the character rotating front to back, later encoded into a smooth looping video.</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Keep the <strong>scene file and the rendered frames</strong> both. The frames are your deliverable; the scene lets you re-render at a higher resolution, adjust lighting, or extend the animation later. As with stills, the render is the output and the scene is the recipe.
+                </blockquote>
+            </section>
+
+            <!-- Section 8: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Turntable</h2>
+                <p>Let's build and render a 360° turntable of your character — set the range, create the spin, preview it, then render a sequence.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Set Up &amp; Keyframe</h3>
+                    <p><strong>Objective:</strong> Create a two-keyframe 360° spin.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Set your animation to <strong>150 frames at 30 fps</strong> (a 5-second clip) in the Timeline.</li>
+                        <li>At <strong>frame 0</strong>, key the camera (or figure) at its start; at <strong>frame 150</strong>, rotate a full <strong>360°</strong> around the figure and key it.</li>
+                        <li>Set the rotation keyframes to <strong>linear</strong> interpolation for constant speed.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Preview &amp; Refine</h3>
+                    <p><strong>Objective:</strong> Confirm smooth, seamless motion before rendering.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li><strong>Scrub the playhead</strong> across the whole range in the viewport and watch the rotation.</li>
+                        <li>Confirm the spin is <strong>even</strong> and the first and last frames match for a clean loop.</li>
+                        <li>Check nothing else is accidentally animated — no drifting lights, morphs, or cloth.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — my turntable stutters when it loops</summary>
+                        <p>Two usual causes. First, interpolation: set the rotation keys to <strong>linear</strong> so speed is constant rather than easing in and out. Second, the loop point: rotating a full <strong>360°</strong> means frame 0 and frame 150 show the same angle, which can double-up on loop — try ending the 360° one frame before the last frame, or rotate to just under 360°, so the loop is seamless.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Render the Sequence</h3>
+                    <p><strong>Objective:</strong> Output an image sequence and encode it.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>In <strong>Render Settings</strong>, choose to render the <strong>animation range</strong> and set output to a numbered <strong>image sequence</strong> (PNG).</li>
+                        <li>Do a quick <strong>low-res test</strong> first; when happy, render the full sequence.</li>
+                        <li><strong>Encode</strong> the frames to a video (in Daz or an external tool) and <strong>save the scene</strong>.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What does interpolation do in an animation?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Removing render noise is the denoiser's job at render time — interpolation is about motion between keyframes.">
+                                A) Removes noise from each rendered frame
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Interpolation automatically calculates the values between two keyframes, so the figure moves smoothly from one recorded pose to the next instead of jumping.">
+                                B) Calculates the frames between keyframes so motion is smooth
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Encoding frames into a movie file happens after rendering — interpolation happens while you animate, filling gaps between keys.">
+                                C) Combines rendered frames into a video file
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> Your character has a dForce drape. What's the cleaner way to build a turntable?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Spinning the figure can disturb the settled cloth, forcing you to re-simulate — not ideal when a drape is already clean.">
+                                A) Rotate the figure 360° and re-simulate each frame
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Keeping the figure planted and orbiting the camera around it leaves the dForce drape perfectly settled — only the viewpoint moves, so there's nothing to re-simulate.">
+                                B) Keep the figure still and orbit the camera around it
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Turntables need a full 360° to show every angle; a 180° swing only reveals half the character.">
+                                C) Rotate only 180° so the cloth doesn't move as much
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Why render an animation as an image sequence rather than straight to a movie file?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="A sequence is crash-safe (a crash at frame 120 keeps frames 1–119), lets you re-encode to any format or resolution, and lets you re-render just a single bad frame — none of which a single movie file allows.">
+                                A) It's crash-safe and lets you re-encode or fix single frames
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="A sequence isn't faster to render — it's the same number of frames; its advantage is safety and flexibility, not speed.">
+                                B) It renders each frame far faster than a movie file
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Image sequences don't reduce quality; if anything, lossless PNG frames preserve more than a compressed movie.">
+                                C) It automatically improves the quality of every frame
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Set frame rate and range first</strong> — timing depends on it.</li>
+                    <li><strong>Scrub the Timeline</strong> to preview motion before any render.</li>
+                    <li><strong>Use linear interpolation</strong> for constant-speed turntables.</li>
+                    <li><strong>Orbit the camera</strong> instead of the figure when physics is settled.</li>
+                    <li><strong>Render image sequences</strong> for crash-safety and re-encoding.</li>
+                    <li><strong>Test at low resolution</strong> before committing to the full render.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't change frame rate after animating</strong> — it rescales your timing.</li>
+                    <li><strong>Don't leave stray keyframes</strong> on lights, cameras, or morphs you didn't mean to animate.</li>
+                    <li><strong>Don't render straight to a movie file</strong> for anything long — a crash loses it all.</li>
+                    <li><strong>Don't mismatch aniBlocks</strong> to the wrong figure generation.</li>
+                    <li><strong>Don't simulate dForce on one frame</strong> for an animated clip — sim the whole range.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Rough in motion with aniBlocks, then bake to the Timeline to polish.</li>
+                    <li>End a 360° a frame short of the last frame for a seamless loop.</li>
+                    <li>Keep a low-res "motion test" render setting saved for quick previews.</li>
+                    <li>Name your frame files with padded numbers so they sort correctly.</li>
+                    <li>Keep the scene file so you can re-render the sequence larger later.</li>
+                </ul>
+            </section>
+
+            <!-- Section 10: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>Animation is set poses at chosen frames — <strong>keyframes</strong> — with Daz <strong>interpolating</strong> the smooth motion between them.</li>
+                        <li>The <strong>Timeline</strong> gives precise keyframe control; <strong>aniMate2 + aniBlocks</strong> give fast, pre-made body motion, and they combine.</li>
+                        <li>A <strong>turntable</strong> needs just two keyframes and <strong>linear</strong> interpolation; orbit the camera when a dForce drape must stay settled.</li>
+                        <li>Set <strong>frame rate and range first</strong>, and remember every frame is a full Iray render, so render time multiplies.</li>
+                        <li>Render an <strong>image sequence</strong> — crash-safe and re-encodable — then assemble it into a shareable video.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/animation/timeline/start" target="_blank" rel="noopener">The Timeline — official Daz user guide</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/animation/animate2/start" target="_blank" rel="noopener">aniMate2 &amp; aniBlocks — Daz documentation</a></li>
+                    <li><a href="https://www.daz3d.com/animation" target="_blank" rel="noopener">Animation in Daz Studio</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>That's Module 4 done — your character can move, and its cloth moves with it. Now we take the whole figure beyond Daz. In <strong>Lesson 5.1 — The Daz to Blender Bridge</strong>, you'll install the bridge, export your Genesis figure into Blender with its mesh, rig, and materials, fix up the shaders on the Blender side, and learn when Diffeomorphic is the better route.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>💡 Your character moves now!</h3>
+                    <p>Keyframes, the Timeline, aniBlocks, a looping turntable, and an image-sequence render — you've crossed from stills into motion. A clean turntable is the classic way to show a 3D character to the world, and you can make one start to finish. Next stop: the bridges that carry this figure into Blender and Unreal.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_10_dforce_cloth_and_hair.html" class="prev-lesson">← Previous: dForce Cloth &amp; Hair</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_12_daz_to_blender_bridge.html" class="next-lesson">Next: Daz to Blender Bridge →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

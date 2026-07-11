@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 3.1 — Building a Scene: adding environments and props, fitting hair and clothing to a figure, creating and framing cameras, understanding composition, and the difference between the headlamp and real scene lights.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 3.1: Building a Scene - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 3</a></li>
+            <li aria-current="page">Lesson 3.1: Building a Scene</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>🎬 Lesson 3.1: Building a Scene</h1>
+                <p class="lead">You have a character — posed, shaped, and surfaced. Right now they're floating in an empty void. This lesson gives them a world. You'll add an environment to stand in, dress the set with props, fit hair and clothing that follow the figure automatically, and — most importantly — set up a <em>camera</em> to frame the shot. A great render is half lighting and half composition, and composition starts here: deciding where the camera stands, what it sees, and what it leaves out. By the end you'll have a staged scene ready for the lights of Lesson 3.2.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain what a <strong>scene</strong> is and how assembling one differs from building a figure</li>
+                        <li>Load <strong>environments and sets</strong> to give a figure a place to stand</li>
+                        <li>Add and position <strong>props</strong>, and <strong>parent</strong> them so they move together</li>
+                        <li>Fit <strong>hair and clothing</strong> to a figure and understand how auto-fit works</li>
+                        <li>Create a dedicated <strong>camera</strong> and understand it versus the Perspective view</li>
+                        <li>Apply basic <strong>framing and composition</strong> — focal length, the rule of thirds, and headroom</li>
+                        <li>Describe the difference between the <strong>headlamp</strong> and real <strong>scene lights</strong></li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 55 minutes</p>
+                    <p><strong>Project:</strong> Your character placed in an environment with props, hair, and clothing, framed by a dedicated camera — a staged scene ready to light and render in the rest of Module 3.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#what-is-a-scene" class="toc-link">What Is a Scene?</a></li>
+                        <li><a href="#environments" class="toc-link">Environments &amp; Sets</a></li>
+                        <li><a href="#props" class="toc-link">Props &amp; Set Dressing</a></li>
+                        <li><a href="#hair-clothing" class="toc-link">Hair &amp; Clothing</a></li>
+                        <li><a href="#cameras" class="toc-link">Cameras</a></li>
+                        <li><a href="#composition" class="toc-link">Framing &amp; Composition</a></li>
+                        <li><a href="#headlamp" class="toc-link">Headlamp vs Scene Lights</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Stage a Scene</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: What Is a Scene? -->
+            <section id="what-is-a-scene" class="lesson-section">
+                <h2>What Is a Scene?</h2>
+                <p>Up to now you've been working on a single figure. A <strong>scene</strong> zooms out: it's the whole assembled world — your figure, plus the environment they stand in, the props around them, the clothing they wear, the cameras that view them, and (next module) the lights. Building a figure is <em>sculpting</em>; building a scene is <em>staging</em>.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> A scene is everything loaded into Daz Studio at once — figures, environments, props, cameras, and lights — arranged in 3D space and listed together in the Scene pane.
+                </blockquote>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Scene:</strong> the complete collection of objects in your Daz Studio session, shown as a hierarchy in the <strong>Scene pane</strong>. Every figure, prop, camera, and light is a <strong>node</strong> in that list, and the whole thing saves to a single <code>.duf</code> scene file.</p>
+                </div>
+
+                <p>The Scene pane is your map. As a scene grows, it becomes the fastest way to select, hide, rename, and organize objects — far more reliable than hunting for them in the viewport.</p>
+
+                <div class="mermaid">
+                    graph TD
+                        A["A Daz Studio scene"] --> B["Figures: your character"]
+                        A --> C["Environment: room or backdrop"]
+                        A --> D["Props: furniture and objects"]
+                        A --> E["Cameras: the framed views"]
+                        A --> F["Lights: added in Module 3"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style B fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#3b82f6,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Staging is non-destructive</h4>
+                    <p>Adding an environment, a prop, or a camera never alters your figure — it just places more objects in the same space. You can rearrange a scene endlessly without touching the pose, shape, or surfaces you worked so hard on. Everything is an independent node you can move, hide, or delete.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Complex environments and high-resolution props can be <strong>heavy</strong> — they eat memory and slow the viewport and render. Start with what the shot actually needs. You can't see what the camera doesn't frame, so there's no reason to load a whole city block for a head-and-shoulders portrait.
+                </blockquote>
+            </section>
+
+            <!-- Section 2: Environments & Sets -->
+            <section id="environments" class="lesson-section">
+                <h2>Environments &amp; Sets</h2>
+                <p>An <strong>environment</strong> (or <strong>set</strong>) is the world your figure occupies — an interior room, a street, a forest, or just a simple backdrop. Loading one is the same double-click workflow you already know from figures and poses: find it in Smart Content or the Content Library and double-click to add it to the scene.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Environment / set:</strong> a prop or group of props that forms a location — walls, floors, terrain, and background geometry. Some environments are a single large prop; others are a collection you load together. Either way they arrive in the Scene pane as nodes you can position or hide.</p>
+                </div>
+
+                <h3>Kinds of environment you'll meet</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>What It Is</th>
+                                <th>Good for…</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Full 3D set</strong></td>
+                                <td>Modeled rooms or locations you can move the camera through</td>
+                                <td>Wide shots, believable depth, reflections in the scene</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Backdrop / backplane</strong></td>
+                                <td>A flat image plane behind the figure</td>
+                                <td>Quick portraits where the background is out of focus anyway</td>
+                            </tr>
+                            <tr>
+                                <td><strong>HDRI environment</strong></td>
+                                <td>A 360° image that both lights <em>and</em> backgrounds the scene</td>
+                                <td>Fast, realistic lighting — covered in Lesson 3.2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Put the figure where the set expects</h4>
+                    <p>A set is usually modeled around its own origin, so a freshly loaded figure may end up standing through a wall or floating above the floor. Select your figure and move it into the set — or use the environment's included <strong>camera or pose presets</strong> if it ships with them, which snap everything into place.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Big interior and exterior sets are among the <strong>heaviest</strong> assets in Daz. If your viewport crawls after loading one, hide parts you can't see, or switch to a simple backdrop for portraits. A lighter scene is faster to pose, frame, and render.
+                </blockquote>
+            </section>
+
+            <!-- Section 3: Props & Set Dressing -->
+            <section id="props" class="lesson-section">
+                <h2>Props &amp; Set Dressing</h2>
+                <p>Once the location is in place, <strong>props</strong> bring it to life: a chair to sit in, a mug on a table, a sword in a hand. <strong>Set dressing</strong> is the craft of placing those props so the scene feels lived-in and intentional rather than empty.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Prop:</strong> any non-figure object you add to a scene — furniture, weapons, plants, vehicles, and small details. Props don't have a figure's full skeleton, though some have their own moving parts (a lid, a drawer, a trigger) exposed as posable nodes.</p>
+                </div>
+
+                <h3>Parenting: making objects move together</h3>
+                <p>The key skill with props is <strong>parenting</strong> — attaching one object to another so it follows along. Parent a mug to a hand and the mug travels with every hand movement; parent a hat to the head and it stays put when the figure looks around.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Parenting:</strong> making one node a <em>child</em> of another so it inherits the parent's movement. In the Scene pane you drag the child onto the parent (or use <strong>Edit → Object → Parent…</strong>). The child keeps its own position relative to the parent and moves whenever the parent does.</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — parent to the closest bone</h4>
+                    <p>For a prop held in a hand, parent it to the <strong>hand bone</strong>, not the whole figure — then it tracks the hand precisely as the arm poses. You can select a specific bone as the parent by expanding the figure's node tree in the Scene pane before parenting.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Parenting is not the same as <strong>fitting</strong>. Parenting glues a rigid prop to a node; fitting (next section) makes flexible clothing bend and follow the figure's <em>pose</em>. Use parenting for hard props like mugs and swords, and fitting for anything that should deform with the body.
+                </blockquote>
+            </section>
+
+            <!-- Section 4: Hair & Clothing -->
+            <section id="hair-clothing" class="lesson-section">
+                <h2>Hair &amp; Clothing</h2>
+                <p>Hair and clothing are special props designed to <strong>conform</strong> to a figure — they follow its shape and pose automatically. Add them the same way you add anything else: select the figure, then double-click the hair or outfit, and Daz fits it in place.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Conforming (fitted) item:</strong> clothing or hair rigged to match a figure's skeleton, so it bends with the pose and reshapes with morphs. When you load it onto a selected figure, it becomes <em>fitted</em> to that figure and moves as one with it.</p>
+                </div>
+
+                <h3>Auto-fit: adapting across generations</h3>
+                <p>When you load clothing made for one figure onto a different generation, Daz offers <strong>Auto-Fit</strong> — it reshapes the garment to the new body using a clone. It's remarkably good, but not magic: complex items can distort, so native clothing for your exact figure always fits best.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Situation</th>
+                                <th>What Happens</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Native clothing</strong></td>
+                                <td>Item made for your exact figure loads directly</td>
+                                <td>Best fit, no conversion needed</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Auto-Fit conversion</strong></td>
+                                <td>Item made for another generation is reshaped via a clone</td>
+                                <td>Usually good; watch for distortion on complex pieces</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Poke-through</strong></td>
+                                <td>Body pushes through clothing in tight or extreme poses</td>
+                                <td>Fix with smoothing, fit morphs, or a push modifier</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Fitting follows the figure — even as you re-pose</h4>
+                    <p>Because fitted items are conformed to the skeleton, you can keep posing and shaping <em>after</em> dressing the figure and the clothing follows along. That's the payoff of conforming over parenting: the garment bends at the elbow, not just travels with the arm.</p>
+                </div>
+
+                <figure>
+                    <img src="images/l07_scene_pane_hierarchy.png" alt="The Scene pane hierarchy with fitted hair and clothing nested under the figure and a prop parented to the hand bone">
+                    <figcaption>Figure 1: The Scene pane after dressing a figure — hair and outfit appear as fitted child nodes beneath the figure, while a held prop is parented to the hand bone.</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> <strong>Poke-through</strong> — skin visible through clothing — is the most common dressing problem, and extreme poses make it worse. Minor cases clear up with the <strong>Smoothing Modifier</strong>; stubborn ones need the item's fit morphs or hiding the skin beneath. We'll also meet <strong>dForce</strong> dynamic clothing in Module 4, which drapes cloth with simulation.
+                </blockquote>
+            </section>
+
+            <!-- Section 5: Cameras -->
+            <section id="cameras" class="lesson-section">
+                <h2>Cameras</h2>
+                <p>Everything so far has been staging. The <strong>camera</strong> is where a scene becomes an <em>image</em> — it decides exactly what the render sees. You've been looking through the <strong>Perspective view</strong> the whole time, but for a finished shot you want a dedicated camera you can aim, lock, and return to.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Camera:</strong> a scene node that defines a viewpoint — position, aim, and focal length. Unlike the Perspective view (a temporary way of looking around), a camera is saved with the scene, so its exact framing is preserved and repeatable.</p>
+                </div>
+
+                <h3>Perspective view vs a real camera</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Perspective View</th>
+                                <th>Camera</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Purpose</strong></td>
+                                <td>Looking around while you work</td>
+                                <td>Framing the final shot</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Saved with scene?</strong></td>
+                                <td>Not as a stable, named view</td>
+                                <td>Yes — position and settings persist</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Extra controls</strong></td>
+                                <td>Basic</td>
+                                <td>Focal length, depth of field, framing aids</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Create, then aim</h4>
+                    <p>Add a camera with <strong>Create → New Camera…</strong>. A handy shortcut: check <strong>"Apply active viewport transforms"</strong> in that dialog and the new camera is born looking exactly where you're already looking — frame the shot roughly in Perspective first, then create the camera to lock it in.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Iray renders from the <strong>active view</strong> — whatever the viewport is currently showing. Before rendering, switch the viewport to your camera (via the viewport's camera dropdown) so you render the framing you designed, not a stray Perspective angle.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: Framing & Composition -->
+            <section id="composition" class="lesson-section">
+                <h2>Framing &amp; Composition</h2>
+                <p>A camera gives you control; <strong>composition</strong> is knowing what to do with it. You don't need art school — a few reliable habits will make almost any shot stronger.</p>
+
+                <h3>Focal length changes the feel</h3>
+                <p>A camera's <strong>focal length</strong> (in millimetres) controls how wide or tight the view is, and how much perspective distortion it introduces.</p>
+                <ul>
+                    <li><strong>Short (wide) — ~24–35mm:</strong> takes in a lot, exaggerates depth; great for environments, unflattering up close (big noses).</li>
+                    <li><strong>Portrait — ~85–135mm:</strong> flattering compression for faces; the classic head-and-shoulders lens.</li>
+                    <li><strong>Long (tele) — 200mm+:</strong> flattens depth, isolates the subject from a distance.</li>
+                </ul>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Rule of thirds:</strong> imagine the frame split by two evenly spaced horizontal and two vertical lines. Placing your subject — or their eyes — along those lines or where they cross tends to look more dynamic and natural than dead-centre. Daz's camera can show a thirds guide overlay to help.</p>
+                </div>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Rough the shot in Perspective"] --> B["Create a camera from that view"]
+                        B --> C["Choose a focal length"]
+                        C --> D["Apply rule of thirds and headroom"]
+                        D --> E["Lock the camera for rendering"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — mind the headroom and eyeline</h4>
+                    <p>Leave a little space above the head (<strong>headroom</strong>), not a huge gap. Put the eyes roughly on the upper third line, and give a looking or moving subject <strong>lead room</strong> — space in front of them to look or move into. These three habits alone fix most amateur framing.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Set your <strong>render aspect ratio</strong> (in Render Settings) before you finalize framing — a shot composed for a square crop falls apart in widescreen. Compose for the shape you'll actually output, and use the camera's aspect-ratio and thirds guides to see the true frame while you work.
+                </blockquote>
+            </section>
+
+            <!-- Section 7: Headlamp vs Scene Lights -->
+            <section id="headlamp" class="lesson-section">
+                <h2>Headlamp vs Scene Lights</h2>
+                <p>Load a figure into an empty scene and it's already lit — flatly, from the front. That's the <strong>headlamp</strong>: a default light attached to the camera. It's a convenience for working, not a look for rendering, and knowing when to turn it off is the bridge into the lighting lessons ahead.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Headlamp:</strong> a default light that shines from wherever the camera is, so the scene is never pitch black while you work. It moves with the view, casts no real shadows, and produces flat, characterless lighting — fine for navigation, wrong for a finished render.</p>
+                </div>
+
+                <h3>Why the headlamp isn't your final light</h3>
+                <ul>
+                    <li><strong>It's flat</strong> — light from the camera means no shadows to give form and depth.</li>
+                    <li><strong>It's characterless</strong> — no mood, direction, or time of day.</li>
+                    <li><strong>It hides your surfaces</strong> — SSS, catchlights, and reflections need directional light to show.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 When you add real lights, turn the headlamp off</h4>
+                    <p>The moment you add your own lights or an HDRI, the headlamp should go. In <strong>Render Settings</strong> (or the viewport's Draw Settings) set the headlamp to <strong>Off</strong> / <em>Never</em> — otherwise it washes out the lighting you're carefully building. If a scene looks stubbornly flat, a still-on headlamp is a prime suspect.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Daz also auto-adds a <strong>default dome/environment light</strong> in Iray, so a fresh scene isn't truly unlit even with the headlamp off. That's why your very first render often looks grey and even — it's the placeholder dome. Lesson 3.2 replaces both the headlamp and that default dome with lighting you actually design.
+                </blockquote>
+
+                <figure>
+                    <img src="images/l07_headlamp_vs_light.png" alt="Headlamp lighting versus a directional scene light - flat and shadowless on the left, showing form and depth on the right">
+                    <figcaption>Figure 2: The same figure under the flat headlamp (left) and a single directional scene light (right). The headlamp erases form; a real light reveals it — the whole point of Module 3's lighting work.</figcaption>
+                </figure>
+            </section>
+
+            <!-- Section 8: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Stage a Scene</h2>
+                <p>Let's put your character into a world: an environment, a prop, fitted hair and clothing, and a dedicated camera framing it all.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Environment &amp; a Prop</h3>
+                    <p><strong>Objective:</strong> Give the figure a place to stand and one object to interact with.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Load an <strong>environment or backdrop</strong> from Smart Content, then move your figure so it sits correctly on the floor.</li>
+                        <li>Add a simple <strong>prop</strong> (a chair, a mug, anything handy) and position it near the figure.</li>
+                        <li><strong>Parent</strong> the prop appropriately — to the hand bone if it's held, or leave it free-standing if it's furniture. Confirm in the Scene pane that the hierarchy looks right.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Dress &amp; Frame</h3>
+                    <p><strong>Objective:</strong> Fit hair and clothing, then set up a camera.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Select the figure and add <strong>hair</strong> and an <strong>outfit</strong>. If Auto-Fit prompts you, accept it and check for poke-through.</li>
+                        <li>Rough the shot in the <strong>Perspective view</strong>, then use <strong>Create → New Camera…</strong> with "apply active viewport transforms" to lock that framing.</li>
+                        <li>Set a <strong>portrait focal length</strong> (~85mm) and adjust for <strong>headroom</strong> and the <strong>rule of thirds</strong>.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — clothing shows skin poking through</summary>
+                        <p>That's <strong>poke-through</strong>. First try adding or increasing the <strong>Smoothing Modifier</strong> on the garment (Edit → Object → Geometry → Add Smoothing Modifier). If it persists in an extreme pose, ease the pose slightly, apply the item's fit morphs, or hide the skin surface underneath the covered area.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Kill the Headlamp</h3>
+                    <p><strong>Objective:</strong> See the difference lighting control makes and save your staged scene.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Switch the viewport to your new <strong>camera</strong> so you're seeing the real framing.</li>
+                        <li>In <strong>Render Settings</strong>, set the <strong>headlamp to Off</strong> and note how the flat frontal light disappears (the default dome remains for now).</li>
+                        <li><strong>Save your scene</strong> — the staged, dressed, framed setup is your starting point for lighting in Lesson 3.2.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> You want a mug to stay in a character's hand as the arm poses. What should you do?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Auto-Fit reshapes conforming clothing across figure generations — it isn't how you attach a rigid prop to a hand.">
+                                A) Run Auto-Fit on the mug
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Parenting the mug to the hand bone makes it a child of that bone, so it inherits the hand's movement and travels with every pose. Parenting to the closest bone tracks the hand most precisely.">
+                                B) Parent the mug to the hand bone
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="A morph reshapes mesh; it won't attach one object to another. You need parenting.">
+                                C) Apply a morph to the mug
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What is the main difference between the Perspective view and a camera?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Both can look at the scene from any angle — that's not the distinction. Think about what persists.">
+                                A) Only the Perspective view can rotate around the scene
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Cameras don't add light. That's the headlamp and scene lights, which are separate.">
+                                B) A camera automatically lights the scene
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="A camera is a saved scene node with a stable position, aim, and focal length, so its framing is preserved and repeatable. The Perspective view is a temporary way of looking around while you work.">
+                                C) A camera is a saved node with persistent, repeatable framing
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Your render looks flat and shadowless even though the character is surfaced well. What's a likely cause?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="The headlamp is a flat light attached to the camera that casts no real shadows. If it's still on, it washes out directional lighting and erases form — turn it off in Render Settings when you add real lights.">
+                                A) The headlamp is still on, flattening the lighting
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Parenting attaches props to nodes; it has no effect on how the scene is lit.">
+                                B) A prop is parented to the wrong bone
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Focal length changes framing and perspective, not whether the scene has shadows. Look at the lighting instead.">
+                                C) The camera's focal length is too long
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Load only what the camera frames</strong> — keep scenes light and responsive.</li>
+                    <li><strong>Use the Scene pane</strong> to select, rename, and organize as the scene grows.</li>
+                    <li><strong>Parent rigid props to the closest bone</strong> so they track the pose precisely.</li>
+                    <li><strong>Select the figure first</strong> before adding hair or clothing so items fit correctly.</li>
+                    <li><strong>Create a dedicated camera</strong> and render from it, not from a stray Perspective angle.</li>
+                    <li><strong>Turn the headlamp off</strong> once you start lighting for real.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't overload the scene</strong> with sets and props you'll never see — it just slows everything down.</li>
+                    <li><strong>Don't confuse parenting with fitting</strong> — rigid props are parented; clothing is conformed.</li>
+                    <li><strong>Don't ignore poke-through</strong> — fix it with smoothing or fit morphs before rendering.</li>
+                    <li><strong>Don't center every subject</strong> — the rule of thirds usually reads better.</li>
+                    <li><strong>Don't render with the headlamp on</strong> when you have real lights — it flattens the shot.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Frame roughly in Perspective, then create a camera from that exact view.</li>
+                    <li>Use an ~85mm focal length for flattering portraits; go wider for environments.</li>
+                    <li>Turn on the camera's rule-of-thirds and aspect-ratio guides while composing.</li>
+                    <li>Set your render aspect ratio <em>before</em> you finalize framing.</li>
+                    <li>Hide, don't delete, heavy set pieces you might want back later.</li>
+                </ul>
+            </section>
+
+            <!-- Section 10: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>A <strong>scene</strong> is everything loaded at once — figures, environment, props, cameras, and lights — organized as nodes in the <strong>Scene pane</strong> and saved as one <code>.duf</code>.</li>
+                        <li><strong>Environments</strong> give the figure a place to stand; keep them as light as the shot allows, and position the figure to sit correctly in the set.</li>
+                        <li><strong>Parenting</strong> attaches rigid props to a node (or bone) so they follow it; <strong>fitting/conforming</strong> makes hair and clothing bend with the figure's pose.</li>
+                        <li>A dedicated <strong>camera</strong> saves stable, repeatable framing; use <strong>focal length</strong>, the <strong>rule of thirds</strong>, and <strong>headroom</strong> to compose it well.</li>
+                        <li>The <strong>headlamp</strong> is flat working light attached to the camera — turn it off when you add real lights, which is exactly where Lesson 3.2 begins.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/finding_your_way_around/interface/panes/scene/start" target="_blank" rel="noopener">The Scene pane — official Daz user guide</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/creating_scenes/fitting_figures_to_other_figures/start" target="_blank" rel="noopener">Fitting &amp; conforming items — Daz documentation</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/finding_your_way_around/interface/viewport/start" target="_blank" rel="noopener">Cameras &amp; the viewport — Daz documentation</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your scene is staged, dressed, and framed — but it's still lit by nothing but a placeholder. In <strong>Lesson 3.2 — Lighting for Iray</strong>, we give it a soul: HDRI dome lighting, emissive surfaces, photometric point and spot lights, a three-point setup, and the tone-mapping basics that turn a flat scene into a photograph.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>🎬 Your character has a world now!</h3>
+                    <p>You've gone from a figure floating in a void to a staged, dressed, framed scene with a camera aimed at exactly the shot you want. That's the hard part of directing an image — and it's done. Next we light it, and everything you've built starts to glow.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_06_materials_and_iray_surfaces.html" class="prev-lesson">← Previous: Materials &amp; Iray Surfaces</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_08_lighting_for_iray.html" class="next-lesson">Next: Lighting for Iray →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

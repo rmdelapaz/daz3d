@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 5.1 — The Daz to Blender Bridge: installing the bridge, exporting a Genesis figure, what transfers (mesh, rig, materials), fixing up shaders in Blender, and when the Diffeomorphic add-on is the better route.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 5.1: The Daz to Blender Bridge - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 5</a></li>
+            <li aria-current="page">Lesson 5.1: The Daz to Blender Bridge</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>🌉 Lesson 5.1: The Daz to Blender Bridge</h1>
+                <p class="lead">Your Daz character doesn't have to stay in Daz. The official Daz to Blender Bridge sends your Genesis figure — mesh, rig, and materials — straight into Blender with a couple of clicks, ready to light, animate, and render with the tools you already know from the Blender course. In this lesson you'll install the bridge on both sides, export a figure, understand exactly what does and doesn't transfer, fix up the materials on the Blender side so they look right in Cycles or Eevee, and learn when the community Diffeomorphic add-on is the smarter choice. This is where the pipeline opens up.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain what a <strong>bridge</strong> is and why it beats manual exporting</li>
+                        <li>Install the <strong>Daz to Blender Bridge</strong> on both the Daz and Blender sides</li>
+                        <li>Export a Genesis figure from Daz into <strong>Blender</strong></li>
+                        <li>Know <strong>what transfers</strong> — mesh, rig, morphs, and materials — and what doesn't</li>
+                        <li>Fix up <strong>materials</strong> in Blender for Cycles or Eevee</li>
+                        <li>Decide when to use <strong>Diffeomorphic</strong> instead of the official bridge</li>
+                        <li>Follow a dependable <strong>bridge workflow</strong></li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 60 minutes</p>
+                    <p><strong>Project:</strong> Your finished Daz character imported into Blender with a working rig and cleaned-up materials, sitting in a Blender scene ready to render.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#why-bridge" class="toc-link">Why Bridge to Blender</a></li>
+                        <li><a href="#installing" class="toc-link">Installing the Bridge</a></li>
+                        <li><a href="#exporting" class="toc-link">Exporting a Figure</a></li>
+                        <li><a href="#what-transfers" class="toc-link">What Transfers</a></li>
+                        <li><a href="#fixing-materials" class="toc-link">Fixing Materials in Blender</a></li>
+                        <li><a href="#diffeomorphic" class="toc-link">When to Use Diffeomorphic</a></li>
+                        <li><a href="#workflow" class="toc-link">A Bridge Workflow</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Send to Blender</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: Why Bridge to Blender -->
+            <section id="why-bridge" class="lesson-section">
+                <h2>Why Bridge to Blender</h2>
+                <p>Daz is superb at building and posing figures, but you might prefer <strong>Blender</strong> for lighting, environments, animation, or its free, powerful render engines. Rather than wrestle with manual file exports, the official <strong>Daz to Blender Bridge</strong> automates the whole handoff — one command in Daz, and your figure appears in Blender set up and ready.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> A bridge is an automated exporter-importer pair that carries your Daz figure — mesh, rig, and materials — into Blender in one step, so you can keep working with tools you already know.
+                </blockquote>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Bridge:</strong> a pair of plugins — one in Daz Studio, one in the target app — that packages a figure and transfers it automatically. The official Daz bridges exist for Blender, Unreal, Maya, 3ds Max, and more, each landing the figure natively in that program.</p>
+                </div>
+
+                <p>The payoff is a real pipeline: shape and pose in Daz where it's easy, then render and animate in Blender where you have full creative control and no per-frame licensing worries. The same character moves fluidly between the two.</p>
+
+                <div class="mermaid">
+                    graph TD
+                        A["Daz to Blender Bridge"] --> B["Mesh geometry"]
+                        A --> C["Skeleton and skin weights"]
+                        A --> D["Materials and textures"]
+                        A --> E["Selected morphs"]
+                        B --> F["A ready-to-use figure in Blender"]
+                        C --> F
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style F fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 The bridge is a starting point, not a finish line</h4>
+                    <p>The bridge gets your figure into Blender fast and faithfully, but materials especially often need a cleanup pass to look their best in Cycles or Eevee. Think of the bridge as delivering a well-organized <em>foundation</em> you then refine — not a one-click perfect render.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Bridges are version-sensitive. The Daz plugin and the Blender add-on must be compatible with your versions of each program. Mismatched versions are the most common reason a bridge "doesn't show up" or fails mid-transfer — always install matching, current releases.
+                </blockquote>
+            </section>
+
+            <!-- Section 2: Installing the Bridge -->
+            <section id="installing" class="lesson-section">
+                <h2>Installing the Bridge</h2>
+                <p>A bridge has <strong>two halves</strong>, and both must be installed: a plugin inside Daz Studio and an add-on inside Blender. Miss either and the handoff won't work.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>The two halves:</strong> the <strong>Daz-side plugin</strong> (installed via Daz Install Manager or Daz Central) adds a <em>Send to Blender</em> command in Daz; the <strong>Blender-side add-on</strong> (a <code>.zip</code> enabled in Blender's Preferences) receives the exported data and builds the figure.</p>
+                </div>
+
+                <h3>Install order</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Step</th>
+                                <th>Where</th>
+                                <th>What you do</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1. Daz plugin</strong></td>
+                                <td>Daz Install Manager</td>
+                                <td>Install "Daz to Blender Bridge"; it adds a menu command</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Blender add-on</strong></td>
+                                <td>Blender Preferences → Add-ons</td>
+                                <td>Install the bridge <code>.zip</code> and enable its checkbox</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Verify</strong></td>
+                                <td>Both apps</td>
+                                <td>Confirm the Daz menu item and the Blender panel appear</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — get the Blender add-on from the Daz plugin</h4>
+                    <p>The matching Blender add-on <code>.zip</code> ships <em>with</em> the Daz-side plugin (there's usually a button in the Daz bridge dialog to reveal or install it). Grabbing it from there guarantees the two halves are the same version — far safer than downloading a random copy that may not match.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> After enabling the add-on in Blender, <strong>save your Preferences</strong> so it stays enabled next launch. And on Windows, if Daz can't write the transfer files, run into a permissions wall, or don't see the menu, launching Daz as administrator once after install often clears it up.
+                </blockquote>
+            </section>
+
+            <!-- Section 3: Exporting a Figure -->
+            <section id="exporting" class="lesson-section">
+                <h2>Exporting a Figure</h2>
+                <p>With both halves installed, sending a figure is quick. In Daz, select your figure and choose <strong>File → Send To → Daz to Blender</strong> (or the bridge's menu entry). A dialog lets you name the asset and pick options, then it packages everything and hands off to Blender.</p>
+
+                <figure>
+                    <img src="images/l12_bridge_export_dialog.png" alt="The Daz to Blender Bridge export dialog showing the asset name field, morph and animation options, and the send button">
+                    <figcaption>Figure 1: The Daz to Blender export dialog — name the asset, choose whether to include morphs and animation, and send. It packages the mesh, rig, and materials for Blender.</figcaption>
+                </figure>
+
+                <p>Two ways to receive it in Blender:</p>
+                <ul>
+                    <li><strong>Live transfer</strong> — if Blender is open with the add-on ready, the bridge can import automatically after the export completes.</li>
+                    <li><strong>Import the export</strong> — otherwise, open Blender and use the bridge panel's <strong>Import</strong> button to pull in the most recent export.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 Export a clean, base figure first</h4>
+                    <p>For your first transfer, send a <strong>simple figure</strong> — base Genesis with skin materials, no heavy hair or dozens of props. A minimal export transfers fast and makes it obvious what came through correctly. Add clothing, hair, and props once the basic pipeline is proven.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Only include the <strong>morphs you actually need</strong>. The bridge can transfer shape morphs, but selecting hundreds bloats the file and slows both export and Blender. Pick the character and expression morphs the figure uses, not the entire installed library.
+                </blockquote>
+            </section>
+
+            <!-- Section 4: What Transfers -->
+            <section id="what-transfers" class="lesson-section">
+                <h2>What Transfers</h2>
+                <p>Knowing exactly what the bridge carries over — and what it doesn't — saves a lot of confusion on the Blender side. The core figure comes through well; some Daz-specific extras need rebuilding.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Transfers?</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Mesh geometry</strong></td>
+                                <td>✅ Yes</td>
+                                <td>The figure's body and any sent clothing meshes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Skeleton &amp; weights</strong></td>
+                                <td>✅ Yes</td>
+                                <td>Comes in as a Blender armature you can pose</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Materials &amp; textures</strong></td>
+                                <td>✅ Mostly</td>
+                                <td>Converted to Blender shaders; expect cleanup</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Shape morphs</strong></td>
+                                <td>✅ If selected</td>
+                                <td>Arrive as shape keys when you include them</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Iray shader nuances</strong></td>
+                                <td>⚠️ Approximated</td>
+                                <td>Skin SSS, translucency may need tuning</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Poses/animation</strong></td>
+                                <td>⚠️ Optional</td>
+                                <td>Current pose or animation if you choose to include it</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Shape key (Blender):</strong> Blender's equivalent of a morph — a stored deformation you can dial from 0 to 1. When you include morphs in the bridge, they land as shape keys, so the character's face and body shaping can still be adjusted in Blender.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Iray's skin shading is physically rich — subsurface scattering, layered translucency — and no automatic conversion reproduces it perfectly. The bridge gives you a strong <strong>starting</strong> material, but photoreal skin in Blender always benefits from a manual pass on subsurface and roughness, covered next.
+                </blockquote>
+            </section>
+
+            <!-- Section 5: Fixing Materials in Blender -->
+            <section id="fixing-materials" class="lesson-section">
+                <h2>Fixing Materials in Blender</h2>
+                <p>The most common bridge follow-up is <strong>tidying materials</strong>. The bridge builds Blender <strong>Principled BSDF</strong> shaders from your Daz surfaces, and while textures usually map correctly, skin and eyes often want a few adjustments to shine in Cycles or Eevee.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Principled BSDF:</strong> Blender's standard all-in-one physically based shader. The bridge plugs your Daz diffuse, normal, roughness, and other maps into its inputs — the same PBR philosophy as Iray's Uber shader, so the concepts transfer even when values need tweaking.</p>
+                </div>
+
+                <h3>Typical fixes</h3>
+                <ul>
+                    <li><strong>Subsurface scattering</strong> — enable/raise it on skin so light passes through convincingly; the bridge may set it low or off.</li>
+                    <li><strong>Roughness</strong> — skin can import too shiny or too matte; nudge roughness for believable specularity.</li>
+                    <li><strong>Eyes</strong> — cornea/eye-moisture surfaces sometimes need transparency and clarity fixes to stop looking dead.</li>
+                    <li><strong>Normal/bump strength</strong> — verify pores and detail read at a sensible intensity.</li>
+                </ul>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — do a quick render before deep tweaking</h4>
+                    <p>Before adjusting anything, drop a light and do a fast <strong>Cycles preview</strong>. Many materials look wrong in the solid viewport but fine when actually lit and rendered. Judge — and fix — materials under real lighting, not the flat workbench shading, or you'll "fix" things that weren't broken.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Cycles and Eevee handle subsurface and transparency differently, so a skin setup dialed for one can look off in the other. Decide which engine you'll render in and tune the materials for <em>that</em> engine — don't expect one set of values to be perfect in both.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: When to Use Diffeomorphic -->
+            <section id="diffeomorphic" class="lesson-section">
+                <h2>When to Use Diffeomorphic</h2>
+                <p>The official bridge isn't the only route. <strong>Diffeomorphic</strong> (the "Import Daz" add-on) is a free, community-built Blender tool that imports Daz figures directly from their scene files — often with more fidelity and control, at the cost of a steeper learning curve.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Diffeomorphic (DazToBlender / "Import Daz"):</strong> a free Blender add-on that reads Daz <code>.duf</code> scene files directly and rebuilds the figure in Blender, with advanced options for materials, morphs, rigging (including a Rigify option), and posing. It's more capable but more complex than the official bridge.</p>
+                </div>
+
+                <h3>Which to reach for</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Choose…</th>
+                                <th>When you want…</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Official Bridge</strong></td>
+                                <td>Fast, simple, one-click handoff for a quick figure transfer</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Diffeomorphic</strong></td>
+                                <td>Maximum material/morph fidelity, advanced rigging, and fine control</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Start with the bridge, graduate to Diffeomorphic</h4>
+                    <p>For learning and quick work, the official bridge is the friendly on-ramp. As your needs grow — better skin shaders, complex morphs, Rigify control rigs — Diffeomorphic rewards the extra effort. Many artists keep both and pick per project; there's no single right answer.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Diffeomorphic is powerful but has a real learning curve and its own workflow quirks; it reads your installed Daz content directly, so paths must be set correctly. If you're new, don't feel you must master it — the official bridge covers the essentials this course needs.
+                </blockquote>
+            </section>
+
+            <!-- Section 7: A Bridge Workflow -->
+            <section id="workflow" class="lesson-section">
+                <h2>A Bridge Workflow</h2>
+                <p>Put it together into a repeatable process and moving figures to Blender becomes routine.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Step</th>
+                                <th>Do this</th>
+                                <th>Why</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1. Prepare</strong></td>
+                                <td>Finalize shape, pose, and materials in Daz</td>
+                                <td>You transfer what's there; fix it in Daz first</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Trim</strong></td>
+                                <td>Select only the morphs you need</td>
+                                <td>Keeps the export lean and Blender responsive</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Send</strong></td>
+                                <td>File → Send To → Daz to Blender</td>
+                                <td>Packages mesh, rig, and materials automatically</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. Fix</strong></td>
+                                <td>Clean up skin/eye materials under a test render</td>
+                                <td>The bridge's shaders are a starting point</td>
+                            </tr>
+                            <tr>
+                                <td><strong>5. Build</strong></td>
+                                <td>Light, stage, and render in Blender</td>
+                                <td>Now use your Blender-course skills</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Prepare the figure in Daz"] --> B["Trim to needed morphs"]
+                        B --> C["Send to Blender"]
+                        C --> D["Fix materials under a test render"]
+                        D --> E["Light and render in Blender"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Keep the Daz scene as your source of truth</h4>
+                    <p>The bridge is one-directional: changes you make in Blender don't flow back to Daz. Treat the <strong>Daz scene</strong> as your master. Need a different shape or a fixed material at the source? Change it in Daz and re-bridge, rather than trying to keep two divergent versions in sync.</p>
+                </div>
+
+                <figure>
+                    <img src="images/l12_daz_vs_blender.png" alt="The same Genesis figure in Daz Studio with Iray on the left and imported into Blender with its armature and materials on the right">
+                    <figcaption>Figure 2: The same Genesis figure in Daz (left, Iray) and after the bridge in Blender (right) — mesh, armature, and materials carried across, ready to refine and render in Blender.</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Large figures with lots of morphs, clothing, and 4K textures make big transfers that can take a while and use significant memory in Blender. If a transfer stalls or Blender bogs down, simplify the export — fewer morphs, decimated or hidden props — and bring pieces over in stages.
+                </blockquote>
+            </section>
+
+            <!-- Section 8: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Send to Blender</h2>
+                <p>Let's move your character into Blender — install-check, export, then fix the materials on the far side.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Verify Both Halves</h3>
+                    <p><strong>Objective:</strong> Confirm the bridge is installed on both ends.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>In Daz, check for the <strong>File → Send To → Daz to Blender</strong> menu entry.</li>
+                        <li>In Blender, open <strong>Preferences → Add-ons</strong> and confirm the Daz bridge add-on is <strong>enabled</strong>.</li>
+                        <li>If either is missing, install it (Daz via DIM, Blender via the add-on <code>.zip</code>) and re-check.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Export a Base Figure</h3>
+                    <p><strong>Objective:</strong> Transfer a clean figure into Blender.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Select a <strong>base Genesis figure</strong> with skin materials and only the morphs it uses.</li>
+                        <li>Run <strong>Send To → Daz to Blender</strong>, name the asset, and send.</li>
+                        <li>In Blender, confirm the figure arrives with a posable <strong>armature</strong> and its materials attached.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — nothing shows up in Blender after I send</summary>
+                        <p>Check the basics in order: is the Blender add-on <strong>enabled</strong> (and Preferences saved)? Are the Daz plugin and Blender add-on the <strong>same version</strong>? If the live transfer didn't fire, open Blender's bridge panel and click <strong>Import</strong> to pull the most recent export manually. On Windows, a permissions issue can block the transfer files — try launching Daz as administrator once.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Fix the Skin</h3>
+                    <p><strong>Objective:</strong> Make the materials render well in Blender.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Add a light and do a quick <strong>Cycles preview</strong> to judge the skin under real lighting.</li>
+                        <li>On the skin's <strong>Principled BSDF</strong>, raise <strong>subsurface</strong> and adjust <strong>roughness</strong> for believable skin.</li>
+                        <li>Fix the <strong>eyes</strong> if they look dead, then save the Blender file.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What does the Daz to Blender Bridge require to work?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="You don't manually export an FBX with the bridge — automating that handoff is the whole point of using it.">
+                                A) You manually export an FBX and import it into Blender
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="A bridge has two halves — a plugin inside Daz Studio that adds a Send to Blender command, and an add-on enabled inside Blender that receives and rebuilds the figure. Both must be installed and version-matched.">
+                                B) Two halves — a Daz-side plugin and a Blender-side add-on
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="The bridge runs locally between the two apps on your machine — no cloud account or upload is involved.">
+                                C) A cloud account that syncs the figure between apps
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> After bridging, the skin looks too shiny and flat in Blender. What's the expected fix?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Re-exporting won't change it — Iray's skin shading doesn't convert perfectly, so the fix is on the Blender material, not another transfer.">
+                                A) Re-run the bridge until the skin converts correctly
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Iray's rich skin shading is only approximated by the automatic conversion, so you tune the Blender Principled BSDF — raise subsurface, adjust roughness — under a test render to get believable skin.">
+                                B) Adjust the Principled BSDF — raise subsurface, fix roughness
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Deleting the textures would make it worse — the maps are correct; it's the shader values like subsurface and roughness that need tuning.">
+                                C) Delete the imported textures and start the material over
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> When is Diffeomorphic the better choice over the official bridge?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Diffeomorphic is more complex, not simpler — the official bridge is the friendlier, faster one-click route.">
+                                A) When you want the simplest, fastest one-click transfer
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Neither tool needs an internet connection to move a figure; both run locally against your installed content.">
+                                B) When you have no internet connection
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Diffeomorphic reads Daz scene files directly and offers advanced material, morph, and rigging control (including Rigify), so it wins when you need maximum fidelity and are willing to handle its steeper learning curve.">
+                                C) When you need maximum material/morph fidelity and advanced rigging
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Install both halves</strong> and keep them version-matched.</li>
+                    <li><strong>Finalize the figure in Daz first</strong> — you transfer what's there.</li>
+                    <li><strong>Select only needed morphs</strong> to keep exports lean.</li>
+                    <li><strong>Judge materials under a test render</strong>, not the solid viewport.</li>
+                    <li><strong>Tune skin for your target engine</strong> — Cycles or Eevee, not both.</li>
+                    <li><strong>Keep the Daz scene</strong> as your one-directional source of truth.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't mismatch plugin versions</strong> — the top cause of bridge failures.</li>
+                    <li><strong>Don't transfer hundreds of morphs</strong> — it bloats and slows everything.</li>
+                    <li><strong>Don't expect perfect skin automatically</strong> — Iray shading only approximates.</li>
+                    <li><strong>Don't edit in Blender expecting it to sync back</strong> — the bridge is one-way.</li>
+                    <li><strong>Don't feel forced into Diffeomorphic</strong> — the official bridge covers the basics.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Grab the Blender add-on from the Daz plugin to guarantee matching versions.</li>
+                    <li>Save Blender Preferences after enabling the add-on so it persists.</li>
+                    <li>Prove the pipeline with a base figure before sending clothing and props.</li>
+                    <li>Do a quick lit Cycles render before "fixing" any material.</li>
+                    <li>Re-bridge from Daz rather than maintaining two divergent versions.</li>
+                </ul>
+            </section>
+
+            <!-- Section 10: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>A <strong>bridge</strong> automates the Daz-to-Blender handoff — mesh, rig, materials, and selected morphs — in one step.</li>
+                        <li>It has <strong>two halves</strong>: a Daz plugin and a Blender add-on, which must be installed and <strong>version-matched</strong>.</li>
+                        <li>The figure arrives with a posable <strong>armature</strong> and <strong>Principled BSDF</strong> materials; skin and eyes usually need a cleanup pass.</li>
+                        <li><strong>Diffeomorphic</strong> is the more powerful, more complex alternative — reach for it when you need maximum fidelity and advanced rigging.</li>
+                        <li>The bridge is <strong>one-directional</strong>, so keep the Daz scene as your master and re-bridge when the source changes.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="https://www.daz3d.com/daz-to-blender-bridge" target="_blank" rel="noopener">Daz to Blender Bridge — official product page</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/bridges/blender/start" target="_blank" rel="noopener">Daz to Blender Bridge — official documentation</a></li>
+                    <li><a href="https://diffeomorphic.blogspot.com/" target="_blank" rel="noopener">Diffeomorphic ("Import Daz") add-on</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your character lives in Blender now — but the pipeline has one more destination. In <strong>Lesson 5.2 — The Daz to Unreal Bridge</strong>, you'll install the Unreal plugin and bridge, export your figure into a level, handle the skeleton and retargeting, rebuild materials in Unreal, transfer animation, and see how all this relates to MetaHuman.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>💡 Your figure crossed the bridge!</h3>
+                    <p>Installed, exported, transferred, and cleaned up — your Daz character now lives in Blender with a working rig and materials. That's a genuine cross-application pipeline, the exact skill that lets you use Daz as a fast character source for any Blender project. One more bridge to go: Unreal.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_11_animation_basics_timeline.html" class="prev-lesson">← Previous: Animation Basics</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_13_daz_to_unreal_bridge.html" class="next-lesson">Next: Daz to Unreal Bridge →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 3.3 — Rendering with Iray: the Render Settings pane, samples and convergence, the Iray denoiser, spot-rendering to iterate fast, render canvases for compositing, and saving with light post-processing to finish a portfolio image.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 3.3: Rendering with Iray - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 3</a></li>
+            <li aria-current="page">Lesson 3.3: Rendering with Iray</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>🎨 Lesson 3.3: Rendering with Iray</h1>
+                <p class="lead">Everything so far — posing, shaping, surfacing, staging, lighting — has led to this moment: turning your scene into a finished picture. Rendering is where Iray takes your lit scene and computes the actual photograph, tracing millions of light paths until a clean image emerges. In this lesson you'll open the Render Settings pane for real, learn what samples and convergence mean and when to stop, use the denoiser to finish faster, iterate quickly with spot-renders, peek at render canvases for compositing power, and finally save and lightly polish an image worth putting in a portfolio. This is the payoff lesson — by the end you'll have a finished render.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Navigate the <strong>Render Settings</strong> pane and its key tabs</li>
+                        <li>Explain what <strong>samples and convergence</strong> mean and when a render is "done"</li>
+                        <li>Set <strong>quality and stopping conditions</strong> so renders don't run forever</li>
+                        <li>Use the <strong>Iray denoiser</strong> to get a clean image in less time</li>
+                        <li>Iterate quickly with the <strong>Spot Render</strong> tool</li>
+                        <li>Understand what <strong>render canvases</strong> are and why compositors love them</li>
+                        <li><strong>Save</strong> a finished render and apply <strong>light post-processing</strong></li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 60 minutes</p>
+                    <p><strong>Project:</strong> Your lit scene from Lesson 3.2, rendered to a clean, denoised, tone-mapped final image and saved as a PNG — the finished deliverable for all of Module 3.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#why-render" class="toc-link">From Lit Scene to Final Image</a></li>
+                        <li><a href="#render-settings" class="toc-link">The Render Settings Pane</a></li>
+                        <li><a href="#samples" class="toc-link">Samples &amp; Convergence</a></li>
+                        <li><a href="#denoiser" class="toc-link">The Iray Denoiser</a></li>
+                        <li><a href="#spot-render" class="toc-link">Spot-Render &amp; Iterating</a></li>
+                        <li><a href="#canvases" class="toc-link">Render Canvases</a></li>
+                        <li><a href="#saving" class="toc-link">Saving &amp; Post-Processing</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Final Render</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: From Lit Scene to Final Image -->
+            <section id="why-render" class="lesson-section">
+                <h2>From Lit Scene to Final Image</h2>
+                <p>You've been previewing in the viewport this whole time, but a preview is not a render. <strong>Rendering</strong> is the moment Iray computes the real image — simulating how every ray of light bounces around your scene until the picture matches physical reality. That's why Iray renders look photographic: they <em>are</em> a light simulation, not a fast approximation.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> Rendering traces millions of light paths through your lit scene, refining the image sample by sample until the noise clears and a clean, photographic picture remains.
+                </blockquote>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Path tracing:</strong> the rendering technique Iray uses, in which the engine follows light rays as they bounce through a scene, accumulating color and brightness. Each pass adds more traced paths (samples), and the more paths it traces, the more accurate — and less grainy — the image becomes.</p>
+                </div>
+
+                <p>Because path tracing is progressive, an Iray render starts grainy and gradually cleans up. Understanding that process is the whole game: it tells you what the settings do, why a render looks noisy at first, and when you can safely call it finished.</p>
+
+                <div class="mermaid">
+                    graph TD
+                        A["Iray render engine"] --> B["Trace light paths as samples"]
+                        B --> C["Image starts noisy and grainy"]
+                        C --> D["More samples reduce the noise"]
+                        D --> E["Stop at convergence or a limit"]
+                        E --> F["Denoise, save, and polish"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                        style F fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 The GPU does the heavy lifting</h4>
+                    <p>Iray is built to render on your <strong>NVIDIA GPU</strong>, which is dramatically faster than the CPU for path tracing. If your renders crawl, confirm Iray is using the GPU in <strong>Render Settings → Advanced</strong>. No compatible GPU? Iray falls back to CPU — slower, but the same final image.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Render time scales with resolution, lighting complexity, and quality settings. A big, softly-lit portrait with lots of area lights takes far longer than a small, simply-lit one. Start with a modest resolution while you dial things in, then render large only once you're happy.
+                </blockquote>
+            </section>
+
+            <!-- Section 2: The Render Settings Pane -->
+            <section id="render-settings" class="lesson-section">
+                <h2>The Render Settings Pane</h2>
+                <p>Everything about how your image is produced lives in <strong>Render Settings</strong> (open it from <strong>Window → Panes → Render Settings</strong>, or the render menu). It's organized into tabs, and you only need a handful of settings to get great results.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Render Settings:</strong> the pane that controls the render engine (Iray or Filament), image dimensions, quality and stopping conditions, tone mapping, the environment, and hardware options. It's the cockpit for turning your scene into a saved image.</p>
+                </div>
+
+                <h3>The tabs you'll actually use</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tab</th>
+                                <th>What lives there</th>
+                                <th>Why it matters</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>General / Editor</strong></td>
+                                <td>Render engine, dimensions, aspect ratio, where to render (to a new window or the viewport)</td>
+                                <td>Set Iray and your output size here first</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Progressive Rendering</strong></td>
+                                <td>Max Samples, Max Time, Rendering Quality (convergence)</td>
+                                <td>Controls how long the render runs and when it stops</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tone Mapping</strong></td>
+                                <td>Exposure, ISO, shutter, f-stop, white balance</td>
+                                <td>The exposure controls you met in Lesson 3.2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Environment</strong></td>
+                                <td>Dome mode, HDRI map, intensity, rotation</td>
+                                <td>The dome lighting from Lesson 3.2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Advanced</strong></td>
+                                <td>GPU/CPU devices, the denoiser, instancing</td>
+                                <td>Confirm the GPU and enable denoising here</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — set your output size before you render</h4>
+                    <p>Decide dimensions up front on the <strong>General</strong> tab. Set the <strong>Pixel Size</strong> (e.g. 2000×2600 for a portrait) or pick an aspect ratio and let it constrain. Rendering at the final size from the start means your framing and depth-of-field match what you'll actually deliver.</p>
+                </div>
+
+                <figure>
+                    <img src="images/l09_render_settings.png" alt="The Render Settings pane, Progressive Rendering tab, showing Max Samples, Max Time, and Rendering Quality with the Iray engine selected">
+                    <figcaption>Figure 1: The Render Settings pane with Progressive Rendering open — Max Samples, Max Time, and Rendering Quality are the three stopping conditions that decide when your render finishes.</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Render Settings are saved <strong>with the scene</strong>, so the dimensions and quality you leave behind are what load next time. If a render comes out the wrong size or unexpectedly slow, check these settings before assuming something broke — the previous session's values are still in effect.
+                </blockquote>
+            </section>
+
+            <!-- Section 3: Samples & Convergence -->
+            <section id="samples" class="lesson-section">
+                <h2>Samples &amp; Convergence</h2>
+                <p>The single most important idea in rendering: an Iray image is built up from <strong>samples</strong>, and it's "done" when it reaches <strong>convergence</strong>. Get these two ideas and the Progressive Rendering tab stops being mysterious.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Sample:</strong> one pass of traced light paths across the image. <strong>Convergence:</strong> how close the image is to its final, noise-free state, shown as a percentage. Iray renders more and more samples, convergence climbs toward 100%, and the noise fades away as it does.</p>
+                </div>
+
+                <h3>The three stopping conditions</h3>
+                <p>Iray keeps rendering until it hits <em>whichever of these comes first</em>:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Setting</th>
+                                <th>Stops when…</th>
+                                <th>Good starting value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Rendering Quality</strong></td>
+                                <td>The image reaches the target convergence</td>
+                                <td>Leave near default; raise for cleaner results</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Max Samples</strong></td>
+                                <td>That many samples have been traced</td>
+                                <td>A few thousand for a clean portrait</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Max Time</strong></td>
+                                <td>That many seconds have elapsed</td>
+                                <td>A safety cap so renders can't run forever</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Diminishing returns are real</h4>
+                    <p>Noise drops fast at first, then slowly. Going from 90% to 95% convergence can take as long as reaching 90% did in the first place — for a small, barely-visible gain. The art of efficient rendering is knowing when "clean enough" has arrived, especially with the denoiser helping (next section).</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — watch the convergence readout</h4>
+                    <p>During a render, Iray shows the <strong>convergence percentage</strong> and elapsed time in the render window's title or log. Watch it: when the percentage crawls and the image already looks clean, you can stop manually — you don't have to wait for a hard limit to be reached.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Setting <strong>Max Samples</strong> or <strong>Max Time</strong> too low stops the render while it's still grainy; too high wastes time chasing invisible gains. These are guardrails, not quality dials — the real quality lever is convergence, and the denoiser lets you stop earlier without penalty.
+                </blockquote>
+            </section>
+
+            <!-- Section 4: The Iray Denoiser -->
+            <section id="denoiser" class="lesson-section">
+                <h2>The Iray Denoiser</h2>
+                <p>The best time-saver Iray offers is the <strong>denoiser</strong> — an AI filter that cleans up the remaining grain so you can stop rendering much earlier. It's the difference between a 40-minute render and a 10-minute one that looks just as clean.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Iray denoiser:</strong> an AI-based post-process that predicts and removes render noise, turning a partly-converged, grainy image into a smooth one. It runs on the GPU and can preview live during the render, so you watch the grain melt away in real time.</p>
+                </div>
+
+                <p>You enable it in <strong>Render Settings → Advanced → Post Denoiser</strong>. The key control is <strong>when</strong> it starts — the denoiser kicks in after a chosen number of samples (its <em>start iteration</em>), so you give the render enough real detail before letting the AI smooth the rest.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Denoise, but don't start too early</h4>
+                    <p>If the denoiser engages too soon — on a very noisy image — it can smear fine detail like skin pores, hair strands, and fabric weave into a waxy blur. Let the render build genuine detail for a few hundred samples first, then let the denoiser clean the leftover grain. Detail first, denoise second.</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — denoiser plus a sample cap is the sweet spot</h4>
+                    <p>A reliable recipe: enable the denoiser, set its start a few hundred samples in, and cap <strong>Max Samples</strong> at a modest number. You get a clean image quickly and predictably, without waiting for full convergence. This combo is how most artists render day to day.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> The denoiser is a finishing tool, not a fix for bad lighting or under-sampling extreme cases. Very dark scenes with tiny bright lights (fireflies) can still fool it. If denoised results look plasticky, render a few more samples before it engages rather than leaning on the filter harder.
+                </blockquote>
+            </section>
+
+            <!-- Section 5: Spot-Render & Iterating -->
+            <section id="spot-render" class="lesson-section">
+                <h2>Spot-Render &amp; Iterating</h2>
+                <p>You rarely nail a render on the first try — you tweak a light, check, tweak a surface, check again. Waiting for a full render each time is agony. The <strong>Spot Render</strong> tool fixes that by rendering only the small region you care about.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Spot Render tool:</strong> a tool (in the toolbar, or Tools menu) that lets you drag a rectangle in the viewport and render <em>only</em> that area at full quality. Perfect for checking a face, an eye highlight, or a fabric surface without re-rendering the entire frame.</p>
+                </div>
+
+                <p>The related habit is the <strong>Iray preview</strong> viewport mode: switch the viewport's draw style to Iray and it renders continuously as you work, giving you a live, physically-accurate view while you adjust lights and materials.</p>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Set up lights and surfaces"] --> B["Iray preview in the viewport"]
+                        B --> C["Spot-render a detail to check it"]
+                        C --> D["Adjust and re-check"]
+                        D --> E["Run the full final render"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Iterate on details, commit to the full render once</h4>
+                    <p>Use spot-renders and the Iray preview for the dozens of small decisions — is the eye catchlight right, is the skin too shiny, is the rim light too hot? Only when every detail checks out do you launch the one expensive full-resolution render. This can turn an afternoon of waiting into twenty minutes.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> A spot-render shows a region at full quality but doesn't change your saved image — it's a check, not the deliverable. And the <strong>Iray preview</strong> is a live view that keeps your GPU busy; if the interface feels sluggish while adjusting, switch the viewport back to a fast draw style until you're ready to look again.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: Render Canvases -->
+            <section id="canvases" class="lesson-section">
+                <h2>Render Canvases</h2>
+                <p>Once you're comfortable, <strong>render canvases</strong> unlock serious post-processing power. They let Iray output extra image layers alongside the beauty render, so you can adjust the final picture in Photoshop or GIMP without re-rendering.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Render canvas:</strong> an additional image buffer Iray writes during a render — such as depth, a specific light's contribution, or a beauty pass. Canvases are set up in <strong>Render Settings → Editor → Canvases</strong> and saved out for compositing.</p>
+                </div>
+
+                <h3>Canvases artists reach for</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Canvas</th>
+                                <th>What it captures</th>
+                                <th>Use it to…</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Beauty</strong></td>
+                                <td>The full final color image</td>
+                                <td>Your main render — the picture itself</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Depth</strong></td>
+                                <td>Distance from camera per pixel</td>
+                                <td>Add fog or depth-of-field blur in post</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Alpha</strong></td>
+                                <td>A transparency mask of the subject</td>
+                                <td>Cut the figure out onto a new background</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Per-light / LPE</strong></td>
+                                <td>One light's contribution on its own</td>
+                                <td>Re-balance key, fill, or rim after rendering</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Canvases are optional — but powerful</h4>
+                    <p>You can finish a great image with no canvases at all. But even one — a simple <strong>alpha</strong> mask — makes swapping backgrounds trivial, and a <strong>depth</strong> canvas lets you add atmospheric haze that would cost real render time to compute directly. They're a bridge from "renderer" to "compositor."</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Canvases add memory and are written in formats like <strong>EXR</strong> that hold high dynamic range — great for compositing but not something you post to the web directly. Treat canvases as intermediate production files; your shareable deliverable is still the tone-mapped beauty image.
+                </blockquote>
+            </section>
+
+            <!-- Section 7: Saving & Post-Processing -->
+            <section id="saving" class="lesson-section">
+                <h2>Saving &amp; Post-Processing</h2>
+                <p>The render finished and it looks great — now preserve it. When a render completes in its own window, use that window's <strong>Save</strong> button to write the image to disk. A little post-processing afterward takes a good render to a polished one.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Post-processing:</strong> the light editing you do <em>after</em> rendering — in an image editor — to finish the look: cropping, subtle color grading, contrast, a touch of sharpening, and cleaning up stray artifacts. Small, tasteful adjustments; the render should already be strong on its own.</p>
+                </div>
+
+                <h3>Saving well</h3>
+                <ul>
+                    <li><strong>Format</strong> — save a <strong>PNG</strong> for a clean, lossless shareable image; use <strong>EXR</strong> only if you'll composite in high dynamic range.</li>
+                    <li><strong>Resolution</strong> — keep the full-size render as your master; export smaller copies for the web from that.</li>
+                    <li><strong>Naming</strong> — name and date your files so versions don't overwrite each other; a finished render is worth keeping.</li>
+                </ul>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — a light grade goes a long way</h4>
+                    <p>In your editor, nudge <strong>contrast</strong> and <strong>saturation</strong> gently, add a subtle <strong>vignette</strong> to draw the eye, and sharpen just a touch. Resist heavy filters — the goal is to enhance the photographic render you already made, not to disguise it. Compare before and after; if you can't tell it's edited, you did it right.</p>
+                </div>
+
+                <figure>
+                    <img src="images/l09_denoise_comparison.png" alt="The same portrait at three stages - noisy low-sample render, denoised version, and final graded image">
+                    <figcaption>Figure 2: The same portrait at three stages — a grainy low-sample render, the denoised version, and the final image after a light post-processing grade — showing how denoising and a gentle grade finish the picture.</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Save the render image and <strong>save your scene</strong> — they're different things. The image is the finished picture; the scene is the recipe that made it. Keep both, so you can re-render at a larger size or tweak a light later without rebuilding everything from scratch.
+                </blockquote>
+            </section>
+
+            <!-- Section 8: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Final Render</h2>
+                <p>Let's render the lit scene from Lesson 3.2 into a finished image — configuring settings, using the denoiser, then saving and lightly grading the result.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Configure &amp; Test Render</h3>
+                    <p><strong>Objective:</strong> Set sane render settings and confirm the look with a spot-render.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>In <strong>Render Settings → General</strong>, confirm the engine is <strong>Iray</strong> and set your <strong>Pixel Size</strong> (e.g. 2000×2600).</li>
+                        <li>On <strong>Progressive Rendering</strong>, set a modest <strong>Max Samples</strong> and a <strong>Max Time</strong> safety cap.</li>
+                        <li>Grab the <strong>Spot Render</strong> tool and drag a box over the face to check lighting and skin at full quality before committing.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Denoise &amp; Full Render</h3>
+                    <p><strong>Objective:</strong> Produce a clean final image efficiently.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>In <strong>Render Settings → Advanced</strong>, enable the <strong>Post Denoiser</strong> and set its start a few hundred samples in.</li>
+                        <li>Launch a full render (to a new window) and watch the <strong>convergence percentage</strong> climb and the grain clear.</li>
+                        <li>When it looks clean and the percentage crawls, let it hit your limit or stop it manually.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — my render looks waxy or plasticky</summary>
+                        <p>The denoiser likely engaged too early. Raise its <strong>start iteration</strong> so the render builds real detail — skin pores, hair, fabric — before the AI smooths the rest. Also make sure your <strong>Max Samples</strong> isn't so low that the render stops while still very noisy. Detail first, denoise second.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Save &amp; Grade</h3>
+                    <p><strong>Objective:</strong> Preserve and lightly polish your finished render.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>In the render window, click <strong>Save</strong> and write a full-size <strong>PNG</strong> with a dated filename.</li>
+                        <li>Open it in an image editor and apply a <strong>light grade</strong> — gentle contrast, a touch of saturation, a subtle vignette.</li>
+                        <li><strong>Save your scene</strong> too, so you can re-render larger or tweak lights later — this is your Module 3 deliverable.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> In Iray, what does "convergence" describe?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Resolution is set separately as Pixel Size on the General tab; convergence isn't about image dimensions.">
+                                A) The pixel dimensions of the output image
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Convergence is a percentage showing how close the image is to its final, noise-free state. As Iray traces more samples, convergence climbs toward 100% and the grain clears.">
+                                B) How close the image is to its final, noise-free state
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="That describes the denoiser, which is a separate AI post-process — convergence is the natural cleanup from tracing more samples.">
+                                C) An AI filter that smooths out remaining grain
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> Why should the denoiser usually start a few hundred samples in, not immediately?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The denoiser runs on the GPU and is fast; the concern isn't speed, it's what it does to detail on a very noisy image.">
+                                A) Because starting it early makes the render take much longer
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="The denoiser doesn't change resolution at all — it only removes noise, whenever it runs.">
+                                B) Because it lowers the output resolution if it runs too soon
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="On a very noisy early image the denoiser has little real detail to work with and can smear pores, hair, and fabric into a waxy blur. Letting the render build genuine detail first, then denoising, keeps things crisp.">
+                                C) Starting too early can smear fine detail into a waxy blur
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> You want to check whether the eye highlight looks right without re-rendering the whole frame. What do you use?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="The Spot Render tool lets you drag a rectangle and render just that region at full quality — ideal for checking a detail like an eye catchlight without paying for a full-frame render.">
+                                A) The Spot Render tool on just the eye region
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="A depth canvas captures distance-per-pixel for compositing; it won't tell you whether a highlight looks right.">
+                                B) A depth render canvas
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Max Time only caps how long a full render runs — it doesn't let you preview a small region quickly.">
+                                C) Lowering the Max Time setting
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Confirm Iray is using the GPU</strong> in Advanced before a long render.</li>
+                    <li><strong>Set your output size first</strong> so framing and depth of field match the deliverable.</li>
+                    <li><strong>Use the denoiser with a sample cap</strong> for fast, predictable clean images.</li>
+                    <li><strong>Spot-render details</strong> and use the Iray preview while iterating.</li>
+                    <li><strong>Watch the convergence readout</strong> and stop when it's clean enough.</li>
+                    <li><strong>Save both the image and the scene</strong> when you're done.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't render at full resolution while still iterating</strong> — test small, deliver big.</li>
+                    <li><strong>Don't start the denoiser on a very noisy image</strong> — you'll get a waxy blur.</li>
+                    <li><strong>Don't chase 100% convergence</strong> — diminishing returns waste hours for invisible gains.</li>
+                    <li><strong>Don't over-process in post</strong> — a light grade beats heavy filters.</li>
+                    <li><strong>Don't forget Render Settings save with the scene</strong> — check them if results surprise you.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Keep a modest test resolution handy, then bump to full size for the final pass.</li>
+                    <li>Pair the denoiser with a start-iteration in the low hundreds for crisp, quick results.</li>
+                    <li>Add an <strong>alpha</strong> canvas so you can swap backgrounds without re-rendering.</li>
+                    <li>Use a <strong>depth</strong> canvas to add atmospheric haze or extra blur in post.</li>
+                    <li>Name and date your saved renders so versions never overwrite each other.</li>
+                </ul>
+            </section>
+
+            <!-- Section 10: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>Iray renders by <strong>path tracing</strong> — accumulating samples until the image <strong>converges</strong> and the noise clears.</li>
+                        <li>The <strong>Render Settings</strong> pane holds it all: engine, dimensions, Progressive Rendering, tone mapping, environment, and hardware.</li>
+                        <li><strong>Max Samples, Max Time, and Rendering Quality</strong> are stopping conditions — Iray halts at whichever comes first.</li>
+                        <li>The <strong>denoiser</strong> lets you stop early and finish clean; start it a few hundred samples in to protect detail.</li>
+                        <li><strong>Spot-render</strong> and the <strong>Iray preview</strong> speed up iteration; <strong>render canvases</strong> unlock compositing; then <strong>save and lightly grade</strong> your finished image.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/environment_and_cameras/render_settings/start" target="_blank" rel="noopener">Render Settings — official Daz user guide</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/rendering/render_canvases/start" target="_blank" rel="noopener">Render Canvases — Daz documentation</a></li>
+                    <li><a href="https://www.daz3d.com/iray" target="_blank" rel="noopener">About Iray in Daz Studio</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>That's Module 3 complete — you can stage, light, and render a finished portrait. Next we add motion and physics. In <strong>Lesson 4.1 — dForce Cloth &amp; Hair Simulation</strong>, you'll drape realistic dynamic clothing on your figure, run a dForce simulation, tune its settings, and fix the classic beginner problems — explosions and pokethrough — so your characters wear their outfits convincingly.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>💡 You made a finished render!</h3>
+                    <p>Posed, shaped, surfaced, staged, lit, and now rendered and saved — you've taken a scene all the way to a photograph you can be proud of. That's the core Daz workflow, start to finish. Everything from here — simulation, animation, and the Blender and Unreal bridges — builds on the solid render foundation you just laid.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_08_lighting_for_iray.html" class="prev-lesson">← Previous: Lighting for Iray</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_10_dforce_cloth_and_hair.html" class="next-lesson">Next: dForce Cloth &amp; Hair →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

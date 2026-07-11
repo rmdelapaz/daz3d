@@ -1,0 +1,16 @@
+Add illustrative stand-in figures for all 14 lessons
+
+Generate 31 labeled HTML/SVG stand-in figures (Daz-style UI mockups,
+diagrams, and studio-mannequin renders) and wire them into the lesson
+pages, replacing the .image-placeholder blocks with <img> tags.
+
+Each image carries an "Illustrative stand-in - not an actual capture"
+badge, so none is mistaken for a genuine Daz Studio / Iray / Blender /
+Unreal capture. Alt text taken from the lesson_NN_image_requirements.md
+files; the "(Art to be added ...)" figcaption notes are removed and the
+requirements Status boxes ticked.
+
+The regeneration toolkit lives in .figbuild/ (figkit/gen/render/wire.py);
+intermediate render output is gitignored.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>

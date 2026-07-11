@@ -1,0 +1,3 @@
+# Intermediate rasterizer output (final PNGs are copied to ../images/)
+html/
+__pycache__/

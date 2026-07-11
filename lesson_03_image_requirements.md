@@ -17,7 +17,7 @@ Art/screenshots needed to replace the `.image-placeholder` blocks in `lesson_03_
 - For Figure 1, capture with a figure already loaded so all four regions have real content to point at.
 
 ## Status
-- [ ] Figure 1 — workspace regions (annotated)
-- [ ] Figure 2 — viewport controls close-up
-- [ ] Figure 3 — Scene pane with figure expanded
-- [ ] Figure 4 — Window → Workspace menu
+- [x] Figure 1 — workspace regions (annotated)
+- [x] Figure 2 — viewport controls close-up
+- [x] Figure 3 — Scene pane with figure expanded
+- [x] Figure 4 — Window → Workspace menu

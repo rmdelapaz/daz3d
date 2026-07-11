@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 5.2 — The Daz to Unreal Bridge: installing the Unreal plugin and bridge, exporting a Genesis figure into a level, skeleton and retargeting, rebuilding materials in Unreal, transferring animation, and how it all relates to MetaHuman.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 5.2: The Daz to Unreal Bridge - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 5</a></li>
+            <li aria-current="page">Lesson 5.2: The Daz to Unreal Bridge</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>🎮 Lesson 5.2: The Daz to Unreal Bridge</h1>
+                <p class="lead">Blender was one destination; Unreal Engine is the other. The Daz to Unreal Bridge sends your Genesis figure into a real-time game engine — mesh, skeleton, materials, and even animation — where it can walk through a level, be lit in real time, and star in cinematics or games. In this lesson you'll install the Unreal plugin and its bridge, export a figure into a project, understand the skeleton and why retargeting matters, rebuild materials as Unreal Material Instances, transfer animation, and see clearly how Daz figures relate to (and differ from) Epic's MetaHuman. This is the pipeline's final bridge — and the gateway to real-time.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Install the <strong>Daz to Unreal</strong> plugin and its Unreal-side bridge</li>
+                        <li>Export a Genesis figure into an <strong>Unreal project</strong></li>
+                        <li>Explain the <strong>skeleton</strong> and why <strong>retargeting</strong> matters</li>
+                        <li>Work with Daz <strong>materials</strong> as Unreal Material Instances</li>
+                        <li><strong>Transfer animation</strong> from Daz to Unreal</li>
+                        <li>Describe how Daz figures relate to <strong>MetaHuman</strong></li>
+                        <li>Follow a dependable <strong>Unreal bridge workflow</strong></li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 65 minutes</p>
+                    <p><strong>Project:</strong> Your Daz character imported into an Unreal level as a Skeletal Mesh with working materials, placed and lit in real time, ready for animation or a cinematic.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#why-unreal" class="toc-link">Why Bridge to Unreal</a></li>
+                        <li><a href="#installing" class="toc-link">Installing the Plugin &amp; Bridge</a></li>
+                        <li><a href="#exporting" class="toc-link">Exporting to Unreal</a></li>
+                        <li><a href="#skeleton" class="toc-link">Skeleton &amp; Retargeting</a></li>
+                        <li><a href="#materials-ue" class="toc-link">Materials in Unreal</a></li>
+                        <li><a href="#animation-metahuman" class="toc-link">Animation &amp; MetaHuman</a></li>
+                        <li><a href="#workflow" class="toc-link">An Unreal Workflow</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Into a Level</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: Why Bridge to Unreal -->
+            <section id="why-unreal" class="lesson-section">
+                <h2>Why Bridge to Unreal</h2>
+                <p>Where Daz and Blender render one frame at a time, <strong>Unreal Engine</strong> renders in <em>real time</em> — dozens of frames a second, interactively. Bringing your Daz figure into Unreal means it can move through a game, star in a real-time cinematic, or be lit and re-posed instantly. The <strong>Daz to Unreal Bridge</strong> automates that handoff just like the Blender one did.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> The Daz to Unreal Bridge sends your figure into Unreal as a real-time Skeletal Mesh — with skeleton, materials, and optional animation — so a Daz character can live in a game or cinematic.
+                </blockquote>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Skeletal Mesh (Unreal):</strong> Unreal's format for an animatable character — a mesh bound to a skeleton (bones) so it can be posed and animated. The bridge converts your Daz figure into a Skeletal Mesh asset in your Unreal project's Content Browser.</p>
+                </div>
+
+                <p>Real-time changes everything about how you think. There's no waiting for a render; you move a light and see the result instantly. That speed is why game developers and virtual-production artists reach for Unreal — and why a fast character source like Daz pairs so well with it.</p>
+
+                <div class="mermaid">
+                    graph TD
+                        A["Daz to Unreal Bridge"] --> B["Skeletal Mesh geometry"]
+                        A --> C["Skeleton for animation"]
+                        A --> D["Material Instances"]
+                        A --> E["Optional animation clips"]
+                        B --> F["A character in the Unreal level"]
+                        C --> F
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style F fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Real-time means budgets matter</h4>
+                    <p>A Daz figure is built for offline Iray renders — dense mesh, huge 4K textures — which can be heavy for real-time. In Unreal you'll often optimize: reduce texture sizes, use LODs, and simplify shaders. The bridge gets the character in; making it <em>performant</em> is a real-time skill layered on top.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> As with the Blender bridge, the Daz plugin and the Unreal plugin must match your <strong>Unreal Engine version</strong>. Unreal updates often and plugins are version-locked, so confirm the bridge supports your exact UE version before installing — a mismatch simply won't load.
+                </blockquote>
+            </section>
+
+            <!-- Section 2: Installing the Plugin & Bridge -->
+            <section id="installing" class="lesson-section">
+                <h2>Installing the Plugin &amp; Bridge</h2>
+                <p>Like the Blender bridge, this is a <strong>two-part</strong> install — but the Unreal half is a <em>project/engine plugin</em> rather than a simple add-on, so there's a little more to it.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>The two parts:</strong> the <strong>Daz-side plugin</strong> (installed via DIM) adds a <em>Send to Unreal</em> command; the <strong>Unreal-side plugin</strong> (the DazToUnreal plugin) is enabled in your Unreal project and listens for incoming figures, importing them into the Content Browser.</p>
+                </div>
+
+                <h3>Install steps</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Step</th>
+                                <th>Where</th>
+                                <th>What you do</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1. Daz plugin</strong></td>
+                                <td>Daz Install Manager</td>
+                                <td>Install "Daz to Unreal Bridge"; adds a menu command</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. UE plugin</strong></td>
+                                <td>Unreal project's Plugins folder</td>
+                                <td>Install DazToUnreal and enable it in the project</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Restart &amp; enable</strong></td>
+                                <td>Unreal Editor</td>
+                                <td>Restart UE; confirm the plugin is enabled</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. Match ports</strong></td>
+                                <td>Both apps</td>
+                                <td>Ensure the bridge port setting matches on each side</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — the bridge talks over a local port</h4>
+                    <p>The Daz and Unreal halves communicate over a <strong>network port</strong> on your machine. If a transfer never arrives, the port number in the Daz dialog and the Unreal plugin settings probably don't match — set them the same, and make sure no firewall prompt was dismissed. This is the Unreal bridge's most common gotcha.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Unreal plugins can be installed per-project or engine-wide, and some versions need the plugin built for your exact engine build. If the plugin won't enable, verify it's the right one for your UE version and that it lives in the correct <code>Plugins</code> folder — a wrong-version plugin is silently ignored.
+                </blockquote>
+            </section>
+
+            <!-- Section 3: Exporting to Unreal -->
+            <section id="exporting" class="lesson-section">
+                <h2>Exporting to Unreal</h2>
+                <p>With both halves installed and Unreal open, sending a figure mirrors the Blender flow. In Daz, select the figure and choose <strong>File → Send To → Daz to Unreal</strong>. A dialog lets you set the asset name, asset type, and options — then it transfers straight into your open Unreal project.</p>
+
+                <figure>
+                    <img src="images/l13_unreal_export_dialog.png" alt="The Daz to Unreal export dialog showing the asset name, Asset Type set to Skeletal Mesh, morph options, and the port setting">
+                    <figcaption>Figure 1: The Daz to Unreal export dialog — set the asset name, choose the Asset Type (e.g. Skeletal Mesh), pick morphs and options, confirm the port, and send into the open Unreal project.</figcaption>
+                </figure>
+
+                <p>The key choice is <strong>Asset Type</strong>:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Asset Type</th>
+                                <th>Use it for…</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Skeletal Mesh</strong></td>
+                                <td>A posable, animatable character — the usual choice for a figure</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Static Mesh</strong></td>
+                                <td>Non-animated props and environment pieces</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Animation</strong></td>
+                                <td>Sending a pose or animation onto an already-imported skeleton</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Import once, animate many</h4>
+                    <p>You don't re-import the whole character for every animation. Send the figure once as a <strong>Skeletal Mesh</strong>, then send additional <strong>Animation</strong> assets that target that same skeleton. This keeps your project tidy — one character, a library of clips — exactly how Unreal expects animation to be organized.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Unreal must be <strong>open with your project loaded</strong> when you send, or the figure has nowhere to land. Unlike a file you can import later, the bridge pushes into a live editor session — start Unreal first, then send from Daz.</blockquote>
+            </section>
+
+            <!-- Section 4: Skeleton & Retargeting -->
+            <section id="skeleton" class="lesson-section">
+                <h2>Skeleton &amp; Retargeting</h2>
+                <p>Daz figures use the <strong>Genesis skeleton</strong>, which has its own bone names and hierarchy. Unreal animations — and the huge library of Marketplace and Mannequin animations — are often built for a <em>different</em> skeleton. <strong>Retargeting</strong> is how you make one skeleton's animation play on another.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Retargeting:</strong> mapping animation from one skeleton onto another with a different bone structure or proportions. In Unreal, an <strong>IK Rig</strong> and <strong>IK Retargeter</strong> define how, say, a Mannequin walk cycle drives the Genesis skeleton — letting your Daz figure use animations it wasn't authored for.</p>
+                </div>
+
+                <p>Why it matters: the bridge brings the Genesis skeleton across faithfully, so <em>Daz</em> animations play perfectly. But to use Unreal's ecosystem of animations, you retarget them onto the Genesis skeleton.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Genesis is not the UE Mannequin</h4>
+                    <p>A frequent surprise: dropping a standard Mannequin animation onto a Daz figure looks broken, because the skeletons differ. That's not a bridge failure — it's the retargeting step you haven't done yet. Set up an IK Rig for the Genesis skeleton, then retarget Mannequin/Marketplace clips onto it.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Retargeting quality depends on a good <strong>bone mapping</strong> and matching a reference pose (e.g. A-pose vs T-pose) between source and target. If a retargeted animation looks twisted, revisit the pose alignment and the bone chains in the IK Rig before blaming the animation itself.
+                </blockquote>
+            </section>
+
+            <!-- Section 5: Materials in Unreal -->
+            <section id="materials-ue" class="lesson-section">
+                <h2>Materials in Unreal</h2>
+                <p>The bridge rebuilds your Daz surfaces as Unreal <strong>Material Instances</strong>, wiring your diffuse, normal, roughness, and other maps into a base material the plugin provides. As with Blender, they arrive close — but skin usually wants a pass to look right in real time.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Material Instance (Unreal):</strong> a lightweight variation of a base <strong>Material</strong> whose exposed parameters (colors, texture maps, scalar values) you tweak without recompiling shaders. The bridge creates one instance per Daz surface, so you adjust skin, eyes, and hair by editing parameters.</p>
+                </div>
+
+                <h3>Common material tasks</h3>
+                <ul>
+                    <li><strong>Skin</strong> — enable/tune <strong>subsurface</strong> so real-time skin isn't flat and plasticky.</li>
+                    <li><strong>Hair</strong> — transparency-based hair cards may need the right blend/shading mode to sort correctly.</li>
+                    <li><strong>Eyes</strong> — refraction and clarity often need adjustment for a lively look.</li>
+                    <li><strong>Texture sizes</strong> — consider downscaling 4K maps for real-time performance.</li>
+                </ul>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — lean on the plugin's master materials</h4>
+                    <p>DazToUnreal ships base "master" materials tuned for Daz surfaces. Rather than rebuilding shaders from scratch, <strong>adjust the exposed parameters</strong> on the generated Material Instances. It's faster, keeps everything consistent, and preserves the plugin's careful setup for skin and translucency.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Real-time skin and hair are genuinely hard — Unreal's offline-quality look takes tuning, and transparent hair especially can render with sorting artifacts. Budget time for materials; a figure that looks flawless in Iray needs deliberate work to look equally good running at 60 fps.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: Animation & MetaHuman -->
+            <section id="animation-metahuman" class="lesson-section">
+                <h2>Animation &amp; MetaHuman</h2>
+                <p>Two questions come up constantly: how do I get my Daz <em>animation</em> into Unreal, and how does all this relate to Epic's <strong>MetaHuman</strong>? Let's answer both.</p>
+
+                <h3>Transferring animation</h3>
+                <p>Animate in Daz (Lesson 4.2), then send it with Asset Type <strong>Animation</strong> targeting your already-imported Genesis skeleton. The clip lands as an Unreal <strong>Animation Sequence</strong> you can play, blend, and sequence — no retargeting needed, because it's already on the Genesis skeleton.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>MetaHuman:</strong> Epic's system for creating extremely high-fidelity, real-time digital humans, with its own rig (including advanced facial controls) and pipeline. MetaHumans are purpose-built for Unreal and are a <em>different</em> character system from Daz Genesis figures.</p>
+                </div>
+
+                <h3>Daz vs MetaHuman</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Daz Genesis (bridged)</th>
+                                <th>MetaHuman</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Origin</strong></td>
+                                <td>Built in Daz, bridged into UE</td>
+                                <td>Built in MetaHuman Creator for UE</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Content ecosystem</strong></td>
+                                <td>Huge Daz store of characters &amp; clothing</td>
+                                <td>Epic's MetaHuman presets and assets</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Facial rig</strong></td>
+                                <td>Daz expressions/morphs</td>
+                                <td>Advanced built-in facial rig</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Best when</strong></td>
+                                <td>You want Daz content and characters in UE</td>
+                                <td>You want Epic's top-tier real-time humans</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 They're complementary, not rivals</h4>
+                    <p>Daz brings an enormous library of ready-made characters and clothing; MetaHuman brings Epic's cutting-edge real-time human tech. Many productions use both — a crowd of bridged Daz figures, a hero MetaHuman — and some workflows even combine Daz assets with MetaHuman rigs. Pick the tool that fits the shot.</p>
+                </div>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Install both plugins"] --> B["Send figure as a Skeletal Mesh"]
+                        B --> C["Set up retargeting if needed"]
+                        C --> D["Tune Material Instances"]
+                        D --> E["Add animation and light the level"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style C fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Don't expect a bridged Daz figure to inherit MetaHuman's facial rig or animations automatically — they're separate systems. Bridging gives you a Daz character in Unreal; using MetaHuman's rig on it is an advanced, separate undertaking, not a checkbox in the bridge.
+                </blockquote>
+            </section>
+
+            <!-- Section 7: An Unreal Workflow -->
+            <section id="workflow" class="lesson-section">
+                <h2>An Unreal Workflow</h2>
+                <p>Bring the steps together into a reliable order and Unreal transfers become routine.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Step</th>
+                                <th>Do this</th>
+                                <th>Why</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1. Open UE</strong></td>
+                                <td>Launch Unreal with your project loaded</td>
+                                <td>The bridge pushes into a live session</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Prepare</strong></td>
+                                <td>Finalize the figure in Daz; trim morphs</td>
+                                <td>You transfer what's there; keep it lean</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Send figure</strong></td>
+                                <td>Send as a Skeletal Mesh</td>
+                                <td>Creates the character asset in UE</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. Materials</strong></td>
+                                <td>Tune the generated Material Instances</td>
+                                <td>Real-time skin/hair needs adjustment</td>
+                            </tr>
+                            <tr>
+                                <td><strong>5. Animate</strong></td>
+                                <td>Send animations or retarget UE clips</td>
+                                <td>Bring the character to life in the level</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Keep Daz as the source; optimize in Unreal</h4>
+                    <p>The bridge is one-way, so the <strong>Daz scene stays your master</strong> — re-bridge when the character changes. Meanwhile, all the real-time work — LODs, texture sizing, material tuning, retargeting — lives in <strong>Unreal</strong> and doesn't go back. Two clear homes: authoring in Daz, optimization and staging in Unreal.</p>
+                </div>
+
+                <figure>
+                    <img src="images/l13_figure_in_unreal_level.png" alt="A bridged Daz character standing in an Unreal Engine level, lit in real time, with the Skeletal Mesh and materials visible in the Content Browser">
+                    <figcaption>Figure 2: The bridged Daz character in an Unreal level — a real-time Skeletal Mesh lit in the scene, with the imported asset and its Material Instances visible in the Content Browser.</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Unreal projects are large and version-specific. Once a character is imported and optimized in a given project, <strong>upgrading the engine version</strong> later can require re-validating plugins and assets. Decide your target UE version early and keep the bridge plugin matched to it throughout a project.</blockquote>
+            </section>
+
+            <!-- Section 8: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Into a Level</h2>
+                <p>Let's get your character standing in an Unreal level — verify the install, send the figure, and place it in the scene.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Verify &amp; Connect</h3>
+                    <p><strong>Objective:</strong> Confirm both halves and the port match.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>In Daz, confirm the <strong>File → Send To → Daz to Unreal</strong> command exists.</li>
+                        <li>In Unreal, open <strong>Edit → Plugins</strong> and confirm <strong>DazToUnreal</strong> is enabled (restart if you just enabled it).</li>
+                        <li>Check the <strong>port number</strong> matches in the Daz dialog and the UE plugin settings.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Send the Figure</h3>
+                    <p><strong>Objective:</strong> Import the character as a Skeletal Mesh.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>With your <strong>Unreal project open</strong>, select the figure in Daz.</li>
+                        <li>Run <strong>Send To → Daz to Unreal</strong> with Asset Type <strong>Skeletal Mesh</strong>, name it, and send.</li>
+                        <li>In Unreal's <strong>Content Browser</strong>, confirm the Skeletal Mesh, skeleton, and materials appeared.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — I sent the figure but nothing arrived in Unreal</summary>
+                        <p>Work through the connection: is <strong>Unreal open with the project loaded</strong>? Is the <strong>DazToUnreal plugin enabled</strong> (and did you restart UE after enabling)? Do the <strong>port numbers match</strong> on both sides, and was any firewall prompt allowed? Is the plugin the right build for your <strong>exact UE version</strong>? The Unreal bridge's failures are almost always the live-session, port, or version link — not the figure itself.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Place &amp; Light</h3>
+                    <p><strong>Objective:</strong> Stage the character in a real-time scene.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Drag the <strong>Skeletal Mesh</strong> from the Content Browser into your level.</li>
+                        <li>Tune the <strong>skin Material Instance</strong> — enable/adjust subsurface so it isn't flat.</li>
+                        <li>Add a light, move it, and watch the character update <strong>in real time</strong>. Save the level.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> When sending a figure with the Daz to Unreal Bridge, what must be true?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="You don't export a file to import later — the bridge pushes directly into a running editor, so Unreal has to be open.">
+                                A) Unreal can be closed; you import the saved file afterward
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="The bridge pushes the figure into a live Unreal session over a local port, so Unreal must be open with your project loaded and the DazToUnreal plugin enabled and port-matched.">
+                                B) Unreal must be open with the project loaded and the plugin enabled
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="No Epic cloud account is involved — the transfer is local between the two apps over a network port on your machine.">
+                                C) You must be signed into an Epic cloud account to sync
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> A standard Unreal Mannequin walk animation looks broken on your Daz figure. Why?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The bridge did its job — it brought the Genesis skeleton across faithfully; the issue is the mismatch with the Mannequin's skeleton.">
+                                A) The bridge failed to import the skeleton correctly
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="The material has nothing to do with animation playback — a wrong shader wouldn't twist the pose.">
+                                B) The skin material is set up incorrectly
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="The Genesis skeleton differs from the UE Mannequin skeleton, so a Mannequin animation must be retargeted (via an IK Rig and Retargeter) onto Genesis before it plays correctly. That step just hasn't been done yet.">
+                                C) The Genesis and Mannequin skeletons differ — it needs retargeting
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> How do Daz Genesis figures relate to MetaHuman?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The bridge doesn't convert a Daz figure into a MetaHuman — they're separate character systems, not two states of the same thing.">
+                                A) The bridge automatically converts Daz figures into MetaHumans
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="They're separate, complementary character systems: Daz offers a huge library of ready-made characters and clothing bridged into UE, while MetaHuman is Epic's purpose-built high-fidelity real-time human with its own advanced rig. Productions often use both.">
+                                B) They're separate, complementary systems — Daz content vs Epic's real-time humans
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="MetaHuman doesn't replace Daz — many workflows use Daz for content variety and MetaHuman for hero characters; neither makes the other obsolete.">
+                                C) MetaHuman fully replaces the need for Daz figures in Unreal
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Match the plugin to your exact UE version</strong> before installing.</li>
+                    <li><strong>Open Unreal with the project loaded</strong> before sending from Daz.</li>
+                    <li><strong>Confirm the bridge port matches</strong> on both sides.</li>
+                    <li><strong>Import the figure once</strong>, then send animations onto its skeleton.</li>
+                    <li><strong>Tune Material Instances</strong> rather than rebuilding shaders.</li>
+                    <li><strong>Optimize for real-time</strong> — texture sizes, LODs — after import.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't send with Unreal closed</strong> — the figure has nowhere to land.</li>
+                    <li><strong>Don't expect Mannequin animations to just work</strong> — retarget them first.</li>
+                    <li><strong>Don't assume real-time skin looks like Iray</strong> — it needs deliberate tuning.</li>
+                    <li><strong>Don't confuse Daz figures with MetaHumans</strong> — separate systems.</li>
+                    <li><strong>Don't ignore version-locking</strong> — plugins are tied to engine builds.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Keep the port setting identical in Daz and the UE plugin to avoid silent failures.</li>
+                    <li>Send one Skeletal Mesh and build a library of Animation assets on it.</li>
+                    <li>Set up an IK Rig for Genesis so you can retarget the whole UE animation ecosystem.</li>
+                    <li>Downscale 4K skin maps for characters that run in real time.</li>
+                    <li>Keep the Daz scene as the master and re-bridge when the character changes.</li>
+                </ul>
+            </section>
+
+            <!-- Section 10: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>The <strong>Daz to Unreal Bridge</strong> sends a figure into Unreal as a real-time <strong>Skeletal Mesh</strong>, with skeleton, materials, and optional animation.</li>
+                        <li>Install <strong>both halves</strong>, match the plugin to your <strong>UE version</strong>, and make the bridge <strong>port</strong> match on each side.</li>
+                        <li>The Genesis skeleton differs from the UE Mannequin, so using Unreal's animation library requires <strong>retargeting</strong> via an IK Rig.</li>
+                        <li>Materials arrive as <strong>Material Instances</strong> you tune — real-time skin and hair need deliberate work to look their best.</li>
+                        <li>Daz figures and <strong>MetaHuman</strong> are separate, complementary systems — Daz for content breadth, MetaHuman for Epic's top-tier real-time humans.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="https://www.daz3d.com/daz-to-unreal-bridge" target="_blank" rel="noopener">Daz to Unreal Bridge — official product page</a></li>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/bridges/unreal/start" target="_blank" rel="noopener">Daz to Unreal Bridge — official documentation</a></li>
+                    <li><a href="https://www.unrealengine.com/en-US/metahuman" target="_blank" rel="noopener">MetaHuman — Epic Games</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Both bridges are in your toolkit — your Daz figure can go to Blender <em>and</em> Unreal. Now we put the entire pipeline together. In <strong>Lesson 5.3 — Capstone: A Full Pipeline Portfolio Piece</strong>, you'll pose, shape, surface, light, and render a character in Daz, then bridge that same figure into Blender and Unreal — one asset proving you can move across the whole pipeline, plus portfolio tips and where to go next.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>💡 Your figure went real-time!</h3>
+                    <p>Plugin, bridge, Skeletal Mesh, retargeting, materials, animation, and the MetaHuman picture — your Daz character now lives in Unreal Engine, lit and posable in real time. You've connected Daz to both major destinations. One capstone lesson stands between you and a complete, cross-pipeline portfolio piece.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_12_daz_to_blender_bridge.html" class="prev-lesson">← Previous: Daz to Blender Bridge</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_14_capstone_full_pipeline.html" class="next-lesson">Next: Capstone Pipeline →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

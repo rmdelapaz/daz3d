@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 5.3 — Capstone: A Full Pipeline Portfolio Piece. Pose, shape, surface, light, and render a character in Daz, then bridge the same figure into Blender and Unreal — one asset that proves you can move across the whole pipeline. Plus portfolio tips and where to go next.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 5.3: Capstone — A Full Pipeline Portfolio Piece - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 5</a></li>
+            <li aria-current="page">Lesson 5.3: Capstone — A Full Pipeline Portfolio Piece</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>🏆 Lesson 5.3: Capstone — A Full Pipeline Portfolio Piece</h1>
+                <p class="lead">This is it — the lesson that ties everything together. You've learned to pose, shape, surface, stage, light, render, simulate, animate, and bridge. Now you'll do it all on one character, start to finish, and carry that same figure across the entire pipeline: built and rendered in Daz, then bridged into Blender and dropped into Unreal. The result is a single asset that proves — to a client, a studio, or yourself — that you can move a character across the whole modern 3D pipeline. We'll walk the capstone step by step, then talk portfolio presentation and where to take these skills next. Let's finish strong.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Plan a <strong>full-pipeline portfolio piece</strong> from a single character</li>
+                        <li>Build, light, and <strong>render a finished character in Daz</strong></li>
+                        <li>Bridge the <em>same</em> figure into <strong>Blender</strong> and render it there</li>
+                        <li>Bridge that figure into an <strong>Unreal</strong> level</li>
+                        <li>Present the three results as a cohesive <strong>portfolio piece</strong></li>
+                        <li>Identify <strong>where to go next</strong> to keep growing</li>
+                        <li>Recognize how the whole <strong>Daz pipeline</strong> fits together</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 90 minutes</p>
+                    <p><strong>Project:</strong> One character rendered in Daz, placed in a Blender scene, and dropped into an Unreal level — presented together as a single cross-pipeline portfolio piece. The course's capstone deliverable.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#capstone-goal" class="toc-link">The Capstone Goal</a></li>
+                        <li><a href="#daz-build" class="toc-link">Build the Character in Daz</a></li>
+                        <li><a href="#daz-render" class="toc-link">Light &amp; Render in Daz</a></li>
+                        <li><a href="#to-blender" class="toc-link">Bridge to Blender</a></li>
+                        <li><a href="#to-unreal" class="toc-link">Bridge to Unreal</a></li>
+                        <li><a href="#portfolio" class="toc-link">Presenting the Piece</a></li>
+                        <li><a href="#where-next" class="toc-link">Where to Go Next</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: The Capstone</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: The Capstone Goal -->
+            <section id="capstone-goal" class="lesson-section">
+                <h2>The Capstone Goal</h2>
+                <p>A capstone is a single project that exercises everything you've learned. Yours is deliberately ambitious but achievable: take <strong>one character</strong> all the way through the pipeline — authored and rendered in Daz, then bridged into both Blender and Unreal — and present the three outputs together.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> Build and render one character in Daz, bridge that same figure into Blender and Unreal, and present all three — proving you can move an asset across the entire modern 3D pipeline.
+                </blockquote>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Pipeline portfolio piece:</strong> a single asset shown at multiple stages across different tools, demonstrating not just one pretty render but the <em>process</em> and <em>versatility</em> to carry a character through authoring, rendering, and real-time engines. Studios value pipeline fluency as much as final images.</p>
+                </div>
+
+                <p>The point isn't three unrelated images — it's <em>the same character</em> appearing in each tool, so the through-line is unmistakable. That continuity is exactly what makes it a compelling portfolio piece rather than three separate experiments.</p>
+
+                <div class="mermaid">
+                    graph TD
+                        A["One character concept"] --> B["Author and render in Daz"]
+                        B --> C["Bridge to Blender and render"]
+                        B --> D["Bridge to Unreal real-time level"]
+                        C --> E["Present as one pipeline piece"]
+                        D --> E
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style B fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Keep the scope tight</h4>
+                    <p>Resist the urge to make your most complex character ever for the capstone. A <strong>clean, well-lit, simple character</strong> carried flawlessly across three tools beats an elaborate one that breaks at every bridge. Nail the pipeline first; dazzle with complexity on your next piece.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Save early and often, and keep your <strong>Daz scene as the master source</strong>. Because both bridges are one-directional, any change to the character should be made in Daz and re-bridged — not patched separately in Blender and Unreal, which would let the three versions drift apart.
+                </blockquote>
+            </section>
+
+            <!-- Section 2: Build the Character in Daz -->
+            <section id="daz-build" class="lesson-section">
+                <h2>Build the Character in Daz</h2>
+                <p>Everything starts in Daz. This stage is a victory lap through Modules 1–2: load a Genesis figure, shape it, pose it, and surface it — the authoring you now know well.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Authoring (in this context):</strong> the creative build of your character before any rendering or bridging — choosing the base figure, dialing morphs for a custom look, posing it, and applying and tweaking Iray surfaces. It's the foundation every later stage inherits.</p>
+                </div>
+
+                <h3>The build checklist</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Stage</th>
+                                <th>Do this</th>
+                                <th>From lesson</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Load &amp; pose</strong></td>
+                                <td>Load Genesis, apply a pose, refine it</td>
+                                <td>Lesson 2.1</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Shape</strong></td>
+                                <td>Dial character/head/body morphs for a custom look</td>
+                                <td>Lesson 2.2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Surface</strong></td>
+                                <td>Apply and tweak Iray skin, eyes, and hair</td>
+                                <td>Lesson 2.3</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dress</strong></td>
+                                <td>Add clothing/hair; drape dForce if dynamic</td>
+                                <td>Lessons 3.1, 4.1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — favor bridge-friendly choices</h4>
+                    <p>Because this character crosses into Blender and Unreal, prefer <strong>reasonable texture sizes</strong> and only the morphs you truly use. A character built with the whole pipeline in mind transfers cleaner and faster than one optimized purely for a single Iray hero shot. Think ahead to the bridges while you build.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Finalize the <strong>shape and materials in Daz</strong> before bridging. Fixing a face morph or a skin tone at the source and re-bridging is clean; trying to fix it separately in three tools is a maintenance nightmare. Get the character right here first.
+                </blockquote>
+            </section>
+
+            <!-- Section 3: Light & Render in Daz -->
+            <section id="daz-render" class="lesson-section">
+                <h2>Light &amp; Render in Daz</h2>
+                <p>With the character built, produce your <strong>Daz hero render</strong> — the polished Iray image that anchors the piece. This is Module 3 in action: stage, light, render, and lightly grade.</p>
+
+                <figure>
+                    <img src="images/l14_daz_hero_render.png" alt="A finished Iray hero render of the capstone character in Daz - posed, lit, denoised, and framed as a portfolio portrait">
+                    <figcaption>Figure 1: The Daz hero render — the capstone character posed, lit, and rendered in Iray, denoised and lightly graded. This polished image anchors the portfolio piece.</figcaption>
+                </figure>
+
+                <h3>The render checklist</h3>
+                <ul>
+                    <li><strong>Stage &amp; frame</strong> — camera, composition, headlamp off (Lesson 3.1).</li>
+                    <li><strong>Light</strong> — an HDRI dome or a three-point rig, exposure dialed (Lesson 3.2).</li>
+                    <li><strong>Render</strong> — Iray with the denoiser, converged and clean (Lesson 3.3).</li>
+                    <li><strong>Finish</strong> — save a full-size PNG and apply a light grade.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 This is your anchor image</h4>
+                    <p>The Daz render is usually the <strong>strongest, most controlled</strong> image of the three, since Iray gives you photoreal skin with the least fuss. Make it excellent — it's the shot that draws people in, with the Blender and Unreal versions demonstrating range around it. Time spent here pays off.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Keep the <strong>pose and framing</strong> in mind for consistency. Presenting the same character in a similar pose across all three tools makes the pipeline through-line obvious. Wildly different poses in each tool weaken the "it's the same asset" story you're trying to tell.</blockquote>
+            </section>
+
+            <!-- Section 4: Bridge to Blender -->
+            <section id="to-blender" class="lesson-section">
+                <h2>Bridge to Blender</h2>
+                <p>Now carry the exact same figure into <strong>Blender</strong> using the bridge from Lesson 5.1, and produce a second render there — showing the character living in Blender's Cycles or Eevee.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Second render:</strong> a render of the same character produced in a different engine (here, Blender) — not to outdo the Daz hero shot, but to demonstrate that the asset transfers and holds up in another tool's lighting and materials. Range, not repetition.</p>
+                </div>
+
+                <h3>Blender stage steps</h3>
+                <ul>
+                    <li><strong>Send</strong> the finalized figure via the Daz to Blender Bridge (trim morphs first).</li>
+                    <li><strong>Fix materials</strong> — raise subsurface, fix roughness and eyes under a test render.</li>
+                    <li><strong>Light &amp; render</strong> with your Blender-course skills — a fresh environment shows range.</li>
+                    <li><strong>Save</strong> the Blender render at a matching resolution.</li>
+                </ul>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — light it differently on purpose</h4>
+                    <p>Don't just replicate the Daz lighting in Blender — give it a <strong>distinct look</strong> (a different mood, environment, or grade). It proves the character is a real, re-lightable asset rather than a single baked image, and it makes the two renders interesting side by side instead of redundant.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Expect a <strong>materials pass</strong>, especially on skin — the bridge's shaders are a starting point, and Iray's look won't appear automatically in Cycles/Eevee. Budget time for this rather than being surprised; it's the normal price of crossing engines.</blockquote>
+            </section>
+
+            <!-- Section 5: Bridge to Unreal -->
+            <section id="to-unreal" class="lesson-section">
+                <h2>Bridge to Unreal</h2>
+                <p>Finally, bring the character into <strong>Unreal Engine</strong> with the bridge from Lesson 5.2 and stage it in a real-time level — the third and most technically distinct stage of the piece.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Real-time showcase:</strong> the character placed and lit inside an Unreal level, rendered interactively rather than offline. It demonstrates the asset works in a game/virtual-production context — a meaningfully different capability from the two offline renders.</p>
+                </div>
+
+                <h3>Unreal stage steps</h3>
+                <ul>
+                    <li><strong>Send</strong> the figure as a Skeletal Mesh into an open Unreal project (matching port/version).</li>
+                    <li><strong>Tune Material Instances</strong> — subsurface on skin, hair sorting, texture sizes for real-time.</li>
+                    <li><strong>Stage &amp; light</strong> the character in a level; capture a high-quality screenshot or render.</li>
+                    <li><strong>Optional</strong> — retarget an animation or add your Daz turntable for extra impact.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 A little real-time goes a long way</h4>
+                    <p>Even a <strong>single well-lit Unreal shot</strong> of your character in a level dramatically broadens the piece — it signals game and virtual-production readiness, not just still-image art. You don't need a playable demo; a polished in-engine capture makes the point clearly.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Unreal is the <strong>most likely stage to hit snags</strong> — port mismatches, version-locked plugins, real-time material quirks. Leave yourself time here, and lean on Lesson 5.2's troubleshooting. If a full level is too much, a clean character-in-a-simple-environment shot still completes the pipeline story.</blockquote>
+            </section>
+
+            <!-- Section 6: Presenting the Piece -->
+            <section id="portfolio" class="lesson-section">
+                <h2>Presenting the Piece</h2>
+                <p>Three renders sitting in a folder aren't a portfolio piece — <strong>presentation</strong> makes them one. How you assemble and caption the results is what turns technical work into a compelling story.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Do this</th>
+                                <th>Why it lands</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Lead with the strongest image</strong></td>
+                                <td>The Daz hero shot hooks the viewer first</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Show the same character in all three</strong></td>
+                                <td>Makes the pipeline through-line unmistakable</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Label each tool</strong></td>
+                                <td>"Daz · Blender · Unreal" signals your range instantly</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Add a one-line process note</strong></td>
+                                <td>Tells the story: authored once, taken everywhere</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Include the turntable if you made one</strong></td>
+                                <td>Motion shows the asset is real and complete</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — a labeled triptych tells the whole story at a glance</h4>
+                    <p>Assemble the three renders into a single <strong>side-by-side triptych</strong> with small tool labels. One image that reads "same character, three engines" communicates pipeline fluency faster than any paragraph — and it's instantly shareable on a portfolio site or social post.</p>
+                </div>
+
+                <figure>
+                    <img src="images/l14_pipeline_triptych.png" alt="A triptych of the same capstone character in Daz, Blender, and Unreal, each panel labeled, showing one asset across three tools">
+                    <figcaption>Figure 2: The capstone piece — the same character in Daz (Iray), Blender, and Unreal, side by side and labeled. One asset across three tools: the whole pipeline in a single image.</figcaption>
+                </figure>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Be honest about what each image is — an in-engine Unreal capture and an offline Iray render are <em>different kinds</em> of images, and that's the point. Don't disguise a real-time shot as an offline render; the value here is showing you can do <strong>both</strong>, not pretending they're identical.</blockquote>
+            </section>
+
+            <!-- Section 7: Where to Go Next -->
+            <section id="where-next" class="lesson-section">
+                <h2>Where to Go Next</h2>
+                <p>You've finished the course — but this is a launch pad, not a finish line. Here's where the skills you built can take you.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Direction</th>
+                                <th>Build on…</th>
+                                <th>Next step</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Deeper Daz artistry</strong></td>
+                                <td>Shaping, surfacing, lighting</td>
+                                <td>Advanced skin, custom morphs, complex scenes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Blender mastery</strong></td>
+                                <td>The Blender bridge</td>
+                                <td>The full Blender course — sculpting, shading, animation</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Real-time &amp; games</strong></td>
+                                <td>The Unreal bridge</td>
+                                <td>The Unreal course — Blueprints, levels, cinematics</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Animation</strong></td>
+                                <td>Timeline &amp; dForce</td>
+                                <td>Character animation, mocap, virtual production</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 The pipeline mindset is the real takeaway</h4>
+                    <p>More than any single tool, you've learned to <strong>move an asset between tools</strong> — the defining skill of modern 3D work. Nobody does everything in one program anymore. Knowing how to author in one place and deliver in another is exactly what makes an artist versatile and employable.</p>
+                </div>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Finish the capstone"] --> B["Deepen Daz artistry"]
+                        A --> C["Take the Blender course"]
+                        A --> D["Take the Unreal course"]
+                        B --> E["Keep building your portfolio"]
+                        C --> E
+                        D --> E
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style A stroke-width:2px
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Keep <strong>making things</strong>. Skills fade without use, and a portfolio grows one finished piece at a time. The single most valuable habit from here is shipping complete work regularly — another character, another scene, another pipeline piece — rather than endlessly polishing one.</blockquote>
+            </section>
+
+            <!-- Section 8: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: The Capstone</h2>
+                <p>This is the big one — the whole pipeline on one character. Work through it at your own pace; it's the sum of everything you've learned.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Build &amp; Render in Daz</h3>
+                    <p><strong>Objective:</strong> Produce your Daz hero image.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li><strong>Load, shape, pose, and surface</strong> a Genesis character (Modules 1–2), keeping textures and morphs bridge-friendly.</li>
+                        <li><strong>Stage and light</strong> it (Module 3) — HDRI or three-point, headlamp off, exposure dialed.</li>
+                        <li><strong>Render</strong> in Iray with the denoiser, save a full-size PNG, and apply a light grade. <strong>Save the scene as your master.</strong></li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Bridge to Blender &amp; Unreal</h3>
+                    <p><strong>Objective:</strong> Carry the same figure into both engines.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li><strong>Send to Blender</strong>, fix the skin/eye materials, light it with a distinct look, and render.</li>
+                        <li><strong>Send to Unreal</strong> (project open, port matched) as a Skeletal Mesh, tune Material Instances, and stage it in a lit level.</li>
+                        <li><strong>Capture</strong> a clean image from each — a Blender render and an in-engine Unreal shot.</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — a bridge stage is fighting me</summary>
+                        <p>Go back to the bridge lesson for that tool. For <strong>Blender</strong> (Lesson 5.1): check both halves are installed and version-matched, and use the panel's Import if the live transfer didn't fire. For <strong>Unreal</strong> (Lesson 5.2): confirm the project is open, the plugin is enabled and built for your exact UE version, and the port matches on both sides. Most bridge trouble is install/version/port — not your character. And keep the export lean: trim morphs, sensible texture sizes.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Assemble the Portfolio Piece</h3>
+                    <p><strong>Objective:</strong> Present all three as one cohesive piece.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Assemble the three images into a <strong>labeled triptych</strong> (Daz · Blender · Unreal), leading with the strongest.</li>
+                        <li>Add a <strong>one-line process note</strong> — "one character, authored in Daz, taken across the pipeline."</li>
+                        <li><strong>Publish it</strong> to your portfolio or share it — then start planning your next piece.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What makes the capstone a <em>pipeline</em> portfolio piece rather than three separate renders?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Using three different characters would break the through-line — the strength of the piece is that it's one asset everywhere.">
+                                A) It uses a different, more complex character in each tool
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Showing the same character authored in Daz and carried into Blender and Unreal makes the through-line unmistakable — it demonstrates you can move one asset across the whole pipeline, which is the point.">
+                                B) The same character appears in all three tools, showing it moves across the pipeline
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Render resolution isn't what defines a pipeline piece — the continuity of one asset across tools is.">
+                                C) All three images are rendered at the highest possible resolution
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> Where should you make changes to the character, and why?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Both bridges are one-directional, so the Daz scene is the master source: change the character in Daz and re-bridge, which keeps the Blender and Unreal versions from drifting apart.">
+                                A) In the Daz scene (the master), then re-bridge — the bridges are one-way
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Editing separately in each tool lets the three versions diverge, since changes don't sync back to Daz — a maintenance nightmare.">
+                                B) Separately in Daz, Blender, and Unreal to match each engine
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Changes in Blender don't flow back to Daz or over to Unreal — the bridges only push outward from Daz.">
+                                C) In Blender, since its changes sync back to Daz and Unreal
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> What's the single most valuable takeaway from the whole course?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Memorizing one program's menus isn't the goal — the course is deliberately cross-tool.">
+                                A) Memorizing every menu in Daz Studio
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Iray is great, but the course's throughline is moving assets between tools, not committing to a single renderer.">
+                                B) Always rendering everything in Iray and nowhere else
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="The defining skill of modern 3D work is moving an asset between tools — authoring in one place and delivering in another. That pipeline mindset, more than any single tool, is what makes an artist versatile.">
+                                C) The pipeline mindset — authoring in one tool and delivering in others
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Keep the scope tight</strong> — a simple character carried flawlessly beats a broken complex one.</li>
+                    <li><strong>Treat the Daz scene as the master</strong> and re-bridge after changes.</li>
+                    <li><strong>Build bridge-friendly</strong> — sensible textures, only needed morphs.</li>
+                    <li><strong>Make the Daz hero render excellent</strong> — it anchors the piece.</li>
+                    <li><strong>Light Blender and Unreal distinctly</strong> to show range.</li>
+                    <li><strong>Present a labeled triptych</strong> leading with your strongest image.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't fix the character separately</strong> in three tools — versions will drift.</li>
+                    <li><strong>Don't leave Unreal for the last five minutes</strong> — it's the snag-prone stage.</li>
+                    <li><strong>Don't disguise a real-time shot</strong> as an offline render — showing both is the value.</li>
+                    <li><strong>Don't use a wildly different pose</strong> in each tool — it weakens the through-line.</li>
+                    <li><strong>Don't stop at one piece</strong> — keep shipping finished work.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Match pose and framing across tools so "same asset" reads instantly.</li>
+                    <li>Add your Lesson 4.2 turntable to the piece for extra impact.</li>
+                    <li>Write a one-line process caption — it tells the pipeline story.</li>
+                    <li>Save versioned scene files at each stage so you can always roll back.</li>
+                    <li>Plan your next piece before the excitement of finishing this one fades.</li>
+                </ul>
+            </section>
+
+            <!-- Section 10: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>The capstone takes <strong>one character</strong> across the whole pipeline — authored and rendered in Daz, then bridged into Blender and Unreal.</li>
+                        <li>Build and <strong>render the Daz hero shot</strong> first; it's your strongest, most controlled anchor image.</li>
+                        <li>Bridge the <em>same</em> figure to <strong>Blender</strong> and <strong>Unreal</strong>, expecting a materials pass in each and keeping Daz as the master.</li>
+                        <li>Presentation makes the piece: a <strong>labeled triptych</strong> of the same character in three tools tells the pipeline story at a glance.</li>
+                        <li>The real takeaway is the <strong>pipeline mindset</strong> — move assets between tools — and the habit of shipping finished work.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="https://www.daz3d.com/bridges" target="_blank" rel="noopener">Daz Bridges — all official bridges</a></li>
+                    <li><a href="https://www.daz3d.com/gallery" target="_blank" rel="noopener">Daz Gallery — portfolio inspiration</a></li>
+                    <li><a href="https://www.artstation.com/" target="_blank" rel="noopener">ArtStation — publish your portfolio piece</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>You've completed <strong>Daz Studio Essentials</strong> — from opening Daz for the first time to carrying a character across Daz, Blender, and Unreal. That's the entire modern pipeline in your hands. Revisit any lesson from the <a href="index.html">course home</a>, take the Blender and Unreal courses to go deeper on those destinations, and above all, keep creating. Congratulations — you did it.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>🏆 You finished the whole pipeline!</h3>
+                    <p>Pose, shape, surface, stage, light, render, simulate, animate, and bridge to two engines — you can now take a character from an empty scene all the way across the modern 3D pipeline. That's a genuinely professional skill set, and a portfolio piece to prove it. Be proud, keep shipping, and go make something amazing.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_13_daz_to_unreal_bridge.html" class="prev-lesson">← Previous: Daz to Unreal Bridge</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="index.html" class="next-lesson">Finish: Course Home →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

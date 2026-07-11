@@ -16,6 +16,6 @@ Art/screenshots needed to replace the `.image-placeholder` blocks in `lesson_02_
 - If producing the §1 diagram as SVG, use `currentColor`/CSS-variable-friendly strokes so it works in both light and dark themes (course convention: `svgDarkModeSupport`).
 
 ## Status
-- [ ] Figure 1 — app vs content diagram
-- [ ] Figure 2 — DIM Ready to Download
-- [ ] Figure 3 — Smart Content vs Content Library
+- [x] Figure 1 — app vs content diagram
+- [x] Figure 2 — DIM Ready to Download
+- [x] Figure 3 — Smart Content vs Content Library
