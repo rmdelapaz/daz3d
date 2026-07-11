@@ -546,6 +546,90 @@ trip = rrow([
 ])
 fig("l14_pipeline_triptych", 1100, 470, trip, bg="#1e2024")
 
+# =================================================================== L15 (Daz to Photoshop)
+_EYE = ("<svg width='15' height='15' viewBox='0 0 16 16' style='flex:none'>"
+        "<path d='M1 8 Q8 2.5 15 8 Q8 13.5 1 8 Z' fill='none' stroke='#d2d2d2' stroke-width='1.1'/>"
+        "<circle cx='8' cy='8' r='2.2' fill='#d2d2d2'/></svg>")
+_LOCK = ("<svg width='12' height='12' viewBox='0 0 12 12' style='flex:none'>"
+         "<rect x='2.5' y='5.5' width='7' height='5.5' rx='1' fill='#9a9a9a'/>"
+         "<path d='M4 5.5 V4 a2 2 0 0 1 4 0 V5.5' fill='none' stroke='#9a9a9a' stroke-width='1'/></svg>")
+
+def ps_row(name, sw, eye=True, mask=None, active=False, adj=False, locked=False):
+    eyehtml = "<span style='width:16px;display:flex;justify-content:center'>%s</span>" % (_EYE if eye else "")
+    if adj:
+        thumb = ("<span style='width:26px;height:22px;border-radius:2px;flex:none;"
+                 "background:conic-gradient(from 90deg,#111 0 50%,#f0f0f0 50% 100%);border:1px solid #555'></span>")
+    else:
+        thumb = "<span style='width:26px;height:22px;border-radius:2px;flex:none;background:%s;border:1px solid #555'></span>" % sw
+    maskhtml = ("<span style='width:22px;height:22px;border-radius:2px;flex:none;background:%s;"
+                "border:1px solid #555;margin-left:4px'></span>" % mask) if mask else ""
+    lock = "<span style='margin-left:auto'>%s</span>" % _LOCK if locked else ""
+    bg = "#3f4a5a" if active else "transparent"
+    return ("<div style='display:flex;align-items:center;gap:7px;padding:5px 9px;background:%s;"
+            "border-bottom:1px solid #333;font-size:12px;color:#dcdcdc'>%s%s%s<span>%s</span>%s</div>"
+            ) % (bg, eyehtml, thumb, maskhtml, name, lock)
+
+def photoshop_window(canvas_svg):
+    menub = ("<div style='display:flex;align-items:center;gap:15px;padding:6px 12px;background:#2b2b2b;"
+             "border-bottom:1px solid #151515;font-size:12px;color:#c8c8c8'>"
+             "<b style='color:#2f9bd8'>Ps</b><span>File</span><span>Edit</span><span>Image</span>"
+             "<span>Layer</span><span>Select</span><span>Filter</span><span>View</span><span>Window</span></div>")
+    tpaths = [
+        "<rect x='2' y='3' width='12' height='10' fill='none' stroke='#c0c0c0' stroke-dasharray='2 1.5'/>",
+        "<path d='M8 1 L8 15 M1 8 L15 8 M8 1 L6 3 M8 1 L10 3 M8 15 L6 13 M8 15 L10 13 M1 8 L3 6 M1 8 L3 10 M15 8 L13 6 M15 8 L13 10' stroke='#c0c0c0' fill='none'/>",
+        "<path d='M3 10 Q2 4 8 4 Q14 4 12 9 Q11 12 7 11' fill='none' stroke='#c0c0c0'/>",
+        "<path d='M11 2 L14 5 L6 13 L3 13 L3 10 Z' fill='none' stroke='#c0c0c0'/>",
+        "<rect x='3' y='6' width='9' height='6' rx='1' fill='none' stroke='#c0c0c0' transform='rotate(-20 8 8)'/>",
+        "<circle cx='7' cy='7' r='4' fill='none' stroke='#c0c0c0'/><line x1='10' y1='10' x2='14' y2='14' stroke='#c0c0c0'/>",
+    ]
+    ticons = "".join("<svg width='16' height='16' viewBox='0 0 16 16'>%s</svg>" % p for p in tpaths)
+    tools = ("<div style='width:38px;background:#333;border-right:1px solid #151515;display:flex;"
+             "flex-direction:column;align-items:center;gap:13px;padding:11px 0'>" + ticons + "</div>")
+    canvas = ("<div style='flex:1;background:#1a1a1a;display:flex;align-items:center;justify-content:center;"
+              "padding:16px;min-width:0'><div style='height:100%;box-shadow:0 0 0 1px #000,0 6px 22px rgba(0,0,0,.5)'>"
+              + canvas_svg + "</div></div>")
+    layers = (ps_row("Vignette", "", adj=True)
+        + ps_row("Color Grade &#183; Curves", "", adj=True, mask="#cfcfcf")
+        + ps_row("Bloom / Glow", "#3a3a3a")
+        + ps_row("Depth Haze", "#9db4c8", mask="#5a5a5a")
+        + ps_row("Dodge &amp; Burn", "#7a7a7a")
+        + ps_row("Skin Retouch", "#c99")
+        + ps_row("Beauty (render)", "#8a6f63", active=True)
+        + ps_row("Z-Depth pass", "linear-gradient(#fff,#111)", eye=False)
+        + ps_row("Specular pass", "#222", eye=False)
+        + ps_row("Background", "#3a3a3a", locked=True))
+    panel = ("<div style='width:262px;background:#2b2b2b;border-left:1px solid #151515;display:flex;flex-direction:column'>"
+        "<div style='display:flex;gap:14px;padding:7px 12px;font-size:12px;color:#d2d2d2;background:#333;border-bottom:1px solid #151515'>"
+        "<b>Layers</b><span style='color:#8a8a8a'>Channels</span><span style='color:#8a8a8a'>Paths</span></div>"
+        "<div style='display:flex;align-items:center;gap:8px;padding:6px 10px;font-size:11px;color:#bcbcbc;border-bottom:1px solid #333'>"
+        "<span style='background:#3a3a3a;border:1px solid #555;border-radius:3px;padding:2px 8px'>Normal &#9662;</span>"
+        "<span style='margin-left:auto'>Opacity</span><span style='color:#e0e0e0'>100%</span></div>"
+        "<div style='flex:1;overflow:hidden'>" + layers + "</div></div>")
+    return ("<div style='display:flex;flex-direction:column;height:100%;background:#1e1e1e;"
+            "font-family:" + FONT + "'>" + menub +
+            "<div style='flex:1;display:flex;min-height:0'>" + tools + canvas + panel + "</div></div>")
+
+ps_canvas = ("<div style='height:100%;display:flex'>"
+    + bust("three", eyes="glossy", hair="strand", w=400, h=520,
+        extra="<rect width='400' height='500' fill='#e7a63f' opacity='.06'/>") + "</div>")
+fig("l15_photoshop_layers", 960, 600, photoshop_window(ps_canvas), bg="#1e1e1e")
+
+raw_extra = "<rect width='400' height='500' fill='#8496ab' opacity='.12'/>"
+fin_extra = ("<defs><linearGradient id='hz' x1='0' y1='0' x2='0' y2='1'>"
+    "<stop offset='.5' stop-color='#c7d8ea' stop-opacity='0'/>"
+    "<stop offset='1' stop-color='#c7d8ea' stop-opacity='.34'/></linearGradient></defs>"
+    "<rect width='400' height='500' fill='#e7a63f' opacity='.07'/>"
+    "<rect y='250' width='400' height='250' fill='url(#hz)'/>"
+    "<ellipse cx='200' cy='150' rx='150' ry='120' fill='#fff' opacity='.05'/>")
+ba15 = rrow([
+    rcell(bust("three", eyes="glossy", hair="strand", w=400, h=500, extra=raw_extra),
+          label="Raw Iray render", tag="Before"),
+    rcell(bust("three", eyes="glossy", hair="strand", w=400, h=500, extra=fin_extra),
+          label="Finished in Photoshop", tag="After"),
+])
+fig("l15_before_after_post", 900, 500, ba15, bg="#1e2024")
+
+
 # ------------------------------------------------------------------ write
 for name, doc in FIGURES.items():
     with open(os.path.join(HTML, name + ".html"), "w", encoding="utf-8") as f:

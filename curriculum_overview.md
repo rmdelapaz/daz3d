@@ -9,7 +9,7 @@ This is a **focused starter course** that takes a complete beginner from opening
 - Hobbyists and artists who want photoreal renders and posed characters quickly
 
 ## Course Structure
-**14 lessons across 5 modules.** Estimated total time: ~12–14 hours. Difficulty ramps from beginner to comfortable-intermediate. Every module ends in a concrete deliverable, and the course closes with a full pipeline capstone.
+**15 lessons across 5 modules.** Estimated total time: ~13–15 hours. Difficulty ramps from beginner to comfortable-intermediate. Every module ends in a concrete deliverable, and the course closes with a full pipeline capstone.
 
 ---
 
@@ -58,12 +58,13 @@ This is a **focused starter course** that takes a complete beginner from opening
 
 ---
 
-### **Module 5: The Bridge Workflow — Daz to Blender & Unreal** (3 lessons)
-**Goal:** Take your Daz figure into the tools from the Blender and Unreal courses.
+### **Module 5: The Bridge Workflow — Blender, Unreal & Photoshop** (4 lessons)
+**Goal:** Take your Daz figure into Blender and Unreal, then finish the render in Photoshop.
 
 12. **The Daz to Blender Bridge** — Installing the bridge, exporting a Genesis figure, what transfers (mesh, rig, materials), fixing up materials in Blender, when to use Diffeomorphic instead
 13. **The Daz to Unreal Bridge** — Installing the UE plugin + bridge, exporting a figure, skeleton & retargeting, materials in UE, animation transfer, how this relates to MetaHuman
-14. **Capstone: A Full Pipeline Portfolio Piece** — Pose, shape, surface, and render a character in Daz, then bridge the *same* figure into Blender and Unreal; wrap-up, portfolio tips, and where to go next
+14. **The Daz to Photoshop Bridge** — A render-based (not geometry) bridge; render passes & canvases, opening the render in Photoshop, a non-destructive layer stack, colour grading, dodge & burn, light skin retouch, depth-based atmosphere, compositing a background, exporting a finished image
+15. **Capstone: A Full Pipeline Portfolio Piece** — Pose, shape, surface, and render a character in Daz, then bridge the *same* figure into Blender and Unreal; wrap-up, portfolio tips, and where to go next
 
 **Course Deliverable:** One character rendered in Daz Studio **and** placed in a Blender scene **and** dropped into an Unreal level — a single asset proving you can move across the whole pipeline.
 
@@ -72,6 +73,7 @@ This is a **focused starter course** that takes a complete beginner from opening
 ## 🔗 Cross-Course Integration
 - **Blender course** — Lessons on materials, lighting, and rendering transfer directly; the Blender Bridge (Lesson 12) lands figures into the Blender skills students already have.
 - **Unreal course** — The Unreal Bridge (Lesson 13) feeds characters into levels; ties into the Unreal course's actors, materials, and animation lessons.
+- **Photoshop finishing** — The Photoshop Bridge (Lesson 14) is render-based, not geometry: it takes the Iray render into Photoshop for grading, retouch, depth atmosphere, and compositing.
 
 ## 🎯 Prerequisites
 - A computer that meets Daz Studio's requirements (dedicated GPU strongly recommended for Iray)

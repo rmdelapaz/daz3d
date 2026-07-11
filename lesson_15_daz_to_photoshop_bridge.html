@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lesson 5.3 — The Daz to Photoshop Bridge: taking your Iray render into Photoshop for 2D finishing. Render passes and canvases, the layer stack, colour grading, skin retouch, depth-based atmosphere, compositing a background, and a non-destructive finishing workflow.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 5.3: The Daz to Photoshop Bridge - Daz Studio Essentials</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Mermaid — initialized by course-enhancements.js for theme awareness -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Daz Studio Essentials</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 5</a></li>
+            <li aria-current="page">Lesson 5.3: The Daz to Photoshop Bridge</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Lesson Header -->
+            <header>
+                <h1>🖌️ Lesson 5.3: The Daz to Photoshop Bridge</h1>
+                <p class="lead">Blender and Unreal took your figure's <em>geometry</em> into other 3D tools. Photoshop is a different destination — it's where a finished <em>image</em> gets its final polish. In this lesson you'll bridge your Iray render into Photoshop as pixels, not mesh: exporting render passes and canvases from Daz, stacking them into a layered document, then grading colour, retouching skin, adding depth-based atmosphere, and compositing a background — all without ever baking a change you can't undo. This is the pipeline's finishing room, and the honest truth about how Daz and Photoshop connect.</p>
+
+                <!-- Learning objectives -->
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain why the Photoshop bridge moves a <strong>rendered image</strong>, not geometry</li>
+                        <li>Set up <strong>render canvases</strong> (passes) in Daz Studio's Advanced Render Settings</li>
+                        <li>Open a render in Photoshop and build a <strong>non-destructive layer stack</strong></li>
+                        <li>Colour-grade with <strong>adjustment layers</strong> and refine light with dodge &amp; burn</li>
+                        <li>Use the <strong>depth pass</strong> to add atmosphere or depth of field</li>
+                        <li><strong>Composite</strong> a background behind a masked character</li>
+                        <li>Follow a reliable, reversible <strong>finishing workflow</strong> and export a final image</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 55 minutes</p>
+                    <p><strong>Project:</strong> Your Iray render taken into Photoshop as a layered document — graded, lightly retouched, given depth-based atmosphere and a composited background — exported as a finished, portfolio-ready image.</p>
+                </div>
+            </header>
+
+            <!-- Sticky Table of Contents -->
+            <details class="card toc-card" open>
+                <summary aria-label="Toggle table of contents">
+                    <span class="toc-icon" aria-hidden="true">📑</span>
+                    <span class="toc-label">In This Lesson</span>
+                    <span class="toc-chevron" aria-hidden="true">▾</span>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#why-photoshop" class="toc-link">Why Finish in Photoshop</a></li>
+                        <li><a href="#different-bridge" class="toc-link">A Different Kind of Bridge</a></li>
+                        <li><a href="#canvases" class="toc-link">Render Passes &amp; Canvases</a></li>
+                        <li><a href="#layers" class="toc-link">Into Photoshop: The Layer Stack</a></li>
+                        <li><a href="#finishing" class="toc-link">Finishing Moves</a></li>
+                        <li><a href="#workflow" class="toc-link">A Photoshop Workflow</a></li>
+                        <li><a href="#hands-on" class="toc-link">Hands-on: Render to Finished</a></li>
+                        <li><a href="#best-practices" class="toc-link">Best Practices</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1: Why Finish in Photoshop -->
+            <section id="why-photoshop" class="lesson-section">
+                <h2>Why Finish in Photoshop</h2>
+                <p>Iray gives you a beautiful <em>raw</em> render — but almost every professional image gets a finishing pass in a 2D editor afterwards. That last ten percent is where a render becomes a <strong>picture</strong>: the colour is graded for mood, distracting blemishes are cleaned up, light is nudged to guide the eye, atmosphere is added for depth, and a background is composited in. <strong>Photoshop</strong> is the classic home for that work.</p>
+
+                <blockquote>
+                    <strong>💡 The one-sentence version:</strong> The Daz to Photoshop "bridge" carries your finished <em>render</em> into Photoshop — as a flat image or as separated passes — so you can grade, retouch, and composite it into a final picture.
+                </blockquote>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Post-processing:</strong> everything you do to a rendered image <em>after</em> the render finishes — colour grading, retouching, compositing, sharpening, adding grain or atmosphere. It's a 2D, pixel-level craft, and it's distinct from the 3D work of posing, surfacing, and lighting.</p>
+                </div>
+
+                <p>You already did a <em>little</em> of this in Lesson 3.3 — the denoiser and a light grade on the way out of Daz. Photoshop is where that idea grows up: non-destructive, layer-based, and far more powerful. It's also where 3D art meets graphic design — adding type for a poster, building a matte-painting background, or assembling several renders into one scene.</p>
+
+                <div class="card card-info">
+                    <h4>💡 When you might <em>skip</em> Photoshop</h4>
+                    <p>If Iray already gave you exactly what you wanted, you don't have to touch Photoshop — a great render can stand alone. Reach for it when the image needs <strong>mood</strong> (grading), <strong>cleanup</strong> (retouching), <strong>depth</strong> (atmosphere), or <strong>context</strong> (a composited background) that's faster or only possible in 2D.</p>
+                </div>
+            </section>
+
+            <!-- Section 2: A Different Kind of Bridge -->
+            <section id="different-bridge" class="lesson-section">
+                <h2>A Different Kind of Bridge</h2>
+                <p>Here's the honest part, and it matters: the Photoshop connection is <strong>not</strong> the same as the Blender and Unreal bridges. Those move your <em>3D character</em> — mesh, rig, and materials — live into another 3D app. Photoshop is a <strong>2D image editor</strong>, so what crosses the bridge is the <strong>rendered image</strong> (pixels), optionally split into passes. There is no live "Send To → Photoshop" that hands over geometry.</p>
+
+                <div class="card card-warning">
+                    <h4>⚠️ Watch Out — Photoshop's old 3D features are gone</h4>
+                    <p>Photoshop once had a built-in 3D engine that could import OBJ/FBX models, and you'll still find old tutorials using it. Adobe <strong>deprecated and then removed</strong> those 3D features, so don't plan a modern workflow around importing a Daz figure <em>as geometry</em> into Photoshop. The supported, future-proof path is render-based: bring in the <em>image</em>, not the mesh.</p>
+                </div>
+
+                <p>That's not a limitation so much as a division of labour. Geometry belongs in your 3D tools; Photoshop is superb at the <em>image</em>. Understanding this keeps you from chasing a workflow that no longer exists — and points you at the one that's fast, reliable, and industry-standard.</p>
+
+                <div class="mermaid">
+                    graph LR
+                        A["Daz Studio — Iray render"] --> B["Beauty image (PNG/TIFF)"]
+                        A --> C["Render canvases / passes (EXR)"]
+                        B --> D["Photoshop document (layers)"]
+                        C --> D
+                        D --> E["Graded, retouched, composited final image"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style D fill:#3b82f6,stroke:#333,color:#fff
+                        style E fill:#10b981,stroke:#333,color:#fff
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Because the bridge is one-way and pixel-based, Photoshop edits <strong>never travel back</strong> to Daz, and you can't re-pose or re-light a character in Photoshop. If the pose or lighting is wrong, fix it in Daz and re-render — post-processing polishes a good render, it doesn't rescue a broken one.
+                </blockquote>
+            </section>
+
+            <!-- Section 3: Render Passes & Canvases -->
+            <section id="canvases" class="lesson-section">
+                <h2>Render Passes &amp; Canvases</h2>
+                <p>The simplest bridge is one file: render your image and save it as a PNG or TIFF, then open it in Photoshop. That's completely valid and it's where most people start. But Daz can hand Photoshop far more to work with by exporting <strong>render canvases</strong> — separate <em>passes</em> that isolate parts of the render.</p>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Render Canvas (pass):</strong> an extra image layer Iray outputs alongside the main "Beauty" render, isolating one component — the diffuse colour, the specular highlights, a depth map, and so on. You enable canvases in <strong>Render Settings → Advanced</strong>, and they save as high-dynamic-range <code>.exr</code> files that Photoshop can open.</p>
+                </div>
+
+                <h3>Passes you'll actually use</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Canvas / pass</th>
+                                <th>What it holds</th>
+                                <th>What you do with it in Photoshop</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Beauty</strong></td>
+                                <td>The full, final render</td>
+                                <td>Your base layer — everything else refines it</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Depth (Z)</strong></td>
+                                <td>Distance from camera, as greyscale</td>
+                                <td>Mask for haze/fog and depth-of-field blur</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Diffuse</strong></td>
+                                <td>Surface colour without highlights</td>
+                                <td>Re-grade colour independently of shine</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Specular / Glossy</strong></td>
+                                <td>Just the highlights &amp; reflections</td>
+                                <td>Boost or tame shine; add bloom on a Screen layer</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Normal</strong></td>
+                                <td>Surface direction, as RGB</td>
+                                <td>Advanced relighting and selection tricks</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Object / Material ID</strong></td>
+                                <td>Flat colours per object or surface</td>
+                                <td>Instant selections/masks for the figure, hair, eyes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — start with two canvases: Beauty + Depth</h4>
+                    <p>You don't need every pass. For most portraits, the <strong>Beauty</strong> render plus a <strong>Depth</strong> canvas already unlock the big wins: overall grading on Beauty, and believable atmosphere or depth-of-field driven by Depth. Add Specular and an ID pass only when a shot calls for them.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Canvases are saved as <strong>32-bit EXR</strong> files. When you bring them into Photoshop the document may open in <strong>32-bit</strong> mode, where some tools are unavailable — convert to <strong>16-bit</strong> (<em>Image → Mode → 16 Bits/Channel</em>) once you've set exposure so the full toolset is available.
+                </blockquote>
+            </section>
+
+            <!-- Section 4: Into Photoshop: The Layer Stack -->
+            <section id="layers" class="lesson-section">
+                <h2>Into Photoshop: The Layer Stack</h2>
+                <p>Open the Beauty render (and any canvases) in Photoshop and you're in familiar territory: a <strong>layer stack</strong>. The golden rule of finishing is <em>non-destructive</em> — you stack adjustments <strong>above</strong> the render rather than painting on it, so every choice stays editable.</p>
+
+                <figure>
+                    <img src="images/l15_photoshop_layers.png" alt="A Photoshop window with the Daz render open, its Layers panel showing the Beauty render at the base beneath render passes and non-destructive adjustment layers for grading, retouch, depth haze, and a vignette">
+                    <figcaption>Figure 1: The render in Photoshop — the Beauty pass sits at the base of the stack, with the Depth and Specular passes below it and a tower of non-destructive adjustment and finishing layers (Skin Retouch, Dodge &amp; Burn, Depth Haze, Bloom, Colour Grade, Vignette) above.</figcaption>
+                </figure>
+
+                <div class="card card-accent">
+                    <h4>📖 Definition</h4>
+                    <p><strong>Adjustment layer:</strong> a special layer that applies an effect — Curves, Levels, Hue/Saturation, Colour Balance — to everything beneath it <em>without</em> altering those pixels. It carries its own <strong>layer mask</strong>, so you can paint the effect in or out of specific areas. It's the backbone of reversible finishing.</p>
+                </div>
+
+                <h3>The three tools that do most of the work</h3>
+                <ul>
+                    <li><strong>Adjustment layers</strong> — Curves and Colour Balance for grade; Hue/Saturation for targeted colour.</li>
+                    <li><strong>Layer masks</strong> — black hides, white reveals; paint to confine any layer to eyes, skin, or background.</li>
+                    <li><strong>Blend modes</strong> — <em>Screen</em> to add light (glow, specular), <em>Multiply</em> to deepen shadows, <em>Soft Light</em> for contrast.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 Smart Objects keep the render editable</h4>
+                    <p>Place the render as a <strong>Smart Object</strong> and filters like sharpening or Camera Raw become <em>Smart Filters</em> — re-editable any time. It's one more way to keep the whole document reversible, which is exactly the mindset that separates a clean finish from a baked-in mistake.</p>
+                </div>
+            </section>
+
+            <!-- Section 5: Finishing Moves -->
+            <section id="finishing" class="lesson-section">
+                <h2>Finishing Moves</h2>
+                <p>With the stack in place, finishing is a handful of repeatable moves. You won't use all of them on every image — reach for the ones the picture needs.</p>
+
+                <h3>Colour grade</h3>
+                <p>A <strong>Curves</strong> or <strong>Colour Balance</strong> adjustment sets the mood — warm and golden, cool and moody, high-contrast and punchy. Grade last-ish, and grade gently; small moves read as intentional, big ones read as a filter.</p>
+
+                <h3>Dodge &amp; burn</h3>
+                <p>Lightening (<em>dodge</em>) and darkening (<em>burn</em>) small areas sculpts where the eye goes — brighten a catchlight, deepen a shadow under the jaw. Do it non-destructively on a 50%-grey <strong>Soft Light</strong> layer so it's fully reversible.</p>
+
+                <h3>Skin retouch</h3>
+                <p>Iray skin is already excellent, so retouching is usually light: a <strong>Healing Brush</strong> on a blank layer (set to "Sample All Layers") to remove a stray artifact or seam. Resist over-smoothing — plastic skin is the classic tell of heavy-handed post.</p>
+
+                <h3>Depth-based atmosphere</h3>
+                <p>This is where the <strong>Depth</strong> canvas earns its keep. Load it as a <strong>layer mask</strong> on a soft haze layer and distance instantly fades to atmosphere; or use it with <em>Lens Blur</em> (Filter → Blur → Lens Blur, set the Depth pass as the source) for believable <strong>depth of field</strong> without re-rendering.</p>
+
+                <h3>Composite a background</h3>
+                <p>Drop a new backdrop <em>behind</em> the character and mask the figure out cleanly — the <strong>Object ID</strong> pass (or a quick <em>Select Subject</em>) makes the selection almost free. Match the new background's colour and light direction to the figure so the composite reads as one image.</p>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip — finish with the "polish trio"</h4>
+                    <p>Almost every image ends the same three ways: a subtle <strong>vignette</strong> to focus the eye, a whisper of <strong>grain</strong> to unify the surfaces, and a light <strong>sharpen</strong> (High Pass or Smart Sharpen) for crispness. Keep all three gentle — they're seasoning, not the meal.</p>
+                </div>
+
+                <blockquote>
+                    <strong>⚠️ Important Note:</strong> Work at the render's <strong>full resolution</strong> and in <strong>16-bit</strong> where you can — grading pushes tones hard, and 8-bit files can <em>band</em> (show stepped gradients) in skies and soft skin. Convert to 8-bit only at the very end, on export.
+                </blockquote>
+            </section>
+
+            <!-- Section 6: A Photoshop Workflow -->
+            <section id="workflow" class="lesson-section">
+                <h2>A Photoshop Workflow</h2>
+                <p>Put the moves in order and finishing becomes routine. The same short pipeline works for a quick grade or a full composite.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Step</th>
+                                <th>Do this</th>
+                                <th>Why</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1. Render</strong></td>
+                                <td>Render the Beauty pass; enable a Depth (and any) canvas</td>
+                                <td>Gives Photoshop the raw material to work with</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Open &amp; stack</strong></td>
+                                <td>Open in Photoshop; place passes as layers; set 16-bit</td>
+                                <td>A clean, non-destructive base to build on</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Retouch</strong></td>
+                                <td>Heal stray artifacts on a separate layer</td>
+                                <td>Cleanup before grading, so the grade sees final pixels</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. Grade</strong></td>
+                                <td>Curves / Colour Balance for mood; dodge &amp; burn</td>
+                                <td>Sets the emotional tone and guides the eye</td>
+                            </tr>
+                            <tr>
+                                <td><strong>5. Depth &amp; composite</strong></td>
+                                <td>Add atmosphere/DOF from Depth; composite a background</td>
+                                <td>Builds depth and context around the figure</td>
+                            </tr>
+                            <tr>
+                                <td><strong>6. Polish &amp; export</strong></td>
+                                <td>Vignette, grain, sharpen; export PNG/JPG (sRGB)</td>
+                                <td>Final unification and a share-ready file</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <figure>
+                    <img src="images/l15_before_after_post.png" alt="Before and after Photoshop finishing — the raw Iray render on the left looks flat and cool, the finished version on the right is colour-graded warmer with a soft glow, depth atmosphere, and a vignette">
+                    <figcaption>Figure 2: The same render, before and after finishing — a flat, cool raw Iray render on the left; on the right, graded warmer with dodge &amp; burn, a depth-driven glow, atmosphere, and a vignette. Same pixels in, a finished picture out.</figcaption>
+                </figure>
+
+                <div class="card card-info">
+                    <h4>💡 Keep Daz as the master, Photoshop as the finish</h4>
+                    <p>Just like the other bridges, the flow is one-way: your <strong>Daz scene stays the master</strong>. If the character or lighting changes, re-render and re-open. Save your Photoshop work as a layered <strong>PSD</strong> so the finish itself is re-editable — two clear homes, 3D authoring in Daz and 2D finishing in Photoshop.</p>
+                </div>
+
+                <div class="mermaid">
+                    graph TD
+                        A["Render Beauty + Depth"] --> B["Open &amp; stack in Photoshop"]
+                        B --> C["Retouch stray artifacts"]
+                        C --> D["Grade + dodge &amp; burn"]
+                        D --> E["Depth atmosphere + composite"]
+                        E --> F["Vignette, grain, sharpen"]
+                        F --> G["Export sRGB image + save PSD"]
+                        style A fill:#6366f1,stroke:#333,stroke-width:2px,color:#fff
+                        style D fill:#3b82f6,stroke:#333,color:#fff
+                        style G fill:#10b981,stroke:#333,color:#fff
+                </div>
+            </section>
+
+            <!-- Section 7: Hands-on -->
+            <section id="hands-on" class="lesson-section">
+                <h2>Hands-on: Render to Finished</h2>
+                <p>Let's take one render from Daz all the way to a finished, exported picture — passes, stack, grade, atmosphere, export.</p>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 1: Render with a Depth Canvas</h3>
+                    <p><strong>Objective:</strong> Output a Beauty render plus a Depth pass.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>In <strong>Render Settings → Advanced</strong>, turn <strong>Canvases</strong> on and add one canvas set to type <strong>Depth</strong>.</li>
+                        <li>Render as usual, then <strong>save</strong> the image — you'll get the Beauty render plus a <code>.exr</code> Depth canvas.</li>
+                        <li>Note where the files saved; you'll open both in Photoshop next.</li>
+                    </ol>
+                    <details>
+                        <summary>💡 Hint — I don't see a separate Depth file</summary>
+                        <p>Confirm <strong>Canvases</strong> is actually enabled (not just added) in the Advanced tab, that the canvas <strong>type is Depth</strong>, and that you <strong>saved</strong> the render (canvases are written on save). Canvases export as <code>.exr</code> next to your image — check the same folder and filename prefix.</p>
+                    </details>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 2: Build the Stack &amp; Grade</h3>
+                    <p><strong>Objective:</strong> Create a non-destructive grade.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Open the Beauty render in Photoshop; if it's 32-bit, set <strong>Image → Mode → 16 Bits/Channel</strong>.</li>
+                        <li>Add a <strong>Curves</strong> adjustment layer and a <strong>Colour Balance</strong> layer; nudge toward a warmer, moodier look.</li>
+                        <li>Add a 50%-grey <strong>Soft Light</strong> layer and gently <strong>dodge</strong> the eyes/highlights and <strong>burn</strong> the edges.</li>
+                    </ol>
+                </div>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise 3: Atmosphere &amp; Export</h3>
+                    <p><strong>Objective:</strong> Use the Depth pass, then export.</p>
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Add a soft, light-coloured <strong>haze</strong> layer; load the <strong>Depth</strong> pass into its <strong>layer mask</strong> so haze grows with distance.</li>
+                        <li>Finish with a subtle <strong>vignette</strong>, a touch of <strong>grain</strong>, and a light <strong>sharpen</strong>.</li>
+                        <li>Save a layered <strong>PSD</strong>, then <strong>Export As</strong> a PNG or JPG in <strong>sRGB</strong> for sharing.</li>
+                    </ol>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What actually crosses the "bridge" from Daz to Photoshop?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Photoshop is a 2D image editor and its old 3D import was removed — geometry stays in your 3D tools.">
+                                A) The figure's mesh and rig, live like the Blender bridge
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct — Photoshop receives the rendered image (pixels), optionally split into passes/canvases. It's a 2D finishing bridge, not a geometry transfer.">
+                                B) The rendered image — pixels — optionally split into passes
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="There's no live two-way link; edits in Photoshop never travel back to the Daz scene.">
+                                C) A live two-way link that updates Daz as you edit
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> You want believable depth-of-field without re-rendering. Which pass helps most?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The specular pass isolates highlights — useful for bloom, not for distance-based blur.">
+                                A) The Specular pass
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct — the Depth (Z) pass encodes distance from camera as greyscale, so it can drive a Lens Blur or mask atmosphere by distance — depth of field in post.">
+                                B) The Depth (Z) pass
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="The diffuse pass is surface colour without highlights — good for re-grading colour, not for blur by distance.">
+                                C) The Diffuse pass
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Why grade with adjustment layers instead of editing the render directly?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="They're not faster to render — there's no render involved; the benefit is about editability.">
+                                A) They make the file render faster
+                            </button>
+                            <button class="quiz-option" data-correct="false" data-hint="Adjustment layers don't change resolution; that's set by the render.">
+                                B) They increase the image's resolution
+                            </button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct — adjustment layers are non-destructive: they apply on top of the render without altering its pixels and carry masks, so every choice stays reversible and re-editable.">
+                                C) They're non-destructive — every choice stays editable and masked
+                            </button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 8: Best Practices -->
+            <section id="best-practices" class="lesson-section">
+                <h2>Best Practices</h2>
+
+                <h3>✅ Do's</h3>
+                <ul>
+                    <li><strong>Work non-destructively</strong> — adjustment layers, masks, and Smart Objects.</li>
+                    <li><strong>Render a Depth canvas</strong> when you want atmosphere or depth of field.</li>
+                    <li><strong>Stay in 16-bit</strong> while grading; convert to 8-bit only on export.</li>
+                    <li><strong>Grade gently</strong> — small, intentional moves beat heavy filters.</li>
+                    <li><strong>Keep the Daz scene as the master</strong> and save a layered PSD of the finish.</li>
+                    <li><strong>Match light and colour</strong> when compositing a new background.</li>
+                </ul>
+
+                <h3>❌ Don'ts</h3>
+                <ul>
+                    <li><strong>Don't try to import the figure as 3D geometry</strong> — Photoshop's 3D is gone.</li>
+                    <li><strong>Don't over-retouch skin</strong> — plastic skin ruins a good Iray render.</li>
+                    <li><strong>Don't fix pose or lighting in post</strong> — re-render from Daz instead.</li>
+                    <li><strong>Don't flatten early</strong> — you lose every bit of editability.</li>
+                    <li><strong>Don't grade in 8-bit</strong> if you can avoid it — watch for banding.</li>
+                </ul>
+
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li>Start minimal: Beauty + Depth covers most portraits.</li>
+                    <li>Use an Object/Material ID pass for instant, clean selections.</li>
+                    <li>Screen the Specular pass back in for controllable bloom on highlights.</li>
+                    <li>Name and group your layers — future-you will thank present-you.</li>
+                    <li>Finish with the polish trio: subtle vignette, grain, and sharpen.</li>
+                </ul>
+            </section>
+
+            <!-- Section 9: Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>The Daz to Photoshop bridge is a <strong>render-based</strong> bridge — it carries the <strong>image</strong>, not geometry (Photoshop's old 3D import is gone).</li>
+                        <li>Daz <strong>render canvases</strong> (Beauty, Depth, Specular, IDs) give Photoshop separated passes to work with; Beauty + Depth covers most shots.</li>
+                        <li>Finishing is <strong>non-destructive</strong>: adjustment layers, masks, and blend modes stacked above the render.</li>
+                        <li>The core moves are <strong>grade, dodge &amp; burn, light retouch, depth atmosphere, and compositing</strong>, finished with a vignette-grain-sharpen polish.</li>
+                        <li>Keep <strong>Daz as the master</strong> and save a layered <strong>PSD</strong> — the whole finish stays re-editable.</li>
+                    </ul>
+                </div>
+
+                <h3>📚 Additional Resources</h3>
+                <ul>
+                    <li><a href="http://docs.daz3d.com/doku.php/public/software/dazstudio/4/userguide/rendering/canvases/start" target="_blank" rel="noopener">Daz Studio — Render Canvases documentation</a></li>
+                    <li><a href="https://helpx.adobe.com/photoshop/using/adjustment-fill-layers.html" target="_blank" rel="noopener">Adobe — Adjustment &amp; fill layers</a></li>
+                    <li><a href="https://helpx.adobe.com/photoshop/kb/photoshop-3d-common-questions-troubleshooting.html" target="_blank" rel="noopener">Adobe — Photoshop 3D features deprecation</a></li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your figure can now go to Blender, to Unreal, <em>and</em> into a finished picture in Photoshop — the full spread of destinations. It's time to prove it end to end. In <strong>Lesson 5.4 — Capstone: A Full Pipeline Portfolio Piece</strong>, you'll pose, shape, surface, light, and render a character in Daz, then carry that same figure across the pipeline — one asset, one portfolio piece, every skill in this course working together.</p>
+
+                <!-- Encouragement Card -->
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>🎉 Your render became a picture!</h3>
+                    <p>Passes, layer stack, grading, retouch, depth atmosphere, and compositing — you've bridged Daz's raw render into a finished, non-destructive Photoshop document. Three destinations mastered: Blender, Unreal, and Photoshop. One capstone remains to tie the whole pipeline together.</p>
+                </div>
+            </section>
+
+            <!-- Lesson Navigation -->
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_13_daz_to_unreal_bridge.html" class="prev-lesson">← Previous: Daz to Unreal Bridge</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_14_capstone_full_pipeline.html" class="next-lesson">Next: Capstone Pipeline →</a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

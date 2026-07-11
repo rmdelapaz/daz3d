@@ -1,8 +1,8 @@
 {
   "course": {
     "title": "Daz Studio Essentials",
-    "subtitle": "From Figure to Final Render — with Blender & Unreal Bridges",
-    "description": "A focused, beginner-friendly starter course that takes you from installing Daz Studio to posing, shaping, lighting, and rendering Genesis figures with Iray — then bridges the same character into Blender and Unreal Engine for a complete pipeline.",
+    "subtitle": "From Figure to Final Render — with Blender, Unreal & Photoshop Bridges",
+    "description": "A focused, beginner-friendly starter course that takes you from installing Daz Studio to posing, shaping, lighting, and rendering Genesis figures with Iray — then bridges the same character into Blender and Unreal Engine and finishes the render in Photoshop for a complete pipeline.",
     "author": {
       "name": "Ray De La Paz",
       "email": "contact via website",
@@ -13,8 +13,8 @@
     "lastUpdated": "2026-07-10",
     "language": "en",
     "difficulty": "beginner",
-    "estimatedHours": 13,
-    "tags": ["daz studio", "3d", "character art", "iray", "rendering", "genesis", "blender bridge", "unreal bridge"]
+    "estimatedHours": 14,
+    "tags": ["daz studio", "3d", "character art", "iray", "rendering", "genesis", "blender bridge", "unreal bridge", "photoshop", "post-processing"]
   },
 
   "branding": {
@@ -81,12 +81,13 @@
     },
     {
       "id": "module-5",
-      "title": "The Bridge Workflow — Daz to Blender & Unreal",
-      "description": "Take your Daz figure into the tools from the Blender and Unreal courses.",
+      "title": "The Bridge Workflow — Blender, Unreal & Photoshop",
+      "description": "Take your Daz figure into Blender and Unreal, then finish the render in Photoshop.",
       "lessons": [
         { "id": "lesson-5-1", "title": "The Daz to Blender Bridge", "filename": "lesson_12_daz_to_blender_bridge.html", "duration": "60 minutes", "difficulty": "intermediate" },
         { "id": "lesson-5-2", "title": "The Daz to Unreal Bridge", "filename": "lesson_13_daz_to_unreal_bridge.html", "duration": "65 minutes", "difficulty": "intermediate" },
-        { "id": "lesson-5-3", "title": "Capstone: A Full Pipeline Portfolio Piece", "filename": "lesson_14_capstone_full_pipeline.html", "duration": "90 minutes", "difficulty": "intermediate" }
+        { "id": "lesson-5-3", "title": "The Daz to Photoshop Bridge", "filename": "lesson_15_daz_to_photoshop_bridge.html", "duration": "55 minutes", "difficulty": "intermediate" },
+        { "id": "lesson-5-4", "title": "Capstone: A Full Pipeline Portfolio Piece", "filename": "lesson_14_capstone_full_pipeline.html", "duration": "90 minutes", "difficulty": "intermediate" }
       ]
     }
   ],
