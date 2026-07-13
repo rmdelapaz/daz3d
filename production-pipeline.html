@@ -74,6 +74,15 @@
   .chip.unreal{color:var(--teal); border-color:color-mix(in srgb,var(--teal) 30%,var(--line))}
   .chip.doc{color:var(--violet); border-color:color-mix(in srgb,var(--violet) 30%,var(--line))}
   .chip.post{color:var(--green); border-color:color-mix(in srgb,var(--green) 30%,var(--line))}
+  /* Deep-dive links */
+  .deep{margin-top:10px; font-size:12.5px; color:var(--muted); display:flex; flex-wrap:wrap; align-items:center; gap:2px}
+  .deep b{font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-right:9px}
+  .deep a{text-decoration:none; font-weight:700}
+  .deep a:hover{text-decoration:underline}
+  .deep a.d-daz{color:#e9c07a}
+  .deep a.d-bl{color:#f0955a}
+  .deep a.d-ue{color:var(--teal)}
+  .deep .sepdot{color:var(--line); padding:0 8px}
   /* Table */
   .tablewrap{max-width:var(--maxw); margin:0 auto; overflow-x:auto; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow)}
   table{border-collapse:collapse; width:100%; min-width:560px; background:var(--panel)}
@@ -194,6 +203,7 @@
         <li><b>Locations</b> → environment kits, or model → assemble</li>
       </ul>
       <div class="chips"><span class="chip daz">Daz Studio</span><span class="chip blender">Blender</span><span class="chip unreal">Fab / Megascans</span><span class="chip unreal">UE Marketplace</span></div>
+      <div class="deep"><b>Deep dive</b><a class="d-daz" href="daz-studio-steps.html">Daz</a><span class="sepdot">·</span><a class="d-bl" href="https://rays-blender.netlify.app/blender-phase-1-asset-sourcing.html" target="_blank" rel="noopener">Blender ↗</a></div>
     </div>
   </div>
 
@@ -203,6 +213,7 @@
       <h3>Character finalization <span class="once">once per character</span></h3>
       <p>Figure + fitted outfit + hair in Daz → bridge to Blender (Diffeomorphic or Daz-to-Unreal) for cleanup &amp; materials → export to Unreal as a Skeletal Mesh on <b>one canonical skeleton</b>. In UE’s Skeleton editor, <b>add hand sockets once</b> (e.g. a right-hand weapon socket) and build an <b>IK Rig</b> for retargeting.</p>
       <div class="chips"><span class="chip daz">Daz Studio</span><span class="chip blender">Blender</span><span class="chip unreal">UE · Skeleton + IK Rig</span></div>
+      <div class="deep"><b>Deep dive</b><a class="d-daz" href="daz-studio-steps.html">Daz</a><span class="sepdot">·</span><a class="d-bl" href="https://rays-blender.netlify.app/blender-phase-2-character-finalization.html" target="_blank" rel="noopener">Blender ↗</a><span class="sepdot">·</span><a class="d-ue" href="https://rays-unreal.netlify.app/unreal-phase-2-character-finalization.html" target="_blank" rel="noopener">Unreal ↗</a></div>
     </div>
   </div>
 
@@ -212,6 +223,7 @@
       <h3>Prop prep <span class="once">once per prop</span></h3>
       <p>Static props: mesh + materials. <b>Held props: separate mesh with the pivot set at the grip</b> — they attach to the character’s hand socket. <span class="muted">(This is the exact fix for the “floating sword”: grip-pivot + socket, never hand-guessed placement.)</span></p>
       <div class="chips"><span class="chip blender">Blender</span><span class="chip unreal">UE · Static Mesh + pivot</span></div>
+      <div class="deep"><b>Deep dive</b><a class="d-bl" href="https://rays-blender.netlify.app/blender-phase-3-prop-prep.html" target="_blank" rel="noopener">Blender ↗</a><span class="sepdot">·</span><a class="d-ue" href="https://rays-unreal.netlify.app/unreal-phase-3-prop-prep.html" target="_blank" rel="noopener">Unreal ↗</a></div>
     </div>
   </div>
 
@@ -221,6 +233,7 @@
       <h3>Animation / pose library <span class="muted" style="font-size:13px;font-weight:600">· per character</span></h3>
       <p>Source animation (mocap, marketplace, or hand-keyed in Blender) and <b>retarget onto the character with UE’s IK Retargeter</b>. Stills = single-frame poses. The socketed prop rides the hand through any pose for free.</p>
       <div class="chips"><span class="chip blender">Blender</span><span class="chip unreal">UE · IK Retargeter</span><span class="chip unreal">Mocap (Rokoko / Move.ai)</span></div>
+      <div class="deep"><b>Deep dive</b><a class="d-bl" href="https://rays-blender.netlify.app/blender-phase-4-animation-pose-library.html" target="_blank" rel="noopener">Blender ↗</a><span class="sepdot">·</span><a class="d-ue" href="https://rays-unreal.netlify.app/unreal-phase-4-animation-retargeting.html" target="_blank" rel="noopener">Unreal ↗</a></div>
     </div>
   </div>
 
@@ -230,6 +243,7 @@
       <h3>Shot assembly <span class="pershot once">per shot</span></h3>
       <p>Load location → place characters → <b>snap props to sockets</b> → assign pose/anim → set time-of-day &amp; mood lighting per the storyboard.</p>
       <div class="chips"><span class="chip unreal">Unreal Engine</span></div>
+      <div class="deep"><b>Deep dive</b><a class="d-ue" href="https://rays-unreal.netlify.app/unreal-phase-5-shot-assembly.html" target="_blank" rel="noopener">Unreal ↗</a></div>
     </div>
   </div>
 
@@ -239,6 +253,7 @@
       <h3>Cinematography <span class="pershot once">per shot</span></h3>
       <p>A <b>Level Sequence</b> per shot: cameras, camera moves, animation timing, and lens / depth-of-field / exposure.</p>
       <div class="chips"><span class="chip unreal">UE · Sequencer</span></div>
+      <div class="deep"><b>Deep dive</b><a class="d-ue" href="https://rays-unreal.netlify.app/unreal-phase-6-cinematography.html" target="_blank" rel="noopener">Unreal ↗</a></div>
     </div>
   </div>
 
@@ -248,6 +263,7 @@
       <h3>Output</h3>
       <p>Render with the <b>Movie Render Queue</b> — <span class="muted">not</span> viewport screenshots. MRQ gives proper anti-aliasing, depth-of-field, motion blur, and image sequences.</p>
       <div class="chips"><span class="chip unreal">UE · Movie Render Queue</span></div>
+      <div class="deep"><b>Deep dive</b><a class="d-ue" href="https://rays-unreal.netlify.app/unreal-phase-7-output.html" target="_blank" rel="noopener">Unreal ↗</a></div>
     </div>
   </div>
 

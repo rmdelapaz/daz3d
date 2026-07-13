@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Deep dive on the two production-pipeline steps that happen in Daz Studio — Phase 1 asset sourcing (Genesis base + morphs + fitted outfits/hair) and Phase 2 character finalization (assemble + Iray surfaces + bridge out to Blender/Unreal).">
+<meta name="author" content="Ray De La Paz">
+<title>Inside Daz Studio — Asset Sourcing &amp; Character Finalization</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+  :root{
+    --bg:#0f1216; --panel:#171c22; --panel2:#1e252d; --ink:#e8edf2; --muted:#9aa7b4;
+    --line:#2a333d; --amber:#f2a33c; --amber-d:#c97f1e; --teal:#4fd1c5; --violet:#a78bfa;
+    --green:#5fd08a; --red:#f2708a; --chip:#232b34;
+    --shadow:0 1px 0 rgba(255,255,255,.03), 0 10px 30px rgba(0,0,0,.35);
+    --maxw:1000px;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f4f6f9; --panel:#ffffff; --panel2:#f0f3f7; --ink:#182028; --muted:#5d6b78;
+      --line:#e2e8ef; --chip:#eef2f7; --shadow:0 1px 2px rgba(16,24,32,.06), 0 12px 30px rgba(16,24,32,.08);}
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; padding:0 20px 80px;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto}
+  a{color:var(--teal)}
+  /* Crumbs */
+  .crumbs{max-width:var(--maxw); margin:0 auto; padding:18px 0 0; font-size:13px; color:var(--muted)}
+  .crumbs a{color:var(--muted); text-decoration:none}
+  .crumbs a:hover{color:var(--ink)}
+  .crumbs .sep{padding:0 8px; color:var(--line)}
+  /* Header */
+  header.top{
+    max-width:var(--maxw); margin:0 auto; padding:30px 0 26px; border-bottom:1px solid var(--line);
+  }
+  .eyebrow{color:var(--amber); font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:12px}
+  h1{font-size:clamp(26px,4.4vw,40px); line-height:1.12; margin:.35em 0 .25em; letter-spacing:-.01em}
+  .flow{color:var(--muted); font-size:15px}
+  .flow b{color:var(--ink)}
+  .arrow{color:var(--amber); font-weight:700; padding:0 6px}
+  .diagram{max-width:var(--maxw); margin:24px auto 0; overflow-x:auto}
+  .diagram svg{width:100%; min-width:680px; height:auto; display:block}
+  /* Principle callout */
+  .principle{
+    margin:30px auto 0; max-width:var(--maxw); background:linear-gradient(180deg,var(--panel2),var(--panel));
+    border:1px solid var(--line); border-left:4px solid var(--amber); border-radius:14px;
+    padding:22px 24px; box-shadow:var(--shadow);
+  }
+  .principle .tag{color:var(--amber); font-weight:700; font-size:12px; letter-spacing:.1em; text-transform:uppercase}
+  .principle p{margin:.5em 0 0; font-size:17px}
+  .principle .em{color:var(--ink); font-weight:600}
+  /* Section headings */
+  h2.sec{font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted);
+    margin:46px auto 16px; max-width:var(--maxw); font-weight:700}
+  /* Phase list */
+  .phases{max-width:var(--maxw); margin:0 auto; display:grid; gap:14px}
+  .phase{
+    display:grid; grid-template-columns:56px 1fr; gap:18px; align-items:start;
+    background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow);
+  }
+  .num{
+    width:44px; height:44px; border-radius:11px; display:grid; place-items:center; font-weight:800; font-size:18px;
+    background:var(--chip); color:var(--amber); border:1px solid var(--line);
+  }
+  .phase h3{margin:2px 0 4px; font-size:19px}
+  .phase h3 .once{font-size:12px; font-weight:700; color:var(--teal); background:color-mix(in srgb,var(--teal) 14%, transparent);
+    border:1px solid color-mix(in srgb,var(--teal) 35%, transparent); padding:2px 8px; border-radius:999px; margin-left:8px; vertical-align:middle; letter-spacing:.02em}
+  .phase p{margin:.2em 0 .6em; color:var(--ink)}
+  .phase p .muted, .muted{color:var(--muted)}
+  /* Sub-step blocks inside a phase */
+  .sub{margin:14px 0 0; padding:14px 0 0; border-top:1px dashed var(--line)}
+  .sub:first-of-type{border-top:none; padding-top:6px}
+  .sub h4{margin:0 0 4px; font-size:15px}
+  .sub h4 .st{display:inline-grid; place-items:center; width:22px; height:22px; border-radius:6px; font-size:12px; font-weight:800;
+    background:var(--chip); color:var(--amber); border:1px solid var(--line); margin-right:8px; vertical-align:middle}
+  .sub p{margin:.2em 0 .4em; color:var(--ink)}
+  ul.tight{margin:.2em 0 .6em; padding-left:18px}
+  ul.tight li{margin:.15em 0}
+  .chips{display:flex; flex-wrap:wrap; gap:7px; margin-top:8px}
+  .chip{font-size:12px; font-weight:600; padding:4px 10px; border-radius:999px; background:var(--chip);
+    border:1px solid var(--line); color:var(--muted); text-decoration:none; display:inline-block}
+  a.chip:hover{border-color:var(--muted); color:var(--ink)}
+  .chip.daz{color:#e9c07a; border-color:color-mix(in srgb,#e9c07a 30%,var(--line))}
+  .chip.blender{color:#f0955a; border-color:color-mix(in srgb,#f0955a 30%,var(--line))}
+  .chip.unreal{color:var(--teal); border-color:color-mix(in srgb,var(--teal) 30%,var(--line))}
+  .chip.doc{color:var(--violet); border-color:color-mix(in srgb,var(--violet) 30%,var(--line))}
+  .chip.post{color:var(--green); border-color:color-mix(in srgb,var(--green) 30%,var(--line))}
+  .chip.lesson{color:var(--teal); border-color:color-mix(in srgb,var(--teal) 30%,var(--line)); background:color-mix(in srgb,var(--teal) 8%,var(--chip))}
+  .lessonrow{display:flex; flex-wrap:wrap; gap:7px; align-items:center; margin-top:10px}
+  .lessonrow .lbl{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-right:2px}
+  /* Table */
+  .tablewrap{max-width:var(--maxw); margin:0 auto; overflow-x:auto; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow)}
+  table{border-collapse:collapse; width:100%; min-width:560px; background:var(--panel)}
+  th,td{text-align:left; padding:13px 18px; border-bottom:1px solid var(--line); font-size:15px; vertical-align:top}
+  th{background:var(--panel2); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  td b{color:var(--ink)}
+  .hub{color:var(--teal); font-weight:700}
+  /* Rule cards */
+  .cards{max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px 22px; box-shadow:var(--shadow)}
+  .card.key{grid-column:1/-1; border-left:4px solid var(--green)}
+  .card.warn{grid-column:1/-1; border-left:4px solid var(--amber)}
+  .card h4{margin:0 0 6px; font-size:16px}
+  .card h4 .dot{color:var(--amber)}
+  .card.key h4 .dot{color:var(--green)}
+  .card p{margin:.35em 0; color:var(--ink)}
+  .card code{background:var(--chip); border:1px solid var(--line); border-radius:6px; padding:1px 6px; font-size:13px; color:var(--teal)}
+  footer{max-width:var(--maxw); margin:48px auto 0; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px}
+  footer a{color:var(--muted)}
+  @media (max-width:640px){
+    .cards{grid-template-columns:1fr}
+    .phase{grid-template-columns:44px 1fr; gap:14px; padding:16px}
+    .num{width:38px;height:38px;border-radius:9px;font-size:16px}
+  }
+  @media print{
+    body{background:#fff; color:#000; padding:0}
+    .phase,.card,.principle,.tablewrap{box-shadow:none; break-inside:avoid}
+    header.top{padding-top:8px}
+  }
+</style>
+</head>
+<body>
+
+<nav class="crumbs" aria-label="Breadcrumb">
+  <a href="index.html">Course Home</a><span class="sep">/</span>
+  <a href="production-pipeline.html">Production Pipeline</a><span class="sep">/</span>
+  <span>Inside Daz Studio</span>
+</nav>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Production Pipeline · Deep Dive</div>
+    <h1>Inside Daz Studio: The Two Steps That Live Here</h1>
+    <div class="flow">Of the whole pipeline, exactly two phases happen in Daz — <b>Phase&nbsp;1 · Asset sourcing</b><span class="arrow">→</span><b>Phase&nbsp;2 · Character finalization</b><span class="arrow">→</span>then you <b>bridge out</b> to Blender / Unreal.</div>
+    <div class="diagram" role="img" aria-label="Two Daz Studio steps: asset sourcing, then character finalization, then a bridge out to Blender and Unreal Engine">
+      <svg viewBox="0 0 1000 168" xmlns="http://www.w3.org/2000/svg">
+        <style>
+          .nd{fill:var(--panel2);stroke:var(--line);stroke-width:1}
+          .ndz{fill:color-mix(in srgb,#e2b06a 8%, var(--panel2));stroke:#e2b06a;stroke-opacity:.55;stroke-width:1}
+          .nm{fill:var(--ink);font:700 15px system-ui,-apple-system,sans-serif}
+          .cap{fill:var(--muted);font:12.5px system-ui,-apple-system,sans-serif}
+          .gl{font:800 18px system-ui,-apple-system,sans-serif;text-anchor:middle}
+          .pill{font:800 10.5px system-ui,sans-serif;letter-spacing:.06em;text-anchor:middle}
+          .ar{fill:var(--amber);stroke:var(--amber)}
+          .arg{fill:var(--muted);stroke:var(--muted)}
+          .daz{fill:#e2b06a}.dazf{fill:#e2b06a;fill-opacity:.16;stroke:#e2b06a}
+          .bl{fill:#f0955a}.blf{fill:#f0955a;fill-opacity:.16;stroke:#f0955a}
+          .teal{fill:var(--teal)}.tealf{fill:var(--teal);fill-opacity:.16;stroke:var(--teal)}
+        </style>
+        <!-- Daz zone label -->
+        <rect class="dazf" x="10" y="10" width="70" height="18" rx="9"/>
+        <text class="pill daz" x="45" y="22">IN DAZ</text>
+
+        <!-- Step 1 -->
+        <rect class="ndz" x="10" y="36" width="300" height="118" rx="16"/>
+        <circle class="dazf" cx="52" cy="76" r="19"/>
+        <text class="gl daz" x="52" y="82">1</text>
+        <text class="nm" x="80" y="72">Asset sourcing</text>
+        <text class="cap" x="80" y="90">base figure + morphs</text>
+        <text class="cap" x="34" y="128">fit outfits &amp; hair · fix pokethrough</text>
+        <text class="cap" x="34" y="146">→ reusable library character</text>
+
+        <!-- Step 2 -->
+        <rect class="ndz" x="345" y="36" width="300" height="118" rx="16"/>
+        <circle class="dazf" cx="387" cy="76" r="19"/>
+        <text class="gl daz" x="387" y="82">2</text>
+        <text class="nm" x="415" y="72">Character finalization</text>
+        <text class="cap" x="415" y="90">figure + outfit + hair</text>
+        <text class="cap" x="369" y="128">Iray surfaces · Save As Scene</text>
+        <text class="cap" x="369" y="146">→ bridge out</text>
+
+        <!-- Bridge-out targets -->
+        <rect class="nd" x="700" y="36" width="290" height="52" rx="14"/>
+        <circle class="blf" cx="732" cy="62" r="15"/>
+        <text class="gl bl" x="732" y="67" style="font-size:15px">B</text>
+        <text class="nm" x="756" y="59">Blender</text>
+        <text class="cap" x="756" y="76">Diffeomorphic (.dbz)</text>
+
+        <rect class="nd" x="700" y="102" width="290" height="52" rx="14"/>
+        <circle class="tealf" cx="732" cy="128" r="15"/>
+        <text class="gl teal" x="732" y="133" style="font-size:15px">U</text>
+        <text class="nm" x="756" y="125">Unreal Engine</text>
+        <text class="cap" x="756" y="142">Daz-to-Unreal bridge</text>
+
+        <g class="ar">
+          <line x1="316" y1="95" x2="339" y2="95" stroke-width="3"/>
+          <polygon points="339,87 339,103 356,95" stroke="none"/>
+        </g>
+        <g class="arg">
+          <line x1="651" y1="95" x2="678" y2="62" stroke-width="2.5"/>
+          <polygon points="672,54 682,66 686,50" stroke="none"/>
+          <line x1="651" y1="95" x2="678" y2="128" stroke-width="2.5"/>
+          <polygon points="686,140 682,124 672,136" stroke="none"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section class="principle">
+  <div class="tag">The one thing to hold onto</div>
+  <p><span class="em">Everything you do in Daz is asset-library prep — done once per character, never per shot.</span>
+  Daz owns the front of the pipeline: sourcing a figure and finishing it into a clean, reusable, bridge-ready character. Posing, prop-snapping, lighting, cameras and rendering all happen <em>downstream</em>. If a task would be repeated every shot, it does not belong here. For the full map of where these two steps sit, see the <a href="production-pipeline.html">Story-to-Screen Production Pipeline</a>.</p>
+</section>
+
+<h2 class="sec">Step 1 · What happens in Daz</h2>
+<div class="phases">
+  <div class="phase">
+    <div class="num">1</div>
+    <div>
+      <h3>Asset sourcing <span class="muted" style="font-size:13px;font-weight:600">· build a reusable character</span></h3>
+      <p>Assemble a Genesis figure into a fully clothed, groomed character that you can save and reuse. Only the <b>character &amp; wardrobe</b> track of Phase&nbsp;1 lives in Daz — props, environments and megascans are sourced in other tools <span class="muted">(Blender, Fab / Megascans, the UE Marketplace)</span> and meet the character later, in Unreal.</p>
+
+      <div class="sub">
+        <h4><span class="st">A</span>Load a Genesis base figure</h4>
+        <p>Drop a Genesis 8/9 base from the Content Library as the foundation. This is the mesh + skeleton everything else conforms to — pick the generation you'll standardize on, because it decides the canonical skeleton downstream.</p>
+      </div>
+
+      <div class="sub">
+        <h4><span class="st">B</span>Shape it with morphs &amp; shaping presets</h4>
+        <p>Dial character identity with shaping morphs and full-body/head presets — proportions, face, body type. Save the shaped result so the same person is reproducible, not re-dialed by hand each time.</p>
+      </div>
+
+      <div class="sub">
+        <h4><span class="st">C</span>Source &amp; auto-fit outfits and hair</h4>
+        <p>Add wardrobe and hair and let Daz <b>auto-fit / conform</b> them to the figure so they follow its shape and pose. Fitted clothing inherits the body morphs; hair parents to the head. This is the wardrobe half of Phase&nbsp;1's "outfits → fit / conform to the figure."</p>
+      </div>
+
+      <div class="sub">
+        <h4><span class="st">D</span>Resolve pokethrough</h4>
+        <p>Where skin punches through clothing, fix it — smoothing modifiers &amp; collision, adjustment morphs, or hiding the occluded body surfaces. A clean silhouette here saves cleanup after the bridge, where fixing it means editing mesh in Blender.</p>
+      </div>
+
+      <div class="sub">
+        <h4><span class="st">E</span>Keep it as a reusable library asset</h4>
+        <p>Save the finished figure + wardrobe as a <b>Scene</b> (and/or a character/wearables preset) so it's a stable, named library asset — the unit that Phase&nbsp;2 finalizes and bridges. Reuse is the whole point: source once, spend everywhere.</p>
+      </div>
+
+      <div class="lessonrow">
+        <span class="lbl">Learn it in</span>
+        <a class="chip lesson" href="lesson_04_loading_and_posing_figures.html">4 · Loading &amp; Posing Figures</a>
+        <a class="chip lesson" href="lesson_05_shaping_characters_with_morphs.html">5 · Shaping with Morphs</a>
+        <a class="chip lesson" href="lesson_10_dforce_cloth_and_hair.html">10 · dForce Cloth &amp; Hair</a>
+      </div>
+      <div class="chips">
+        <span class="chip daz">Daz Studio</span>
+        <span class="chip muted">Genesis base + morphs</span>
+        <span class="chip muted">auto-fit / conform</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tablewrap" style="margin-top:14px">
+  <table>
+    <thead><tr><th>Phase 1 track</th><th>Where it's done</th><th>Meets the character…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Characters</b> — base figure + morphs</td><td><b>Daz Studio</b> <span class="muted">(this page)</span></td><td>is the character</td></tr>
+      <tr><td><b>Outfits &amp; hair</b> — fit / conform</td><td><b>Daz Studio</b> <span class="muted">(this page)</span></td><td>fitted on the figure in Daz</td></tr>
+      <tr><td><b>Props</b> — model or acquire</td><td>Blender · Fab / Megascans</td><td>snapped to a hand socket in <span class="hub">Unreal</span></td></tr>
+      <tr><td><b>Locations</b> — environment kits</td><td>UE Marketplace · Blender</td><td>placed around the character in <span class="hub">Unreal</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 class="sec">Step 2 · What happens in Daz</h2>
+<div class="phases">
+  <div class="phase">
+    <div class="num">2</div>
+    <div>
+      <h3>Character finalization <span class="once">once per character</span></h3>
+      <p>Take the sourced character and finish it for export: one assembled figure + fitted outfit + hair, with surfaces set the way you want, then <b>bridge out</b> of Daz. This is the last stop before the character becomes a Blender scene or an Unreal Skeletal Mesh.</p>
+
+      <div class="sub">
+        <h4><span class="st">A</span>Assemble figure + fitted outfit + hair</h4>
+        <p>Confirm the character is complete and consistent in one scene — the same reusable asset from Step&nbsp;1, verified as a single unit before it leaves Daz.</p>
+      </div>
+
+      <div class="sub">
+        <h4><span class="st">B</span>Set up Iray surfaces / materials as needed</h4>
+        <p>Tune Iray surfaces where it matters — the parts of look-dev that are cheapest to get right in Daz. Note what carries: the <a href="lesson_13_daz_to_unreal_bridge.html">Daz-to-Unreal bridge</a> converts materials automatically, while a <a href="lesson_12_daz_to_blender_bridge.html">Diffeomorphic</a> import gives Blender shaders you'll often finish in that DCC.</p>
+      </div>
+
+      <div class="sub">
+        <h4><span class="st">C</span>Bridge out — Diffeomorphic (.dbz) or Daz-to-Unreal</h4>
+        <p>Two exits, same character:</p>
+        <ul class="tight">
+          <li><b>To Blender</b> — the <b>Diffeomorphic</b> add-on. Its accurate "DBZ File" fit needs a companion <code style="background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:13px;color:var(--teal)">.dbz</code> generated in Daz alongside the scene, for correct clothing/geograft fit on the morphed figure.</li>
+          <li><b>To Unreal</b> — the <b>Daz-to-Unreal</b> bridge exports straight to UE as a Skeletal Mesh with materials converted.</li>
+        </ul>
+      </div>
+
+      <div class="lessonrow">
+        <span class="lbl">Learn it in</span>
+        <a class="chip lesson" href="lesson_06_materials_and_iray_surfaces.html">6 · Materials &amp; Iray Surfaces</a>
+        <a class="chip lesson" href="lesson_12_daz_to_blender_bridge.html">12 · Daz → Blender Bridge</a>
+        <a class="chip lesson" href="lesson_13_daz_to_unreal_bridge.html">13 · Daz → Unreal Bridge</a>
+      </div>
+      <div class="chips">
+        <span class="chip daz">Daz Studio</span>
+        <span class="chip blender">Diffeomorphic · .dbz</span>
+        <span class="chip unreal">Daz-to-Unreal · Skeletal Mesh</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cards" style="margin-top:14px">
+  <div class="card warn">
+    <h4><span class="dot">◆</span> Save As Scene <em>first</em>, or the .dbz lands orphaned</h4>
+    <p>Diffeomorphic's <code>export_to_blender</code> script writes the <code>.dbz</code> next to the scene file. <b>If the Daz scene is untitled</b> — e.g. you opened a character preset from the library and merged wardrobe onto it but never did <b>File → Save As → Scene</b> — the scene path is empty and the export dumps a mis-named <code>.dbz</code> at the library root <span class="muted">(e.g. <code>…\My DAZ 3D Library\.dbz</code>)</span> instead of beside your character. Blender then can't find it and the DBZ fit silently falls back.</p>
+    <p><b>Fix:</b> <code>File → Save As → Scene</code> the assembled character <b>before</b> running the export. A valid <code>.dbz</code> is gzip JSON starting <code>{"application":"export_highdef_to_blender"…}</code>. Cost hours once — do the Save As up front.</p>
+  </div>
+  <div class="card key">
+    <h4><span class="dot">◆</span> Why "once per character" matters</h4>
+    <p>Finalize each character <b>one time</b> and everything downstream reuses it: the bridge produces a Skeletal Mesh on <b>one canonical skeleton</b>, and in UE you add hand <b>sockets</b> and an <b>IK&nbsp;Rig</b> once so poses, mocap and marketplace animations retarget onto it forever. Redoing Daz work per shot is the anti-pattern this whole pipeline is built to avoid.</p>
+  </div>
+</div>
+
+<h2 class="sec">Handing off — where the character goes next</h2>
+<div class="phases">
+  <div class="phase">
+    <div class="num">→</div>
+    <div>
+      <h3>Downstream of Daz <span class="muted" style="font-size:13px;font-weight:600">· Blender &amp; Unreal finish the job</span></h3>
+      <p>Once the character bridges out, Daz's part is done. The rest of Phase&nbsp;2 happens outside it:</p>
+      <ul class="tight">
+        <li><b>Blender cleanup &amp; materials</b> — fix shaders, tidy the mesh, and prep the rig after a Diffeomorphic import.</li>
+        <li><b>Unreal — Skeletal Mesh on one canonical skeleton</b> — import the character, then in the Skeleton editor <b>add hand sockets once</b> (e.g. a right-hand weapon socket) and build an <b>IK Rig</b> for retargeting.</li>
+        <li><b>Then per-shot assembly</b> — place → snap prop to socket → pick pose → light → shoot. None of that touches Daz again.</li>
+      </ul>
+      <div class="lessonrow">
+        <span class="lbl">Continue in</span>
+        <a class="chip lesson" href="lesson_12_daz_to_blender_bridge.html">12 · Daz → Blender Bridge</a>
+        <a class="chip lesson" href="lesson_13_daz_to_unreal_bridge.html">13 · Daz → Unreal Bridge</a>
+        <a class="chip lesson" href="lesson_14_capstone_full_pipeline.html">14 · Full-Pipeline Capstone</a>
+        <a class="chip doc" href="production-pipeline.html">Pipeline Phases 2–5</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>Inside Daz Studio · Phases 1–2 of the Daz → Blender → Unreal pipeline</span>
+  <span><a href="production-pipeline.html">Full pipeline ↗</a> · <a href="index.html">Course home</a></span>
+</footer>
+
+</body>
+</html>
