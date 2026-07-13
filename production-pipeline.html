@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cinematic Production Pipeline — Daz → Blender → Unreal</title>
+<style>
+  :root{
+    --bg:#0f1216; --panel:#171c22; --panel2:#1e252d; --ink:#e8edf2; --muted:#9aa7b4;
+    --line:#2a333d; --amber:#f2a33c; --amber-d:#c97f1e; --teal:#4fd1c5; --violet:#a78bfa;
+    --green:#5fd08a; --red:#f2708a; --chip:#232b34;
+    --shadow:0 1px 0 rgba(255,255,255,.03), 0 10px 30px rgba(0,0,0,.35);
+    --maxw:1000px;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f4f6f9; --panel:#ffffff; --panel2:#f0f3f7; --ink:#182028; --muted:#5d6b78;
+      --line:#e2e8ef; --chip:#eef2f7; --shadow:0 1px 2px rgba(16,24,32,.06), 0 12px 30px rgba(16,24,32,.08);}
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; padding:0 20px 80px;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto}
+  /* Header */
+  header.top{
+    max-width:var(--maxw); margin:0 auto; padding:48px 0 26px; border-bottom:1px solid var(--line);
+  }
+  .eyebrow{color:var(--amber); font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:12px}
+  h1{font-size:clamp(26px,4.4vw,40px); line-height:1.12; margin:.35em 0 .25em; letter-spacing:-.01em}
+  .flow{color:var(--muted); font-size:15px}
+  .flow b{color:var(--ink)}
+  .arrow{color:var(--amber); font-weight:700; padding:0 6px}
+  .diagram{max-width:var(--maxw); margin:24px auto 0; overflow-x:auto}
+  .diagram svg{width:100%; min-width:680px; height:auto; display:block}
+  /* Principle callout */
+  .principle{
+    margin:30px auto 0; max-width:var(--maxw); background:linear-gradient(180deg,var(--panel2),var(--panel));
+    border:1px solid var(--line); border-left:4px solid var(--amber); border-radius:14px;
+    padding:22px 24px; box-shadow:var(--shadow);
+  }
+  .principle .tag{color:var(--amber); font-weight:700; font-size:12px; letter-spacing:.1em; text-transform:uppercase}
+  .principle p{margin:.5em 0 0; font-size:17px}
+  .principle .em{color:var(--ink); font-weight:600}
+  /* Section headings */
+  h2.sec{font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted);
+    margin:46px auto 16px; max-width:var(--maxw); font-weight:700}
+  /* Phase list */
+  .phases{max-width:var(--maxw); margin:0 auto; display:grid; gap:14px}
+  .phase{
+    display:grid; grid-template-columns:56px 1fr; gap:18px; align-items:start;
+    background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow);
+  }
+  .num{
+    width:44px; height:44px; border-radius:11px; display:grid; place-items:center; font-weight:800; font-size:18px;
+    background:var(--chip); color:var(--amber); border:1px solid var(--line);
+  }
+  .phase h3{margin:2px 0 4px; font-size:18px}
+  .phase h3 .once{font-size:12px; font-weight:700; color:var(--teal); background:color-mix(in srgb,var(--teal) 14%, transparent);
+    border:1px solid color-mix(in srgb,var(--teal) 35%, transparent); padding:2px 8px; border-radius:999px; margin-left:8px; vertical-align:middle; letter-spacing:.02em}
+  .phase h3 .pershot{color:var(--violet); background:color-mix(in srgb,var(--violet) 14%, transparent);
+    border-color:color-mix(in srgb,var(--violet) 35%, transparent)}
+  .phase p{margin:.2em 0 .6em; color:var(--ink)}
+  .phase p .muted, .muted{color:var(--muted)}
+  ul.tight{margin:.2em 0 .6em; padding-left:18px}
+  ul.tight li{margin:.15em 0}
+  .chips{display:flex; flex-wrap:wrap; gap:7px; margin-top:8px}
+  .chip{font-size:12px; font-weight:600; padding:4px 10px; border-radius:999px; background:var(--chip);
+    border:1px solid var(--line); color:var(--muted)}
+  .chip.daz{color:#e9c07a; border-color:color-mix(in srgb,#e9c07a 30%,var(--line))}
+  .chip.blender{color:#f0955a; border-color:color-mix(in srgb,#f0955a 30%,var(--line))}
+  .chip.unreal{color:var(--teal); border-color:color-mix(in srgb,var(--teal) 30%,var(--line))}
+  .chip.doc{color:var(--violet); border-color:color-mix(in srgb,var(--violet) 30%,var(--line))}
+  .chip.post{color:var(--green); border-color:color-mix(in srgb,var(--green) 30%,var(--line))}
+  /* Table */
+  .tablewrap{max-width:var(--maxw); margin:0 auto; overflow-x:auto; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow)}
+  table{border-collapse:collapse; width:100%; min-width:560px; background:var(--panel)}
+  th,td{text-align:left; padding:13px 18px; border-bottom:1px solid var(--line); font-size:15px; vertical-align:top}
+  th{background:var(--panel2); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  td b{color:var(--ink)}
+  .hub{color:var(--teal); font-weight:700}
+  /* Rule cards */
+  .cards{max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px 22px; box-shadow:var(--shadow)}
+  .card.key{grid-column:1/-1; border-left:4px solid var(--green)}
+  .card.warn{border-left:4px solid var(--amber)}
+  .card h4{margin:0 0 6px; font-size:16px}
+  .card h4 .dot{color:var(--amber)}
+  .card.key h4 .dot{color:var(--green)}
+  .card p{margin:.35em 0; color:var(--ink)}
+  .card code{background:var(--chip); border:1px solid var(--line); border-radius:6px; padding:1px 6px; font-size:13px; color:var(--teal)}
+  footer{max-width:var(--maxw); margin:48px auto 0; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px}
+  @media (max-width:640px){
+    .cards{grid-template-columns:1fr}
+    .phase{grid-template-columns:44px 1fr; gap:14px; padding:16px}
+    .num{width:38px;height:38px;border-radius:9px;font-size:16px}
+  }
+  @media print{
+    body{background:#fff; color:#000; padding:0}
+    .phase,.card,.principle,.tablewrap{box-shadow:none; break-inside:avoid}
+    header.top{padding-top:8px}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Cinematic / Virtual Production Reference</div>
+    <h1>Story-to-Screen Production Pipeline</h1>
+    <div class="flow"><b>Daz Studio</b><span class="arrow">→</span><b>Blender</b><span class="arrow">→</span><b>Unreal Engine 5</b><span class="arrow">→</span><b>Render &amp; Post</b></div>
+    <div class="diagram" role="img" aria-label="Pipeline flow: Daz Studio, then Blender, then Unreal Engine 5, then Render and Post">
+      <svg viewBox="0 0 1000 156" xmlns="http://www.w3.org/2000/svg">
+        <style>
+          .nd{fill:var(--panel2);stroke:var(--line);stroke-width:1}
+          .nm{fill:var(--ink);font:700 16px system-ui,-apple-system,sans-serif}
+          .cap{fill:var(--muted);font:12.5px system-ui,-apple-system,sans-serif}
+          .gl{font:800 18px system-ui,-apple-system,sans-serif;text-anchor:middle}
+          .pill{font:800 10.5px system-ui,sans-serif;letter-spacing:.06em;text-anchor:middle}
+          .ar{fill:var(--amber);stroke:var(--amber)}
+          .daz{fill:#e2b06a}.dazf{fill:#e2b06a;fill-opacity:.16;stroke:#e2b06a}
+          .bl{fill:#f0955a}.blf{fill:#f0955a;fill-opacity:.16;stroke:#f0955a}
+          .teal{fill:var(--teal)}.tealf{fill:var(--teal);fill-opacity:.16;stroke:var(--teal)}
+          .green{fill:var(--green)}.greenf{fill:var(--green);fill-opacity:.16;stroke:var(--green)}
+        </style>
+        <rect class="nd" x="10" y="18" width="205" height="120" rx="16"/>
+        <circle class="dazf" cx="48" cy="58" r="19"/>
+        <text class="gl daz" x="48" y="64">D</text>
+        <text class="nm" x="76" y="63">Daz Studio</text>
+        <text class="cap" x="30" y="108">Characters + outfits</text>
+
+        <rect class="nd" x="270" y="18" width="205" height="120" rx="16"/>
+        <circle class="blf" cx="308" cy="58" r="19"/>
+        <text class="gl bl" x="308" y="64">B</text>
+        <text class="nm" x="336" y="63">Blender</text>
+        <text class="cap" x="290" y="108">Rig · bridge · sockets</text>
+
+        <rect class="nd" x="530" y="18" width="205" height="120" rx="16"/>
+        <rect class="tealf" x="683" y="27" width="40" height="18" rx="9"/>
+        <text class="pill teal" x="703" y="39">HUB</text>
+        <circle class="tealf" cx="568" cy="58" r="19"/>
+        <text class="gl teal" x="568" y="64">U</text>
+        <text class="nm" x="596" y="63">Unreal Engine</text>
+        <text class="cap" x="550" y="108">Assemble · pose · shoot</text>
+
+        <rect class="nd" x="790" y="18" width="205" height="120" rx="16"/>
+        <circle class="greenf" cx="828" cy="58" r="19"/>
+        <text class="gl green" x="828" y="64">R</text>
+        <text class="nm" x="856" y="63">Render &amp; Post</text>
+        <text class="cap" x="810" y="108">MRQ → edit → sound</text>
+
+        <g class="ar">
+          <line x1="222" y1="78" x2="250" y2="78" stroke-width="3"/>
+          <polygon points="250,70 250,86 267,78" stroke="none"/>
+          <line x1="482" y1="78" x2="510" y2="78" stroke-width="3"/>
+          <polygon points="510,70 510,86 527,78" stroke="none"/>
+          <line x1="742" y1="78" x2="770" y2="78" stroke-width="3"/>
+          <polygon points="770,70 770,86 787,78" stroke="none"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section class="principle">
+  <div class="tag">The one principle</div>
+  <p><span class="em">Separate “asset-library prep” (done once per asset) from “shot assembly” (done once per shot).</span>
+  Finish each character <em>once</em> as a self-contained rig — with hand <b>sockets</b> and a <b>pose library</b> — so assembling a shot is just: place → snap prop to socket → pick pose → light → shoot. A held prop bound to the hand bone inherits the wrist angle automatically, so it never has to be hand-placed.</p>
+</section>
+
+<h2 class="sec">The pipeline, in order</h2>
+<div class="phases">
+
+  <div class="phase">
+    <div class="num">0</div>
+    <div>
+      <h3>Pre-production → Shot Breakdown</h3>
+      <p>Turn the storyboard into a <b>shot breakdown sheet</b> (per shot: location, characters, outfits, props, action/pose, camera, lighting/mood) and de-dupe the asset list into a <b>master asset tracker</b> with a status per asset. Everything downstream keys off these two documents.</p>
+      <div class="chips"><span class="chip doc">Spreadsheet / Notion</span><span class="chip doc">Shot list</span><span class="chip doc">Asset tracker</span></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="num">1</div>
+    <div>
+      <h3>Asset sourcing <span class="muted" style="font-size:13px;font-weight:600">· parallel tracks</span></h3>
+      <ul class="tight">
+        <li><b>Characters</b> → base figure + morphs</li>
+        <li><b>Outfits</b> → fit / conform to the figure</li>
+        <li><b>Props</b> → model or acquire</li>
+        <li><b>Locations</b> → environment kits, or model → assemble</li>
+      </ul>
+      <div class="chips"><span class="chip daz">Daz Studio</span><span class="chip blender">Blender</span><span class="chip unreal">Fab / Megascans</span><span class="chip unreal">UE Marketplace</span></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="num">2</div>
+    <div>
+      <h3>Character finalization <span class="once">once per character</span></h3>
+      <p>Figure + fitted outfit + hair in Daz → bridge to Blender (Diffeomorphic or Daz-to-Unreal) for cleanup &amp; materials → export to Unreal as a Skeletal Mesh on <b>one canonical skeleton</b>. In UE’s Skeleton editor, <b>add hand sockets once</b> (e.g. a right-hand weapon socket) and build an <b>IK Rig</b> for retargeting.</p>
+      <div class="chips"><span class="chip daz">Daz Studio</span><span class="chip blender">Blender</span><span class="chip unreal">UE · Skeleton + IK Rig</span></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="num">3</div>
+    <div>
+      <h3>Prop prep <span class="once">once per prop</span></h3>
+      <p>Static props: mesh + materials. <b>Held props: separate mesh with the pivot set at the grip</b> — they attach to the character’s hand socket. <span class="muted">(This is the exact fix for the “floating sword”: grip-pivot + socket, never hand-guessed placement.)</span></p>
+      <div class="chips"><span class="chip blender">Blender</span><span class="chip unreal">UE · Static Mesh + pivot</span></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="num">4</div>
+    <div>
+      <h3>Animation / pose library <span class="muted" style="font-size:13px;font-weight:600">· per character</span></h3>
+      <p>Source animation (mocap, marketplace, or hand-keyed in Blender) and <b>retarget onto the character with UE’s IK Retargeter</b>. Stills = single-frame poses. The socketed prop rides the hand through any pose for free.</p>
+      <div class="chips"><span class="chip blender">Blender</span><span class="chip unreal">UE · IK Retargeter</span><span class="chip unreal">Mocap (Rokoko / Move.ai)</span></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="num">5</div>
+    <div>
+      <h3>Shot assembly <span class="pershot once">per shot</span></h3>
+      <p>Load location → place characters → <b>snap props to sockets</b> → assign pose/anim → set time-of-day &amp; mood lighting per the storyboard.</p>
+      <div class="chips"><span class="chip unreal">Unreal Engine</span></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="num">6</div>
+    <div>
+      <h3>Cinematography <span class="pershot once">per shot</span></h3>
+      <p>A <b>Level Sequence</b> per shot: cameras, camera moves, animation timing, and lens / depth-of-field / exposure.</p>
+      <div class="chips"><span class="chip unreal">UE · Sequencer</span></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="num">7</div>
+    <div>
+      <h3>Output</h3>
+      <p>Render with the <b>Movie Render Queue</b> — <span class="muted">not</span> viewport screenshots. MRQ gives proper anti-aliasing, depth-of-field, motion blur, and image sequences.</p>
+      <div class="chips"><span class="chip unreal">UE · Movie Render Queue</span></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="num">8</div>
+    <div>
+      <h3>Post</h3>
+      <p>Edit → composite (if needed) → sound.</p>
+      <div class="chips"><span class="chip post">DaVinci Resolve / Premiere</span><span class="chip post">Nuke / After Effects</span></div>
+    </div>
+  </div>
+
+</div>
+
+<h2 class="sec">Software by role</h2>
+<div class="tablewrap">
+  <table>
+    <thead><tr><th>Role</th><th>Tool</th></tr></thead>
+    <tbody>
+      <tr><td>Characters &amp; outfits — source / fit</td><td><b>Daz Studio</b></td></tr>
+      <tr><td>Character cleanup, rig, prop-rig, hand-keyed animation</td><td><b>Blender</b> <span class="muted">(bridge DCC)</span></td></tr>
+      <tr><td>Environments, sockets, retargeting, lighting, cameras, <b>render</b></td><td><span class="hub">Unreal Engine 5</span> <span class="muted">— the hub</span></td></tr>
+      <tr><td>Optional specialists</td><td>Marvelous Designer (cloth) · Substance (texturing) · Fab / Megascans (assets) · Rokoko / Move.ai (mocap)</td></tr>
+      <tr><td>Post</td><td>DaVinci Resolve / Premiere · Nuke / After Effects</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 class="sec">Rules that keep it clean</h2>
+<div class="cards">
+  <div class="card warn">
+    <h4><span class="dot">◆</span> Held props: socket, don’t bake</h4>
+    <p><b>Default — attach held props to a hand socket in Unreal.</b> Keeps them swappable; the pose transfers and the prop follows the wrist automatically.</p>
+    <p><b>Bake-at-source</b> (skin the prop into the mesh in Daz/Blender) <b>only</b> for a hero prop permanently fused to one character — e.g. a knight whose sword is skinned into his mesh, and is therefore always perfect.</p>
+  </div>
+  <div class="card warn">
+    <h4><span class="dot">◆</span> Standardize + retarget</h4>
+    <p>One canonical skeleton per character, plus UE’s IK Rig / Retargeter, means poses and animations are <b>shared</b> across characters with different skeletons — Daz figures can use mocap and marketplace anims.</p>
+  </div>
+  <div class="card key">
+    <h4><span class="dot">◆</span> The single change that prevents the “sword” problem</h4>
+    <p>Set a hand <b>socket</b> on the character’s skeleton in Phase&nbsp;2, give the prop a <b>grip-pivot</b> in Phase&nbsp;3, and in the shot just <code>attach-to-socket</code>. Then the Blender/Daz wrist angle drives the blade automatically — no manual prop-nudging, correct from every camera angle.</p>
+  </div>
+</div>
+
+<footer>
+  <span>Production pipeline reference · Daz → Blender → Unreal Engine 5</span>
+  <span>Assembly = place · socket · pose · light · shoot</span>
+</footer>
+
+</body>
+</html>
